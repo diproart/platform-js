@@ -1,5 +1,7 @@
 # platform-js
 
+[![Build Status](https://travis-ci.org/diproart/platform-js.svg?branch=master)](https://travis-ci.org/diproart/platform-js)
+
 **only for internal use**
 
 Platform-js - javascript (and css) bundles for internal development stream.
