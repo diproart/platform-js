@@ -82,12 +82,12 @@ th
 $body-background-color: #fff !default
 $body-size: 16px !default
 $body-rendering: optimizeLegibility !default
-$body-family: $family-sans-serif !default
+$body-family: $family-primary !default
 $body-color: $text !default
 $body-weight: $weight-normal !default
 $body-line-height: 1.5 !default
 
-$code-family: $family-monospace !default
+$code-family: $family-code !default
 $code-padding: 0.25em 0.5em 0.25em !default
 $code-weight: normal !default
 $code-size: 0.875em !default
@@ -108,6 +108,7 @@ html
   overflow-x: hidden
   overflow-y: scroll
   text-rendering: $body-rendering
+  text-size-adjust: 100%
 
 article,
 aside,
@@ -229,28 +230,31 @@ table
 
 // Typography
 
-@each $size in $sizes
-  $i: index($sizes, $size)
-  .is-size-#{$i}
-    font-size: $size !important
-  +mobile
-    .is-size-#{$i}-mobile
+=typography-size($target:'')
+  @each $size in $sizes
+    $i: index($sizes, $size)
+    .is-size-#{$i}#{if($target == '', '', '-' + $target)}
       font-size: $size !important
-  +tablet
-    .is-size-#{$i}-tablet
-      font-size: $size !important
-  +touch
-    .is-size-#{$i}-touch
-      font-size: $size !important
-  +desktop
-    .is-size-#{$i}-desktop
-      font-size: $size !important
-  +widescreen
-    .is-size-#{$i}-widescreen
-      font-size: $size !important
-  +fullhd
-    .is-size-#{$i}-fullhd
-      font-size: $size !important
+
++typography-size()
+
++mobile
+  +typography-size('mobile')
+
++tablet
+  +typography-size('tablet')
+
++touch
+  +typography-size('touch')
+
++desktop
+  +typography-size('desktop')
+
++widescreen
+  +typography-size('widescreen')
+
++fullhd
+  +typography-size('fullhd')
 
 $alignments: ('centered': 'center', 'left': 'left', 'right': 'right')
 
@@ -306,6 +310,15 @@ $alignments: ('centered': 'center', 'left': 'left', 'right': 'right')
 @each $name, $shade in $shades
   .has-text-#{$name}
     color: $shade !important
+
+.has-text-weight-light
+  font-weight: $weight-light !important
+.has-text-weight-normal
+  font-weight: $weight-normal !important
+.has-text-weight-semibold
+  font-weight: $weight-semibold !important
+.has-text-weight-bold
+  font-weight: $weight-bold !important
 
 // Visibility
 

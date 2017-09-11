@@ -44,8 +44,8 @@ $weight-bold: 700 !default
 
 // Responsiveness
 
-// The container gap, which acts as the offset for breakpoints
-$gap: 24px !default
+// The container horizontal gap, which acts as the offset for breakpoints
+$gap: 32px !default
 // 960, 1152, and 1344 have been chosen because they are divisible by both 12 and 16
 $tablet: 769px !default
 // 960px container + 3rem
@@ -292,7 +292,7 @@ $sizes: $size-1 $size-2 $size-3 $size-4 $size-5 $size-6 $size-7 !default
   position: relative
   width: $dimensions
   span
-    background-color: $text
+    background-color: currentColor
     display: block
     height: 1px
     left: 50%
@@ -309,11 +309,10 @@ $sizes: $size-1 $size-2 $size-3 $size-4 $size-5 $size-6 $size-7 !default
     &:nth-child(3)
       margin-top: 4px
   &:hover
-    background-color: $background
+    background-color: rgba(black, 0.05)
   // Modifers
   &.is-active
     span
-      background-color: $link
       &:nth-child(1)
         margin-left: -5px
         transform: rotate(45deg)

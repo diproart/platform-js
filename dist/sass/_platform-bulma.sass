@@ -44,8 +44,8 @@ $weight-bold: 700 !default
 
 // Responsiveness
 
-// The container gap, which acts as the offset for breakpoints
-$gap: 24px !default
+// The container horizontal gap, which acts as the offset for breakpoints
+$gap: 32px !default
 // 960, 1152, and 1344 have been chosen because they are divisible by both 12 and 16
 $tablet: 769px !default
 // 960px container + 3rem
@@ -292,7 +292,7 @@ $sizes: $size-1 $size-2 $size-3 $size-4 $size-5 $size-6 $size-7 !default
   position: relative
   width: $dimensions
   span
-    background-color: $text
+    background-color: currentColor
     display: block
     height: 1px
     left: 50%
@@ -309,11 +309,10 @@ $sizes: $size-1 $size-2 $size-3 $size-4 $size-5 $size-6 $size-7 !default
     &:nth-child(3)
       margin-top: 4px
   &:hover
-    background-color: $background
+    background-color: rgba(black, 0.05)
   // Modifers
   &.is-active
     span
-      background-color: $link
       &:nth-child(1)
         margin-left: -5px
         transform: rotate(45deg)
@@ -532,12 +531,12 @@ th
 $body-background-color: #fff !default
 $body-size: 16px !default
 $body-rendering: optimizeLegibility !default
-$body-family: $family-sans-serif !default
+$body-family: $family-primary !default
 $body-color: $text !default
 $body-weight: $weight-normal !default
 $body-line-height: 1.5 !default
 
-$code-family: $family-monospace !default
+$code-family: $family-code !default
 $code-padding: 0.25em 0.5em 0.25em !default
 $code-weight: normal !default
 $code-size: 0.875em !default
@@ -558,6 +557,7 @@ html
   overflow-x: hidden
   overflow-y: scroll
   text-rendering: $body-rendering
+  text-size-adjust: 100%
 
 article,
 aside,
@@ -679,28 +679,31 @@ table
 
 // Typography
 
-@each $size in $sizes
-  $i: index($sizes, $size)
-  .is-size-#{$i}
-    font-size: $size !important
-  +mobile
-    .is-size-#{$i}-mobile
+=typography-size($target:'')
+  @each $size in $sizes
+    $i: index($sizes, $size)
+    .is-size-#{$i}#{if($target == '', '', '-' + $target)}
       font-size: $size !important
-  +tablet
-    .is-size-#{$i}-tablet
-      font-size: $size !important
-  +touch
-    .is-size-#{$i}-touch
-      font-size: $size !important
-  +desktop
-    .is-size-#{$i}-desktop
-      font-size: $size !important
-  +widescreen
-    .is-size-#{$i}-widescreen
-      font-size: $size !important
-  +fullhd
-    .is-size-#{$i}-fullhd
-      font-size: $size !important
+
++typography-size()
+
++mobile
+  +typography-size('mobile')
+
++tablet
+  +typography-size('tablet')
+
++touch
+  +typography-size('touch')
+
++desktop
+  +typography-size('desktop')
+
++widescreen
+  +typography-size('widescreen')
+
++fullhd
+  +typography-size('fullhd')
 
 $alignments: ('centered': 'center', 'left': 'left', 'right': 'right')
 
@@ -756,6 +759,15 @@ $alignments: ('centered': 'center', 'left': 'left', 'right': 'right')
 @each $name, $shade in $shades
   .has-text-#{$name}
     color: $shade !important
+
+.has-text-weight-light
+  font-weight: $weight-light !important
+.has-text-weight-normal
+  font-weight: $weight-normal !important
+.has-text-weight-semibold
+  font-weight: $weight-semibold !important
+.has-text-weight-bold
+  font-weight: $weight-bold !important
 
 // Visibility
 
@@ -882,6 +894,8 @@ $button-hover-border-color: $link-hover-border !default
 
 $button-focus-color: $link-focus !default
 $button-focus-border-color: $link-focus-border !default
+$button-focus-box-shadow-size: 0 0 0 0.125em !default
+$button-focus-box-shadow-color: rgba($link, 0.25) !default
 
 $button-active-color: $link-active !default
 $button-active-border-color: $link-active-border !default
@@ -898,8 +912,6 @@ $button-disabled-opacity: 0.5 !default
 $button-static-color: $grey !default
 $button-static-background-color: $white-ter !default
 $button-static-border-color: $grey-lighter !default
-
-$button-shadow-inset: inset 0 1px 2px rgba($black, 0.2) !default
 
 // The button sizes use mixins so they can be used at different breakpoints
 =button-small
@@ -948,12 +960,12 @@ $button-shadow-inset: inset 0 1px 2px rgba($black, 0.2) !default
   &:focus,
   &.is-focused
     border-color: $button-focus-border-color
-    // box-shadow: 0 0 0.5em rgba($button-focus-border-color, 0.25)
     color: $button-focus-color
+    &:not(:active)
+      box-shadow: $button-focus-box-shadow-size $button-focus-box-shadow-color
   &:active,
   &.is-active
     border-color: $button-active-border-color
-    box-shadow: $button-shadow-inset
     color: $button-active-color
   // Colors
   &.is-link
@@ -964,10 +976,12 @@ $button-shadow-inset: inset 0 1px 2px rgba($black, 0.2) !default
     &:hover,
     &.is-hovered,
     &:focus,
-    &.is-focused,
+    &.is-focused
+      background-color: $button-link-hover-background-color
+      color: $button-link-hover-color
     &:active,
     &.is-active
-      background-color: $button-link-hover-background-color
+      background-color: darken($button-link-hover-background-color, 5%)
       color: $button-link-hover-color
     &[disabled]
       background-color: transparent
@@ -988,13 +1002,13 @@ $button-shadow-inset: inset 0 1px 2px rgba($black, 0.2) !default
       &:focus,
       &.is-focused
         border-color: transparent
-        box-shadow: 0 0 0.5em rgba($color, 0.25)
         color: $color-invert
+        &:not(:active)
+          box-shadow: $button-focus-box-shadow-size rgba($color, 0.25)
       &:active,
       &.is-active
         background-color: darken($color, 5%)
         border-color: transparent
-        box-shadow: $button-shadow-inset
         color: $color-invert
       &[disabled]
         background-color: $color
@@ -1073,12 +1087,10 @@ $button-shadow-inset: inset 0 1px 2px rgba($black, 0.2) !default
     box-shadow: none
     pointer-events: none
 
-$container-offset: 60px !default
-
 .container
   margin: 0 auto
   position: relative
-  +from($desktop + $container-offset)
+  +from($desktop)
     max-width: $desktop - (2 * $gap)
     width: $desktop - (2 * $gap)
     &.is-fluid
@@ -1086,18 +1098,18 @@ $container-offset: 60px !default
       margin-right: $gap
       max-width: none
       width: auto
-  +until($widescreen + $container-offset)
+  +until($widescreen)
     &.is-widescreen
       max-width: $widescreen - (2 * $gap)
       width: auto
-  +until($fullhd + $container-offset)
+  +until($fullhd)
     &.is-fullhd
       max-width: $fullhd - (2 * $gap)
       width: auto
-  +from($widescreen + $container-offset)
+  +from($widescreen)
     max-width: $widescreen - (2 * $gap)
     width: $widescreen - (2 * $gap)
-  +from($fullhd + $container-offset)
+  +from($fullhd)
     max-width: $fullhd - (2 * $gap)
     width: $fullhd - (2 * $gap)
 $content-heading-color: $text-strong !default
@@ -1188,8 +1200,13 @@ $content-table-foot-cell-color: $text-strong !default
   dd
     margin-left: 2em
   figure
-    margin: 2em
+    margin-left: 2em
+    margin-right: 2em
     text-align: center
+    &:not(:first-child)
+      margin-top: 2em
+    &:not(:last-child)
+      margin-bottom: 2em
     img
       display: inline-block
     figcaption
@@ -1251,6 +1268,8 @@ $input-hover-border-color: $grey-light !default
 
 $input-focus-color: $grey-darker !default
 $input-focus-border-color: $link !default
+$input-focus-box-shadow-size: 0 0 0 0.125em !default
+$input-focus-box-shadow-color: rgba($link, 0.25) !default
 
 $input-disabled-color: $text-light !default
 $input-disabled-background-color: $background !default
@@ -1294,6 +1313,7 @@ $help-size: $size-small !default
   &:active,
   &.is-active
     border-color: $input-focus-border-color
+    box-shadow: $input-focus-box-shadow-size $input-focus-box-shadow-color
   &[disabled]
     background-color: $input-disabled-background-color
     border-color: $input-disabled-border-color
@@ -1315,6 +1335,11 @@ $help-size: $size-small !default
     $color: nth($pair, 1)
     &.is-#{$name}
       border-color: $color
+      &:focus,
+      &.is-focused,
+      &:active,
+      &.is-active
+        box-shadow: $input-focus-box-shadow-size rgba($color, 0.25)
   // Sizes
   &.is-small
     +control-small
@@ -1341,6 +1366,9 @@ $help-size: $size-small !default
     min-height: 120px
   &[rows]
     height: unset
+  // Modifiers
+  &.has-fixed-size
+    resize: none
 
 .checkbox,
 .radio
@@ -1380,13 +1408,6 @@ $help-size: $size-small !default
     font-size: 1em
     max-width: 100%
     outline: none
-    &:hover
-      border-color: $input-hover-border-color
-    &:focus,
-    &.is-focused,
-    &:active,
-    &.is-active
-      border-color: $input-focus-border-color
     &::-ms-expand
       display: none
     &[disabled]:hover
@@ -1407,6 +1428,11 @@ $help-size: $size-small !default
     $color: nth($pair, 1)
     &.is-#{$name} select
       border-color: $color
+      &:focus,
+      &.is-focused,
+      &:active,
+      &.is-active
+        box-shadow: $input-focus-box-shadow-size rgba($color, 0.25)
   // Sizes
   &.is-small
     +control-small
@@ -1837,24 +1863,16 @@ $icon-dimensions-large: 3rem !default
   justify-content: center
   height: $icon-dimensions
   width: $icon-dimensions
-  .fa
-    font-size: 21px
   // Sizes
   &.is-small
     height: $icon-dimensions-small
     width: $icon-dimensions-small
-    .fa
-      font-size: 14px
   &.is-medium
     height: $icon-dimensions-medium
     width: $icon-dimensions-medium
-    .fa
-      font-size: 28px
   &.is-large
     height: $icon-dimensions-large
     width: $icon-dimensions-large
-    .fa
-      font-size: 42px
 
 $dimensions: 16 24 32 48 64 96 128 !default
 
@@ -2067,6 +2085,7 @@ $table-striped-row-even-hover-background-color: $white-ter !default
 $tag-background-color: $background !default
 $tag-color: $text !default
 $tag-radius: $radius !default
+$tag-delete-margin: 1px !default
 
 .tags
   align-items: center
@@ -2091,7 +2110,7 @@ $tag-radius: $radius !default
         border-bottom-right-radius: 0
         border-top-right-radius: 0
 
-.tag
+.tag:not(body)
   align-items: center
   background-color: $tag-background-color
   border-radius: $tag-radius
@@ -2121,7 +2140,7 @@ $tag-radius: $radius !default
     font-size: $size-medium
   // Modifiers
   &.is-delete
-    margin-left: 1px
+    margin-left: $tag-delete-margin
     padding: 0
     position: relative
     width: 2em
@@ -2214,11 +2233,6 @@ $subtitle-strong-weight: $weight-semibold !default
 
 .delete
   +delete
-
-.fa
-  font-size: 21px
-  text-align: center
-  vertical-align: top
 
 .heading
   display: block
@@ -2512,11 +2526,13 @@ a.dropdown-item
   flex-grow: 0
   flex-shrink: 0
   .level-item
-    &:not(:last-child)
-      margin-right: 0.75rem
     // Modifiers
     &.is-flexible
       flex-grow: 1
+    // Responsiveness
+    +tablet
+      &:not(:last-child)
+        margin-right: 0.75rem
 
 .level-left
   align-items: center
@@ -2993,6 +3009,49 @@ $navbar-divider-background-color: $border !default
   background-color: $navbar-background-color
   min-height: $navbar-height
   position: relative
+  @each $name, $pair in $colors
+    $color: nth($pair, 1)
+    $color-invert: nth($pair, 2)
+    &.is-#{$name}
+      background-color: $color
+      color: $color-invert
+      .navbar-brand
+        & > .navbar-item,
+        .navbar-link
+          color: $color-invert
+        & > a.navbar-item,
+        .navbar-link
+          &:hover,
+          &.is-active
+            background-color: darken($color, 5%)
+            color: $color-invert
+        .navbar-link
+          &::after
+            border-color: $color-invert
+      +desktop
+        .navbar-start,
+        .navbar-end
+          & > .navbar-item,
+          .navbar-link
+            color: $color-invert
+          & > a.navbar-item,
+          .navbar-link
+            &:hover,
+            &.is-active
+              background-color: darken($color, 5%)
+              color: $color-invert
+          .navbar-link
+            &::after
+              border-color: $color-invert
+        .navbar-item.has-dropdown:hover .navbar-link,
+        .navbar-item.has-dropdown.is-active .navbar-link
+          background-color: darken($color, 5%)
+          color: $color-invert
+        .navbar-dropdown
+          a.navbar-item
+            &.is-active
+              background-color: $color
+              color: $color-invert
   & > .container
     align-items: stretch
     display: flex
@@ -3001,13 +3060,16 @@ $navbar-divider-background-color: $border !default
   &.has-shadow
     box-shadow: 0 2px 3px rgba($black, 0.1)
 
-.navbar-brand
-  +overflow-touch
+.navbar-brand,
+.navbar-tabs
   align-items: stretch
   display: flex
   flex-shrink: 0
-  max-width: 100vw
   min-height: $navbar-height
+
+.navbar-tabs
+  +overflow-touch
+  max-width: 100vw
   overflow-x: auto
   overflow-y: hidden
 
@@ -3080,11 +3142,13 @@ a.navbar-item,
 +touch
   .navbar > .container
     display: block
-  .navbar-brand
+  .navbar-brand,
+  .navbar-tabs
     .navbar-item
       align-items: center
       display: flex
   .navbar-menu
+    background-color: $white
     box-shadow: 0 8px 16px rgba($black, 0.1)
     padding: 0.5rem 0
     &.is-active
@@ -3191,8 +3255,10 @@ a.navbar-item,
   .navbar-divider
     display: block
   .container > .navbar
-    margin-left: -1rem
-    margin-right: -1rem
+    .navbar-brand
+      margin-left: -1rem
+    .navbar-menu
+      margin-right: -1rem
   // Hover/Active states
   a.navbar-item,
   .navbar-link
@@ -3585,12 +3651,14 @@ $tabs-toggle-link-active-color: $primary-invert !default
   &.is-large
     font-size: $size-large
 
+$column-gap: 0.75rem !default
+
 .column
   display: block
   flex-basis: 0
   flex-grow: 1
   flex-shrink: 1
-  padding: 0.75rem
+  padding: $column-gap
   .columns.is-mobile > &.is-narrow
     flex: none
   .columns.is-mobile > &.is-full
@@ -3865,13 +3933,13 @@ $tabs-toggle-link-active-color: $primary-invert !default
         margin-left: ($i / 12) * 100%
 
 .columns
-  margin-left: -0.75rem
-  margin-right: -0.75rem
-  margin-top: -0.75rem
+  margin-left: (-$column-gap)
+  margin-right: (-$column-gap)
+  margin-top: (-$column-gap)
   &:last-child
-    margin-bottom: -0.75rem
+    margin-bottom: (-$column-gap)
   &:not(:last-child)
-    margin-bottom: 0.75rem
+    margin-bottom: calc(1.5rem - #{$column-gap})
   // Modifiers
   &.is-centered
     justify-content: center
@@ -3879,23 +3947,13 @@ $tabs-toggle-link-active-color: $primary-invert !default
     margin-left: 0
     margin-right: 0
     margin-top: 0
-    &:last-child
-      margin-bottom: 0
-    &:not(:last-child)
-      margin-bottom: 1.5rem
     & > .column
       margin: 0
-      padding: 0
-  &.is-grid
-    // Responsiveness
-    +tablet
-      flex-wrap: wrap
-      & > .column
-        max-width: 33.3333%
-        padding: 0.75rem
-        width: 33.3333%
-        & + .column
-          margin-left: 0
+      padding: 0 !important
+    &:not(:last-child)
+      margin-bottom: 1.5rem
+    &:last-child
+      margin-bottom: 0
   &.is-mobile
     display: flex
   &.is-multiline
@@ -3910,6 +3968,17 @@ $tabs-toggle-link-active-color: $primary-invert !default
     // Modifiers
     &.is-desktop
       display: flex
+
+.columns.is-variable
+  --columnGap: 0.75rem
+  margin-left: calc(-1 * var(--columnGap))
+  margin-right: calc(-1 * var(--columnGap))
+  .column
+    padding-left: var(--columnGap)
+    padding-right: var(--columnGap)
+  @for $i from 0 through 8
+    &.is-#{$i}
+      --columnGap: $i * 0.25rem
 
 .tile
   align-items: stretch
