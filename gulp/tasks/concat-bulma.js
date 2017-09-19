@@ -121,7 +121,7 @@ gulp.task('bulma:grid', () => {
 
 gulp.task('bulma:layout', () => {
   return gulp
-    .src(components)
+    .src(layout)
     .pipe(concat('_platform-bulma-layout.sass'))
     .pipe(gulp.dest('dist/sass'))
 })
