@@ -30,7 +30,7 @@
     "animate.css": "^3.5.2",
     "axios": "^0.16.2",
     "browserify": "^14.3.0",
-    "bulma": "^0.5.1",
+    "bulma": "^0.5.3",
     "cross-env": "^5.0.1",
     "debug": "^2.6.4",
     "gsap": "^1.19.1",
