@@ -57,10 +57,11 @@ let grid = [
 })
 
 let layout = [
-  "saas/layout/hero.sass",
-  "saas/layout/section.sass",
-  "saas/layout/footer.sass",
+  "sass/layout/hero.sass",
+  "sass/layout/section.sass",
+  "sass/layout/footer.sass",
 ].map(function(p){
+  console.log(`${rootPath}/${p}`)
   return path.resolve(`${rootPath}/${p}`)
 })
 
@@ -125,6 +126,8 @@ gulp.task('bulma:layout', () => {
     .pipe(concat('_platform-bulma-layout.sass'))
     .pipe(gulp.dest('dist/sass'))
 })
+
+console.log(layout)
 
 gulp.task('bulma', [
   'bulma:utilities',
