@@ -18,6 +18,7 @@ $orange:       hsl(14,  100%, 53%) !default
 $yellow:       hsl(48,  100%, 67%) !default
 $green:        hsl(141, 71%,  48%) !default
 $turquoise:    hsl(171, 100%, 41%) !default
+$cyan:         hsl(204, 86%,  53%) !default
 $blue:         hsl(217, 71%,  53%) !default
 $purple:       hsl(271, 100%, 71%) !default
 $red:          hsl(348, 100%, 61%) !default
@@ -94,7 +95,7 @@ $speed: 86ms !default
 
 $primary: $turquoise !default
 
-$info: $blue !default
+$info: $cyan !default
 $success: $green !default
 $warning: $yellow !default
 $danger: $red !default
@@ -108,12 +109,13 @@ $orange-invert: findColorInvert($orange) !default
 $yellow-invert: findColorInvert($yellow) !default
 $green-invert: findColorInvert($green) !default
 $turquoise-invert: findColorInvert($turquoise) !default
+$cyan-invert: findColorInvert($cyan) !default
 $blue-invert: findColorInvert($blue) !default
 $purple-invert: findColorInvert($purple) !default
 $red-invert: findColorInvert($red) !default
 
 $primary-invert: $turquoise-invert !default
-$info-invert: $blue-invert !default
+$info-invert: $cyan-invert !default
 $success-invert: $green-invert !default
 $warning-invert: $yellow-invert !default
 $danger-invert: $red-invert !default
@@ -144,15 +146,15 @@ $pre-background: $background !default
 
 // Link colors
 
-$link: $primary !default
-$link-invert: $primary-invert !default
+$link: $blue !default
+$link-invert: $blue-invert !default
 $link-visited: $purple !default
 
 $link-hover: $grey-darker !default
 $link-hover-border: $grey-light !default
 
 $link-focus: $grey-darker !default
-$link-focus-border: $primary !default
+$link-focus-border: $blue !default
 
 $link-active: $grey-darker !default
 $link-active-border: $grey-dark !default
@@ -169,7 +171,7 @@ $size-large: $size-4 !default
 
 // Lists and maps
 
-$colors: ("white": ($white, $black), "black": ($black, $white), "light": ($light, $light-invert), "dark": ($dark, $dark-invert), "primary": ($primary, $primary-invert), "info": ($info, $info-invert), "success": ($success, $success-invert), "warning": ($warning, $warning-invert), "danger": ($danger, $danger-invert)) !default
+$colors: ("white": ($white, $black), "black": ($black, $white), "light": ($light, $light-invert), "dark": ($dark, $dark-invert), "primary": ($primary, $primary-invert), "link": ($link, $link-invert), "info": ($info, $info-invert), "success": ($success, $success-invert), "warning": ($warning, $warning-invert), "danger": ($danger, $danger-invert)) !default
 $shades: ("black-bis": $black-bis, "black-ter": $black-ter, "grey-darker": $grey-darker, "grey-dark": $grey-dark, "grey": $grey, "grey-light": $grey-light, "grey-lighter": $grey-lighter, "white-ter": $white-ter, "white-bis": $white-bis) !default
 
 $sizes: $size-1 $size-2 $size-3 $size-4 $size-5 $size-6 $size-7 !default
@@ -179,6 +181,8 @@ $sizes: $size-1 $size-2 $size-3 $size-4 $size-5 $size-6 $size-7 !default
     transform: rotate(0deg)
   to
     transform: rotate(359deg)
+
+@import "initial-variables"
 
 =arrow($color)
   border: 1px solid $color
@@ -900,9 +904,9 @@ $button-focus-box-shadow-color: rgba($link, 0.25) !default
 $button-active-color: $link-active !default
 $button-active-border-color: $link-active-border !default
 
-$button-link-color: $text !default
-$button-link-hover-background-color: $background !default
-$button-link-hover-color: $text-strong !default
+$button-text-color: $text !default
+$button-text-hover-background-color: $background !default
+$button-text-hover-color: $text-strong !default
 
 $button-disabled-background-color: $white !default
 $button-disabled-border-color: $grey-lighter !default
@@ -968,21 +972,21 @@ $button-static-border-color: $grey-lighter !default
     border-color: $button-active-border-color
     color: $button-active-color
   // Colors
-  &.is-link
+  &.is-text
     background-color: transparent
     border-color: transparent
-    color: $button-link-color
+    color: $button-text-color
     text-decoration: underline
     &:hover,
     &.is-hovered,
     &:focus,
     &.is-focused
-      background-color: $button-link-hover-background-color
-      color: $button-link-hover-color
+      background-color: $button-text-hover-background-color
+      color: $button-text-hover-color
     &:active,
     &.is-active
-      background-color: darken($button-link-hover-background-color, 5%)
-      color: $button-link-hover-color
+      background-color: darken($button-text-hover-background-color, 5%)
+      color: $button-text-hover-color
     &[disabled]
       background-color: transparent
       border-color: transparent
@@ -1305,6 +1309,8 @@ $help-size: $size-small !default
   background-color: $input-background-color
   border-color: $input-border-color
   color: $input-color
+  +placeholder
+    color: rgba($input-color, 0.3)
   &:hover,
   &.is-hovered
     border-color: $input-hover-border-color
@@ -2040,8 +2046,6 @@ $table-striped-row-even-hover-background-color: $white-ter !default
     color: $table-cell-heading-color
     text-align: left
   tr
-    &:hover
-      background-color: $table-row-hover-background-color
     &.is-selected
       background-color: $table-row-active-background-color
       color: $table-row-active-color
@@ -2080,6 +2084,16 @@ $table-striped-row-even-hover-background-color: $white-ter !default
           border-bottom-width: 1px
   &.is-fullwidth
     width: 100%
+  &.is-hoverable
+    tbody
+      tr
+        &:hover
+          background-color: $table-row-hover-background-color
+    &.is-striped
+      tbody
+        tr:not(.is-selected)
+          &:hover
+            background-color: $table-striped-row-even-hover-background-color
   &.is-narrow
     td,
     th
@@ -2089,8 +2103,6 @@ $table-striped-row-even-hover-background-color: $white-ter !default
       tr:not(.is-selected)
         &:nth-child(even)
           background-color: $table-striped-row-even-background-color
-          &:hover
-            background-color: $table-striped-row-even-hover-background-color
 
 $tag-background-color: $background !default
 $tag-color: $text !default
@@ -2278,7 +2290,7 @@ $subtitle-strong-weight: $weight-semibold !default
   text-align: center
   vertical-align: top
 
-$breadcrumb-item-color: $text-light !default
+$breadcrumb-item-color: $link !default
 $breadcrumb-item-hover-color: $link-hover !default
 $breadcrumb-item-active-color: $text-strong !default
 
@@ -2431,8 +2443,8 @@ $dropdown-content-z: 20 !default
 $dropdown-item-color: $grey-dark !default
 $dropdown-item-hover-color: $black !default
 $dropdown-item-hover-background-color: $background !default
-$dropdown-item-active-color: $primary-invert !default
-$dropdown-item-active-background-color: $primary !default
+$dropdown-item-active-color: $link-invert !default
+$dropdown-item-active-background-color: $link !default
 
 $dropdown-divider-background-color: $border !default
 
@@ -2448,6 +2460,12 @@ $dropdown-divider-background-color: $border !default
     .dropdown-menu
       left: auto
       right: 0
+  &.is-up
+    .dropdown-menu
+      bottom: 100%
+      padding-bottom: $dropdown-content-offset
+      padding-top: unset
+      top: auto
 
 .dropdown-menu
   display: none
@@ -2512,6 +2530,7 @@ a.dropdown-item
         margin-bottom: 0
       &:not(.is-narrow)
         flex-grow: 1
+      margin-right: 0.75rem
   // Responsiveness
   +tablet
     display: flex
@@ -2533,7 +2552,7 @@ a.dropdown-item
   +mobile
     &:not(:last-child)
       margin-bottom: 0.75rem
-
+    
 .level-left,
 .level-right
   flex-basis: auto
@@ -2853,132 +2872,6 @@ $modal-card-body-padding: 20px !default
   overflow: auto
   padding: $modal-card-body-padding
 
-$nav-height: 3.25rem !default
-
-// Components
-
-.nav-toggle
-  +hamburger($nav-height)
-  // Responsiveness
-  +tablet
-    display: none
-
-.nav-item
-  align-items: center
-  display: flex
-  flex-grow: 0
-  flex-shrink: 0
-  font-size: $size-normal
-  justify-content: center
-  line-height: 1.5
-  padding: 0.5rem 0.75rem
-  a
-    flex-grow: 1
-    flex-shrink: 0
-  img
-    max-height: 1.75rem
-  .tag
-    &:first-child:not(:last-child)
-      margin-right: 0.5rem
-    &:last-child:not(:first-child)
-      margin-left: 0.5rem
-  // Responsiveness
-  +mobile
-    justify-content: flex-start
-
-.nav-item a:not(.button),
-a.nav-item:not(.button)
-  color: $text-light
-  &:hover
-    color: $link-hover
-  // Modifiers
-  &.is-active
-    color: $link-active
-  &.is-tab
-    border-bottom: 1px solid transparent
-    border-top: 1px solid transparent
-    padding-bottom: calc(0.75rem - 1px)
-    padding-left: 1rem
-    padding-right: 1rem
-    padding-top: calc(0.75rem - 1px)
-    &:hover
-      border-bottom-color: $primary
-      border-top-color: transparent
-    &.is-active
-      border-bottom: 3px solid $primary
-      color: $primary
-      padding-bottom: calc(0.75rem - 3px)
-  // Responsiveness
-  +desktop
-    &.is-brand
-      padding-left: 0
-
-// Containers
-
-.nav-left,
-.nav-right
-  +overflow-touch
-  align-items: stretch
-  display: flex
-  flex-grow: 1
-  flex-shrink: 0
-  max-width: 100%
-  overflow: auto
-  +widescreen
-    flex-basis: 0
-
-.nav-left
-  justify-content: flex-start
-  white-space: nowrap
-
-.nav-right
-  justify-content: flex-end
-
-.nav-center
-  align-items: stretch
-  display: flex
-  flex-grow: 0
-  flex-shrink: 0
-  justify-content: center
-  margin-left: auto
-  margin-right: auto
-
-.nav-menu
-  // Responsiveness
-  +mobile
-    &.nav-right
-      background-color: $white
-      box-shadow: 0 4px 7px rgba($black, 0.1)
-      left: 0
-      display: none
-      right: 0
-      top: 100%
-      position: absolute
-      .nav-item
-        border-top: 1px solid rgba($border, 0.5)
-        padding: 0.75rem
-      &.is-active
-        display: block
-
-// Main container
-
-.nav
-  align-items: stretch
-  background-color: $white
-  display: flex
-  height: $nav-height
-  position: relative
-  text-align: center
-  z-index: 10
-  & > .container
-    align-items: stretch
-    display: flex
-    min-height: $nav-height
-    width: 100%
-  // Modifiers
-  &.has-shadow
-    box-shadow: 0 2px 3px rgba($black, 0.1)
-
 $navbar-background-color: $white !default
 $navbar-height: 3.25rem !default
 
@@ -2990,10 +2883,10 @@ $navbar-item-active-background-color: transparent !default
 $navbar-item-img-max-height: 1.75rem !default
 
 $navbar-tab-hover-background-color: transparent !default
-$navbar-tab-hover-border-bottom-color: $primary !default
-$navbar-tab-active-color: $primary !default
+$navbar-tab-hover-border-bottom-color: $link !default
+$navbar-tab-active-color: $link !default
 $navbar-tab-active-background-color: transparent !default
-$navbar-tab-active-border-bottom-color: $primary !default
+$navbar-tab-active-border-bottom-color: $link !default
 $navbar-tab-active-border-bottom-style: solid !default
 $navbar-tab-active-border-bottom-width: 3px !default
 
@@ -3009,7 +2902,7 @@ $navbar-dropdown-boxed-shadow: 0 8px 8px rgba($black, 0.1), 0 0 0 1px rgba($blac
 
 $navbar-dropdown-item-hover-color: $black !default
 $navbar-dropdown-item-hover-background-color: $background !default
-$navbar-dropdown-item-active-color: $primary !default
+$navbar-dropdown-item-active-color: $link !default
 $navbar-dropdown-item-active-background-color: $background !default
 
 $navbar-divider-background-color: $border !default
@@ -3177,12 +3070,12 @@ a.navbar-item,
       .navbar-link
         &:hover,
         &.is-active
-          background-color: transparent
+          background-color: transparent !important
       .navbar-item.has-dropdown
         &.is-active,
         &.is-hoverable:hover
           .navbar-link
-            background-color: transparent
+            background-color: transparent !important
       .navbar-dropdown
         a.navbar-item
           &:hover
@@ -3524,8 +3417,8 @@ $tabs-border-bottom-width: 1px !default
 $tabs-link-color: $text !default
 $tabs-link-hover-border-bottom-color: $text-strong !default
 $tabs-link-hover-color: $text-strong !default
-$tabs-link-active-border-bottom-color: $primary !default
-$tabs-link-active-color: $primary !default
+$tabs-link-active-border-bottom-color: $link !default
+$tabs-link-active-color: $link !default
 $tabs-link-padding: 0.5em 1em !default
 
 $tabs-boxed-link-radius: $radius !default
@@ -3542,9 +3435,9 @@ $tabs-toggle-link-border-width: 1px !default
 $tabs-toggle-link-hover-background-color: $background !default
 $tabs-toggle-link-hover-border-color: $border-hover !default
 $tabs-toggle-link-radius: $radius !default
-$tabs-toggle-link-active-background-color: $primary !default
-$tabs-toggle-link-active-border-color: $primary !default
-$tabs-toggle-link-active-color: $primary-invert !default
+$tabs-toggle-link-active-background-color: $link !default
+$tabs-toggle-link-active-border-color: $link !default
+$tabs-toggle-link-active-color: $link-invert !default
 
 .tabs
   +block
@@ -4029,9 +3922,8 @@ $column-gap: 0.75rem !default
   display: flex
   flex-direction: column
   justify-content: space-between
-  .nav
+  .navbar
     background: none
-    box-shadow: 0 1px 0 rgba($border, 0.3)
   .tabs
     ul
       border-bottom: none
@@ -4052,16 +3944,17 @@ $column-gap: 0.75rem !default
         a:not(.button),
         strong
           color: $color-invert
-      .nav
-        box-shadow: 0 1px 0 rgba($color-invert, 0.2)
-      .nav-menu
-        +mobile
+      .navbar-menu
+        +touch
           background-color: $color
-      a.nav-item,
-      .nav-item a:not(.button)
+      .navbar-item,
+      .navbar-link
         color: rgba($color-invert, 0.7)
+      a.navbar-item,
+      .navbar-link
         &:hover,
         &.is-active
+          background-color: darken($color, 5%)
           color: $color-invert
       .tabs
         a
@@ -4090,21 +3983,21 @@ $column-gap: 0.75rem !default
         $gradient-bottom-right: lighten(saturate(adjust-hue($color, 10deg), 5%), 5%)
         background-image: linear-gradient(141deg, $gradient-top-left 0%, $color 71%, $gradient-bottom-right 100%)
         +mobile
-          .nav-menu
+          .navbar-menu
             background-image: linear-gradient(141deg, $gradient-top-left 0%, $color 71%, $gradient-bottom-right 100%)
       // Responsiveness
-      +mobile
-        .nav-toggle
-          span
-            background-color: $color-invert
-          &:hover
-            background-color: rgba($black, 0.1)
-          &.is-active
-            span
-              background-color: $color-invert
-        .nav-menu
-          .nav-item
-            border-top-color: rgba($color-invert, 0.2)
+      // +mobile
+      //   .nav-toggle
+      //     span
+      //       background-color: $color-invert
+      //     &:hover
+      //       background-color: rgba($black, 0.1)
+      //     &.is-active
+      //       span
+      //         background-color: $color-invert
+      //   .nav-menu
+      //     .nav-item
+      //       border-top-color: rgba($color-invert, 0.2)
   // Sizes
   &.is-small
     .hero-body

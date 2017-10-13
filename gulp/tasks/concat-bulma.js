@@ -22,7 +22,7 @@ let components = [
   "sass/components/menu.sass",
   "sass/components/message.sass",
   "sass/components/modal.sass",
-  "sass/components/nav.sass",
+  //"sass/components/nav.sass", // since 0.6.0
   "sass/components/navbar.sass",
   "sass/components/pagination.sass",
   "sass/components/panel.sass",

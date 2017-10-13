@@ -1,6 +1,6 @@
 {
   "name": "platform-js",
-  "version": "0.5.3",
+  "version": "0.6.0",
   "description": "JavaScript bundles",
   "main": "dist/js/platform.vue.bundle.js",
   "scripts": {
@@ -30,7 +30,7 @@
     "animate.css": "^3.5.2",
     "axios": "^0.16.2",
     "browserify": "^14.3.0",
-    "bulma": "^0.5.3",
+    "bulma": "^0.6.0",
     "cross-env": "^5.0.1",
     "debug": "^2.6.4",
     "gsap": "^1.19.1",
