@@ -92,6 +92,32 @@ gulp.task('bulma:utilities', () => {
     .pipe(gulp.dest('dist/sass'))
 })
 
+/**
+ * @see https://gitlab.edge/insales/themes/issues/3
+ */
+gulp.task('bulma:mixins', () => {
+  return gulp
+    .src(path.resolve(`${rootPath}/sass/utilities/mixins.sass`))
+    .pipe(concat('_platform-bulma-mixins.sass'))
+    .pipe(gulp.dest('dist/sass'))
+})
+
+/**
+ * @see https://gitlab.edge/insales/themes/issues/3
+ */
+gulp.task('bulma:vars', () => {
+  return gulp
+    .src(path.resolve(`${rootPath}/sass/utilities/initial-variables.sass`))
+    .pipe(concat('_platform-bulma-initial-variables.sass'))
+    .pipe(gulp.dest('dist/sass'))
+})
+
+gulp.task('bulma:initial_variables', () => {
+  return gulp
+    .src(path.resolve(`${rootPath}/sass/utilities/initial-variables.sass`))
+    .pipe(gulp.dest('dist/sass'))
+})
+
 gulp.task('bulma:base', () => {
   return gulp
     .src(base)
@@ -127,15 +153,16 @@ gulp.task('bulma:layout', () => {
     .pipe(gulp.dest('dist/sass'))
 })
 
-console.log(layout)
-
 gulp.task('bulma', [
   'bulma:utilities',
   'bulma:base',
   'bulma:elements',
   'bulma:components',
   'bulma:grid',
-  'bulma:layout'
+  'bulma:layout',
+  'bulma:mixins',
+  'bulma:vars',
+  'bulma:initial_variables'
 ], () => {
   return gulp
     .src(bulma)
