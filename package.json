@@ -73,7 +73,9 @@
     "vue-router": "^2.7.0",
     "vuex": "^2.4.0"
   },
-  "dependencies": {},
+  "dependencies": {
+    "heatmap.js": "^2.0.5"
+  },
   "engines": {
     "node": ">= 6.0.0",
     "npm": ">= 5.0.0"
