@@ -1,6 +1,6 @@
 {
   "name": "platform-js",
-  "version": "0.6.0-1",
+  "version": "0.6.1",
   "description": "JavaScript bundles",
   "main": "dist/js/platform.vue.bundle.js",
   "scripts": {
