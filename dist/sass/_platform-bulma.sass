@@ -194,6 +194,7 @@ $sizes: $size-1 $size-2 $size-3 $size-4 $size-5 $size-6 $size-7 !default
   pointer-events: none
   position: absolute
   transform: rotate(-45deg)
+  transform-origin: center
   width: 0.5em
 
 =block
@@ -226,7 +227,7 @@ $sizes: $size-1 $size-2 $size-3 $size-4 $size-5 $size-6 $size-7 !default
   display: inline-block
   flex-grow: 0
   flex-shrink: 0
-  font-size: $size-normal
+  font-size: 0
   height: 20px
   max-height: 20px
   max-width: 20px
@@ -299,34 +300,30 @@ $sizes: $size-1 $size-2 $size-3 $size-4 $size-5 $size-6 $size-7 !default
     background-color: currentColor
     display: block
     height: 1px
-    left: 50%
-    margin-left: -7px
+    left: calc(50% - 8px)
     position: absolute
-    top: 50%
-    transition: none $speed $easing
-    transition-property: background, left, opacity, transform
-    width: 15px
+    transform-origin: center
+    transition-duration: $speed
+    transition-property: background-color, opacity, transform
+    transition-timing-function: $easing
+    width: 16px
     &:nth-child(1)
-      margin-top: -6px
+      top: calc(50% - 6px)
     &:nth-child(2)
-      margin-top: -1px
+      top: calc(50% - 1px)
     &:nth-child(3)
-      margin-top: 4px
+      top: calc(50% + 4px)
   &:hover
     background-color: rgba(black, 0.05)
   // Modifers
   &.is-active
     span
       &:nth-child(1)
-        margin-left: -5px
-        transform: rotate(45deg)
-        transform-origin: left top
+        transform: translateY(5px) rotate(45deg)
       &:nth-child(2)
         opacity: 0
       &:nth-child(3)
-        margin-left: -5px
-        transform: rotate(-45deg)
-        transform-origin: left bottom
+        transform: translateY(-5px) rotate(-45deg)
 
 =loader
   animation: spinAround 500ms infinite linear
@@ -532,7 +529,7 @@ th
   padding: 0
   text-align: left
 
-$body-background-color: #fff !default
+$body-background-color: $white !default
 $body-size: 16px !default
 $body-rendering: optimizeLegibility !default
 $body-family: $family-primary !default
@@ -847,6 +844,45 @@ $displays: 'block' 'flex' 'inline' 'inline-block' 'inline-flex'
   .is-hidden-fullhd
     display: none !important
 
+.is-invisible
+  visibility: hidden !important
+
++mobile
+  .is-invisible-mobile
+    visibility: hidden !important
+
++tablet
+  .is-invisible-tablet
+    visibility: hidden !important
+
++tablet-only
+  .is-invisible-tablet-only
+    visibility: hidden !important
+
++touch
+  .is-invisible-touch
+    visibility: hidden !important
+
++desktop
+  .is-invisible-desktop
+    visibility: hidden !important
+
++desktop-only
+  .is-invisible-desktop-only
+    visibility: hidden !important
+
++widescreen
+  .is-invisible-widescreen
+    visibility: hidden !important
+
++widescreen-only
+  .is-invisible-widescreen-only
+    visibility: hidden !important
+
++fullhd
+  .is-invisible-fullhd
+    visibility: hidden !important
+
 // Other
 
 .is-marginless
@@ -1090,6 +1126,46 @@ $button-static-border-color: $grey-lighter !default
     color: $button-static-color
     box-shadow: none
     pointer-events: none
+
+.buttons
+  align-items: center
+  display: flex
+  flex-wrap: wrap
+  justify-content: flex-start
+  .button
+    margin-bottom: 0.5rem
+    &:not(:last-child)
+      margin-right: 0.5rem
+  &:last-child
+    margin-bottom: -0.5rem
+  &:not(:last-child)
+    margin-bottom: 1rem
+  &.has-addons
+    .button
+      &:not(:first-child)
+        border-bottom-left-radius: 0
+        border-top-left-radius: 0
+      &:not(:last-child)
+        border-bottom-right-radius: 0
+        border-top-right-radius: 0
+        margin-right: -1px
+      &:last-child
+        margin-right: 0
+      &:hover,
+      &.is-hovered
+        z-index: 2
+      &:focus,
+      &.is-focused,
+      &:active,
+      &.is-active,
+      &.is-selected
+        z-index: 3
+        &:hover
+          z-index: 4
+  &.is-centered
+    justify-content: center
+  &.is-right
+    justify-content: flex-end
 
 .container
   margin: 0 auto
@@ -1533,6 +1609,11 @@ $help-size: $size-small !default
     .file-name
       border-bottom-left-radius: 0
       border-top-left-radius: 0
+    &.is-empty
+      .file-cta
+        border-radius: $file-radius
+      .file-name
+        display: none
   &.is-centered
     justify-content: center
   &.is-right
@@ -1983,6 +2064,9 @@ $progress-value-background-color: $text !default
     background-color: $progress-value-background-color
   &::-moz-progress-bar
     background-color: $progress-value-background-color
+  &::-ms-fill
+    background-color: $progress-value-background-color
+    border: none
   // Colors
   @each $name, $pair in $colors
     $color: nth($pair, 1)
@@ -1990,6 +2074,8 @@ $progress-value-background-color: $text !default
       &::-webkit-progress-value
         background-color: $color
       &::-moz-progress-bar
+        background-color: $color
+      &::-ms-fill
         background-color: $color
   // Sizes
   &.is-small
@@ -2042,6 +2128,12 @@ $table-striped-row-even-hover-background-color: $white-ter !default
     &.is-narrow
       white-space: nowrap
       width: 1%
+    &.is-selected
+      background-color: $table-row-active-background-color
+      color: $table-row-active-color
+      a,
+      strong
+        color: currentColor
   th
     color: $table-cell-heading-color
     text-align: left
@@ -2086,7 +2178,7 @@ $table-striped-row-even-hover-background-color: $white-ter !default
     width: 100%
   &.is-hoverable
     tbody
-      tr
+      tr:not(.is-selected)
         &:hover
           background-color: $table-row-hover-background-color
     &.is-striped
@@ -2131,6 +2223,18 @@ $tag-delete-margin: 1px !default
       &:not(:last-child)
         border-bottom-right-radius: 0
         border-top-right-radius: 0
+  &.is-centered
+    justify-content: center
+    .tag
+      margin-right: 0.25rem
+      margin-left: 0.25rem
+  &.is-right
+    justify-content: flex-end
+    .tag
+      &:not(:first-child)
+        margin-left: 0.5rem
+      &:not(:last-child)
+        margin-right: 0
 
 .tag:not(body)
   align-items: center
@@ -2160,6 +2264,16 @@ $tag-delete-margin: 1px !default
     font-size: $size-normal
   &.is-large
     font-size: $size-medium
+  .icon
+    &:first-child:not(:last-child)
+      margin-left: -0.375em
+      margin-right: 0.1875em
+    &:last-child:not(:first-child)
+      margin-left: 0.1875em
+      margin-right: -0.375em
+    &:first-child:last-child
+      margin-left: -0.375em
+      margin-right: -0.375em
   // Modifiers
   &.is-delete
     margin-left: $tag-delete-margin
@@ -2874,9 +2988,10 @@ $modal-card-body-padding: 20px !default
 
 $navbar-background-color: $white !default
 $navbar-height: 3.25rem !default
+$navbar-fixed-z: 30 !default
 
 $navbar-item-color: $grey-dark !default
-$navbar-item-hover-color: $black !default
+$navbar-item-hover-color: $link !default
 $navbar-item-hover-background-color: $background !default
 $navbar-item-active-color: $black !default
 $navbar-item-active-background-color: transparent !default
@@ -2906,6 +3021,17 @@ $navbar-dropdown-item-active-color: $link !default
 $navbar-dropdown-item-active-background-color: $background !default
 
 $navbar-divider-background-color: $border !default
+
+=navbar-fixed
+  left: 0
+  position: fixed
+  right: 0
+  z-index: $navbar-fixed-z
+
+=navbar-fixed-html
+  left: 0
+  position: fixed
+  right: 0
 
 .navbar
   background-color: $navbar-background-color
@@ -2961,6 +3087,21 @@ $navbar-divider-background-color: $border !default
     width: 100%
   &.has-shadow
     box-shadow: 0 2px 3px rgba($black, 0.1)
+  &.is-fixed-bottom,
+  &.is-fixed-top
+    +navbar-fixed
+  &.is-fixed-bottom
+    bottom: 0
+    &.has-shadow
+      box-shadow: 0 -2px 3px rgba($black, 0.1)
+  &.is-fixed-top
+    top: 0
+
+html.has-navbar-fixed-top
+  padding-top: $navbar-height
+
+html.has-navbar-fixed-bottom
+  padding-bottom: $navbar-height
 
 .navbar-brand,
 .navbar-tabs
@@ -2991,7 +3132,7 @@ $navbar-divider-background-color: $border !default
   position: relative
 
 a.navbar-item,
-.navbar-link
+a.navbar-link
   &:hover,
   &.is-active
     background-color: $navbar-item-hover-background-color
@@ -3004,6 +3145,9 @@ a.navbar-item,
     max-height: $navbar-item-img-max-height
   &.has-dropdown
     padding: 0
+  &.is-expanded
+    flex-grow: 1
+    flex-shrink: 1
   &.is-tab
     border-bottom: 1px solid transparent
     min-height: $navbar-height
@@ -3055,6 +3199,27 @@ a.navbar-item,
     padding: 0.5rem 0
     &.is-active
       display: block
+  // Fixed navbar
+  .navbar
+    &.is-fixed-bottom-touch,
+    &.is-fixed-top-touch
+      +navbar-fixed
+    &.is-fixed-bottom-touch
+      bottom: 0
+      &.has-shadow
+        box-shadow: 0 -2px 3px rgba($black, 0.1)
+    &.is-fixed-top-touch
+      top: 0
+    &.is-fixed-top,
+    &.is-fixed-top-touch
+      .navbar-menu
+        +overflow-touch
+        max-height: calc(100vh - #{$navbar-height})
+        overflow: auto
+  html.has-navbar-fixed-top-touch
+    padding-top: $navbar-height
+  html.has-navbar-fixed-bottom-touch
+    padding-bottom: $navbar-height
 
 +desktop
   .navbar,
@@ -3067,7 +3232,7 @@ a.navbar-item,
     min-height: $navbar-height
     &.is-transparent
       a.navbar-item,
-      .navbar-link
+      a.navbar-link
         &:hover,
         &.is-active
           background-color: transparent !important
@@ -3093,6 +3258,16 @@ a.navbar-item,
   .navbar-item
     &.has-dropdown
       align-items: stretch
+    &.has-dropdown-up
+      .navbar-link::after
+        transform: rotate(135deg) translate(0.25em, -0.25em)
+      .navbar-dropdown
+        border-bottom: $navbar-dropdown-border-top
+        border-radius: $navbar-dropdown-radius $navbar-dropdown-radius 0 0
+        border-top: none
+        bottom: 100%
+        box-shadow: 0 -8px 8px rgba($black, 0.1)
+        top: auto
     &.is-active,
     &.is-hoverable:hover
       .navbar-dropdown
@@ -3156,14 +3331,30 @@ a.navbar-item,
       right: 0
   .navbar-divider
     display: block
+  .navbar > .container,
   .container > .navbar
     .navbar-brand
       margin-left: -1rem
     .navbar-menu
       margin-right: -1rem
+  // Fixed navbar
+  .navbar
+    &.is-fixed-bottom-desktop,
+    &.is-fixed-top-desktop
+      +navbar-fixed
+    &.is-fixed-bottom-desktop
+      bottom: 0
+      &.has-shadow
+        box-shadow: 0 -2px 3px rgba($black, 0.1)
+    &.is-fixed-top-desktop
+      top: 0
+  html.has-navbar-fixed-top-desktop
+    padding-top: $navbar-height
+  html.has-navbar-fixed-bottom-desktop
+    padding-bottom: $navbar-height
   // Hover/Active states
   a.navbar-item,
-  .navbar-link
+  a.navbar-link
     &.is-active
       color: $navbar-item-active-color
     &.is-active:not(:hover)
@@ -3581,6 +3772,18 @@ $column-gap: 0.75rem !default
   .columns.is-mobile > &.is-one-quarter
     flex: none
     width: 25%
+  .columns.is-mobile > &.is-one-fifth
+    flex: none
+    width: 20%
+  .columns.is-mobile > &.is-two-fifths
+    flex: none
+    width: 40%
+  .columns.is-mobile > &.is-three-fifths
+    flex: none
+    width: 60%
+  .columns.is-mobile > &.is-four-fifths
+    flex: none
+    width: 80%
   .columns.is-mobile > &.is-offset-three-quarters
     margin-left: 75%
   .columns.is-mobile > &.is-offset-two-thirds
@@ -3591,6 +3794,14 @@ $column-gap: 0.75rem !default
     margin-left: 33.3333%
   .columns.is-mobile > &.is-offset-one-quarter
     margin-left: 25%
+  .columns.is-mobile > &.is-offset-one-fifth
+    margin-left: 20%
+  .columns.is-mobile > &.is-offset-two-fifths
+    margin-left: 40%
+  .columns.is-mobile > &.is-offset-three-fifths
+    margin-left: 60%
+  .columns.is-mobile > &.is-offset-four-fifths
+    margin-left: 80%
   @for $i from 1 through 12
     .columns.is-mobile > &.is-#{$i}
       flex: none
@@ -3618,6 +3829,18 @@ $column-gap: 0.75rem !default
     &.is-one-quarter-mobile
       flex: none
       width: 25%
+    &.is-one-fifth-mobile
+      flex: none
+      width: 20%
+    &.is-two-fifths-mobile
+      flex: none
+      width: 40%
+    &.is-three-fifths-mobile
+      flex: none
+      width: 60%
+    &.is-four-fifths-mobile
+      flex: none
+      width: 80%
     &.is-offset-three-quarters-mobile
       margin-left: 75%
     &.is-offset-two-thirds-mobile
@@ -3628,6 +3851,14 @@ $column-gap: 0.75rem !default
       margin-left: 33.3333%
     &.is-offset-one-quarter-mobile
       margin-left: 25%
+    &.is-offset-one-fifth-mobile
+      margin-left: 20%
+    &.is-offset-two-fifths-mobile
+      margin-left: 40%
+    &.is-offset-three-fifths-mobile
+      margin-left: 60%
+    &.is-offset-four-fifths-mobile
+      margin-left: 80%
     @for $i from 1 through 12
       &.is-#{$i}-mobile
         flex: none
@@ -3662,6 +3893,22 @@ $column-gap: 0.75rem !default
     &.is-one-quarter-tablet
       flex: none
       width: 25%
+    &.is-one-fifth,
+    &.is-one-fifth-tablet
+      flex: none
+      width: 20%
+    &.is-two-fifths,
+    &.is-two-fifths-tablet
+      flex: none
+      width: 40%
+    &.is-three-fifths,
+    &.is-three-fifths-tablet
+      flex: none
+      width: 60%
+    &.is-four-fifths,
+    &.is-four-fifths-tablet
+      flex: none
+      width: 80%
     &.is-offset-three-quarters,
     &.is-offset-three-quarters-tablet
       margin-left: 75%
@@ -3677,6 +3924,18 @@ $column-gap: 0.75rem !default
     &.is-offset-one-quarter,
     &.is-offset-one-quarter-tablet
       margin-left: 25%
+    &.is-offset-one-fifth,
+    &.is-offset-one-fifth-tablet
+      margin-left: 20%
+    &.is-offset-two-fifths,
+    &.is-offset-two-fifths-tablet
+      margin-left: 40%
+    &.is-offset-three-fifths,
+    &.is-offset-three-fifths-tablet
+      margin-left: 60%
+    &.is-offset-four-fifths,
+    &.is-offset-four-fifths-tablet
+      margin-left: 80%
     @for $i from 1 through 12
       &.is-#{$i},
       &.is-#{$i}-tablet
@@ -3706,6 +3965,18 @@ $column-gap: 0.75rem !default
     &.is-one-quarter-touch
       flex: none
       width: 25%
+    &.is-one-fifth-touch
+      flex: none
+      width: 20%
+    &.is-two-fifths-touch
+      flex: none
+      width: 40%
+    &.is-three-fifths-touch
+      flex: none
+      width: 60%
+    &.is-four-fifths-touch
+      flex: none
+      width: 80%
     &.is-offset-three-quarters-touch
       margin-left: 75%
     &.is-offset-two-thirds-touch
@@ -3716,6 +3987,14 @@ $column-gap: 0.75rem !default
       margin-left: 33.3333%
     &.is-offset-one-quarter-touch
       margin-left: 25%
+    &.is-offset-one-fifth-touch
+      margin-left: 20%
+    &.is-offset-two-fifths-touch
+      margin-left: 40%
+    &.is-offset-three-fifths-touch
+      margin-left: 60%
+    &.is-offset-four-fifths-touch
+      margin-left: 80%
     @for $i from 1 through 12
       &.is-#{$i}-touch
         flex: none
@@ -3743,6 +4022,18 @@ $column-gap: 0.75rem !default
     &.is-one-quarter-desktop
       flex: none
       width: 25%
+    &.is-one-fifth-desktop
+      flex: none
+      width: 20%
+    &.is-two-fifths-desktop
+      flex: none
+      width: 40%
+    &.is-three-fifths-desktop
+      flex: none
+      width: 60%
+    &.is-four-fifths-desktop
+      flex: none
+      width: 80%
     &.is-offset-three-quarters-desktop
       margin-left: 75%
     &.is-offset-two-thirds-desktop
@@ -3753,6 +4044,14 @@ $column-gap: 0.75rem !default
       margin-left: 33.3333%
     &.is-offset-one-quarter-desktop
       margin-left: 25%
+    &.is-offset-one-fifth-desktop
+      margin-left: 20%
+    &.is-offset-two-fifths-desktop
+      margin-left: 40%
+    &.is-offset-three-fifths-desktop
+      margin-left: 60%
+    &.is-offset-four-fifths-desktop
+      margin-left: 80%
     @for $i from 1 through 12
       &.is-#{$i}-desktop
         flex: none
@@ -3780,6 +4079,18 @@ $column-gap: 0.75rem !default
     &.is-one-quarter-widescreen
       flex: none
       width: 25%
+    &.is-one-fifth-widescreen
+      flex: none
+      width: 20%
+    &.is-two-fifths-widescreen
+      flex: none
+      width: 40%
+    &.is-three-fifths-widescreen
+      flex: none
+      width: 60%
+    &.is-four-fifths-widescreen
+      flex: none
+      width: 80%
     &.is-offset-three-quarters-widescreen
       margin-left: 75%
     &.is-offset-two-thirds-widescreen
@@ -3790,6 +4101,14 @@ $column-gap: 0.75rem !default
       margin-left: 33.3333%
     &.is-offset-one-quarter-widescreen
       margin-left: 25%
+    &.is-offset-one-fifth-widescreen
+      margin-left: 20%
+    &.is-offset-two-fifths-widescreen
+      margin-left: 40%
+    &.is-offset-three-fifths-widescreen
+      margin-left: 60%
+    &.is-offset-four-fifths-widescreen
+      margin-left: 80%
     @for $i from 1 through 12
       &.is-#{$i}-widescreen
         flex: none
@@ -3817,6 +4136,18 @@ $column-gap: 0.75rem !default
     &.is-one-quarter-fullhd
       flex: none
       width: 25%
+    &.is-one-fifth-fullhd
+      flex: none
+      width: 20%
+    &.is-two-fifths-fullhd
+      flex: none
+      width: 40%
+    &.is-three-fifths-fullhd
+      flex: none
+      width: 60%
+    &.is-four-fifths-fullhd
+      flex: none
+      width: 80%
     &.is-offset-three-quarters-fullhd
       margin-left: 75%
     &.is-offset-two-thirds-fullhd
@@ -3827,6 +4158,14 @@ $column-gap: 0.75rem !default
       margin-left: 33.3333%
     &.is-offset-one-quarter-fullhd
       margin-left: 25%
+    &.is-offset-one-fifth-fullhd
+      margin-left: 20%
+    &.is-offset-two-fifths-fullhd
+      margin-left: 40%
+    &.is-offset-three-fifths-fullhd
+      margin-left: 60%
+    &.is-offset-four-fifths-fullhd
+      margin-left: 80%
     @for $i from 1 through 12
       &.is-#{$i}-fullhd
         flex: none
@@ -3880,7 +4219,7 @@ $column-gap: 0.75rem !default
     padding-right: var(--columnGap)
   @for $i from 0 through 8
     &.is-#{$i}
-      --columnGap: $i * 0.25rem
+      --columnGap: #{$i * 0.25rem}
 
 .tile
   align-items: stretch
