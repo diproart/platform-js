@@ -49,12 +49,12 @@ $weight-bold: 700 !default
 $gap: 32px !default
 // 960, 1152, and 1344 have been chosen because they are divisible by both 12 and 16
 $tablet: 769px !default
-// 960px container + 3rem
+// 960px container + 4rem
 $desktop: 960px + (2 * $gap) !default
-// 1152px container + 3rem
-$widescreen: 1152px + (2 * $gap)  !default
-// 1344px container + 3rem
-$fullhd: 1344px + (2 * $gap)  !default
+// 1152px container + 4rem
+$widescreen: 1152px + (2 * $gap) !default
+// 1344px container + 4rem
+$fullhd: 1344px + (2 * $gap) !default
 
 // Miscellaneous
 
@@ -62,7 +62,12 @@ $easing: ease-out !default
 $radius-small: 2px !default
 $radius: 3px !default
 $radius-large: 5px !default
+$radius-rounded: 290486px !default
 $speed: 86ms !default
+
+// Flags
+
+$variable-columns: true !default
 
 @function powerNumber($number, $exp)
   $value: 1
@@ -222,7 +227,7 @@ $sizes: $size-1 $size-2 $size-3 $size-4 $size-5 $size-6 $size-7 !default
   -webkit-appearance: none
   background-color: rgba($black, 0.2)
   border: none
-  border-radius: 290486px
+  border-radius: $radius-rounded
   cursor: pointer
   display: inline-block
   flex-grow: 0
@@ -328,7 +333,7 @@ $sizes: $size-1 $size-2 $size-3 $size-4 $size-5 $size-6 $size-7 !default
 =loader
   animation: spinAround 500ms infinite linear
   border: 2px solid $border
-  border-radius: 290486px
+  border-radius: $radius-rounded
   border-right-color: transparent
   border-top-color: transparent
   content: ""
@@ -748,6 +753,9 @@ $alignments: ('centered': 'center', 'justified': 'justify', 'left': 'left', 'rig
 .is-uppercase
   text-transform: uppercase !important
 
+.is-italic
+  font-style: italic !important
+
 @each $name, $pair in $colors
   $color: nth($pair, 1)
   .has-text-#{$name}
@@ -1126,6 +1134,10 @@ $button-static-border-color: $grey-lighter !default
     color: $button-static-color
     box-shadow: none
     pointer-events: none
+  &.is-rounded
+    border-radius: $radius-rounded
+    padding-left: 1em
+    padding-right: 1em
 
 .buttons
   align-items: center
@@ -1410,8 +1422,6 @@ $help-size: $size-small !default
   box-shadow: $input-shadow
   max-width: 100%
   width: 100%
-  &[type="search"]
-    border-radius: 290486px
   &[readonly]
     box-shadow: none
   // Colors
@@ -1440,6 +1450,10 @@ $help-size: $size-small !default
     width: auto
 
 .input
+  &.is-rounded
+    border-radius: $radius-rounded
+    padding-left: 1em
+    padding-right: 1em
   &.is-static
     background-color: transparent
     border-color: transparent
@@ -1493,6 +1507,10 @@ $help-size: $size-small !default
       right: 1.125em
       top: 50%
       z-index: 4
+  &.is-rounded
+    select
+      border-radius: $radius-rounded
+      padding-left: 1em
   select
     +input
     cursor: pointer
@@ -1614,10 +1632,6 @@ $help-size: $size-small !default
         border-radius: $file-radius
       .file-name
         display: none
-  &.is-centered
-    justify-content: center
-  &.is-right
-    justify-content: flex-end
   &.is-boxed
     .file-label
       flex-direction: column
@@ -1647,19 +1661,22 @@ $help-size: $size-small !default
       .file-name
         border-radius: 0 0 $file-radius $file-radius
         border-width: 0 1px 1px
-  &.is-right
-    .file-cta
-      border-radius: 0 $file-radius $file-radius 0
-    .file-name
-      border-radius: $file-radius 0 0 $file-radius
-      border-width: 1px 0 1px 1px
-      order: -1
+  &.is-centered
+    justify-content: center
   &.is-fullwidth
     .file-label
       width: 100%
     .file-name
       flex-grow: 1
       max-width: none
+  &.is-right
+    justify-content: flex-end
+    .file-cta
+      border-radius: 0 $file-radius $file-radius 0
+    .file-name
+      border-radius: $file-radius 0 0 $file-radius
+      border-width: 1px 0 1px 1px
+      order: -1
 
 .file-label
   align-items: stretch
@@ -1759,22 +1776,26 @@ $help-size: $size-small !default
     .control
       &:not(:last-child)
         margin-right: -1px
+      &:not(:first-child):not(:last-child)
+        .button,
+        .input,
+        .select select
+          border-radius: 0
       &:first-child
         .button,
         .input,
         .select select
-          border-bottom-left-radius: $input-radius
-          border-top-left-radius: $input-radius
+          border-bottom-right-radius: 0
+          border-top-right-radius: 0
       &:last-child
         .button,
         .input,
         .select select
-          border-bottom-right-radius: $input-radius
-          border-top-right-radius: $input-radius
+          border-bottom-left-radius: 0
+          border-top-left-radius: 0
       .button,
       .input,
       .select select
-        border-radius: 0
         &:hover,
         &.is-hovered
           z-index: 2
@@ -1942,6 +1963,7 @@ $help-size: $size-small !default
       position: absolute !important
       right: 0.625em
       top: 0.625em
+      z-index: 4
     &.is-small:after
       font-size: $size-small
     &.is-medium:after
@@ -1980,6 +2002,8 @@ $dimensions: 16 24 32 48 64 96 128 !default
     display: block
     height: auto
     width: 100%
+    &.is-rounded
+      border-radius: $radius-rounded
   // Ratio
   &.is-square,
   &.is-1by1,
@@ -2030,8 +2054,8 @@ $notification-padding: 1.25rem 2.5rem 1.25rem 1.5rem !default
     background: transparent
   & > .delete
     position: absolute
-    right: 0.5em
-    top: 0.5em
+    right: 0.5rem
+    top: 0.5rem
   .title,
   .subtitle,
   .content
@@ -2052,7 +2076,7 @@ $progress-value-background-color: $text !default
   -moz-appearance: none
   -webkit-appearance: none
   border: none
-  border-radius: 290486px
+  border-radius: $radius-rounded
   display: block
   height: $size-normal
   overflow: hidden
@@ -2302,7 +2326,7 @@ $tag-delete-margin: 1px !default
     &:active
       background-color: darken($tag-background-color, 10%)
   &.is-rounded
-    border-radius: 290486px
+    border-radius: $radius-rounded
 
 a.tag
   &:hover
@@ -2313,6 +2337,8 @@ $title-size: $size-3 !default
 $title-weight: $weight-semibold !default
 $title-strong-color: inherit !default
 $title-strong-weight: inherit !default
+$title-sub-size: 0.75em !default
+$title-sup-size: 0.75em !default
 
 $subtitle-color: $grey-dark !default
 $subtitle-size: $size-5 !default
@@ -2327,6 +2353,10 @@ $subtitle-strong-weight: $weight-semibold !default
   em,
   span
     font-weight: inherit
+  sub
+    font-size: $title-sub-size
+  sup
+    font-size: $title-sup-size
   .tag
     vertical-align: middle
 
@@ -2393,7 +2423,7 @@ $subtitle-strong-weight: $weight-semibold !default
 .number
   align-items: center
   background-color: $background
-  border-radius: 290486px
+  border-radius: $radius-rounded
   display: inline-flex
   font-size: $size-medium
   height: 2em
@@ -2666,7 +2696,7 @@ a.dropdown-item
   +mobile
     &:not(:last-child)
       margin-bottom: 0.75rem
-    
+
 .level-left,
 .level-right
   flex-basis: auto
@@ -2741,6 +2771,7 @@ a.dropdown-item
   flex-basis: auto
   flex-grow: 1
   flex-shrink: 1
+  overflow: auto
   text-align: left
 
 $menu-item-color: $text !default
@@ -2874,7 +2905,7 @@ $message-body-pre-code-background-color: transparent !default
   pre code
     background-color: $message-body-pre-code-background-color
 
-$modal-z: 20 !default
+$modal-z: 40 !default
 
 $modal-background-background-color: rgba($black, 0.86) !default
 
@@ -3194,7 +3225,7 @@ a.navbar-link
       align-items: center
       display: flex
   .navbar-menu
-    background-color: $white
+    background-color: $navbar-background-color
     box-shadow: 0 8px 16px rgba($black, 0.1)
     padding: 0.5rem 0
     &.is-active
@@ -3400,6 +3431,14 @@ $pagination-shadow-inset: inset 0 1px 2px rgba($black, 0.2)
     font-size: $size-medium
   &.is-large
     font-size: $size-large
+  &.is-rounded
+    .pagination-previous,
+    .pagination-next
+      padding-left: 1em
+      padding-right: 1em
+      border-radius: $radius-rounded
+    .pagination-link
+      border-radius: $radius-rounded
 
 .pagination,
 .pagination-list
@@ -3425,6 +3464,7 @@ $pagination-shadow-inset: inset 0 1px 2px rgba($black, 0.2)
 .pagination-next,
 .pagination-link
   border-color: $pagination-border-color
+  color: $pagination-color
   min-width: 2.25em
   &:hover
     border-color: $pagination-hover-border-color
@@ -3736,6 +3776,16 @@ $tabs-toggle-link-active-color: $link-invert !default
           z-index: 1
     ul
       border-bottom: none
+    &.is-toggle-rounded
+      li
+        &:first-child a
+          border-bottom-left-radius: $radius-rounded
+          border-top-left-radius: $radius-rounded
+          padding-left: 1.25em
+        &:last-child a
+          border-bottom-right-radius: $radius-rounded
+          border-top-right-radius: $radius-rounded
+          padding-right: 1.25em
   // Sizes
   &.is-small
     font-size: $size-small
@@ -4210,16 +4260,17 @@ $column-gap: 0.75rem !default
     &.is-desktop
       display: flex
 
-.columns.is-variable
-  --columnGap: 0.75rem
-  margin-left: calc(-1 * var(--columnGap))
-  margin-right: calc(-1 * var(--columnGap))
-  .column
-    padding-left: var(--columnGap)
-    padding-right: var(--columnGap)
-  @for $i from 0 through 8
-    &.is-#{$i}
-      --columnGap: #{$i * 0.25rem}
+@if $variable-columns
+  .columns.is-variable
+    --columnGap: 0.75rem
+    margin-left: calc(-1 * var(--columnGap))
+    margin-right: calc(-1 * var(--columnGap))
+    .column
+      padding-left: var(--columnGap)
+      padding-right: var(--columnGap)
+    @for $i from 0 through 8
+      &.is-#{$i}
+        --columnGap: #{$i * 0.25rem}
 
 .tile
   align-items: stretch
@@ -4273,7 +4324,7 @@ $column-gap: 0.75rem !default
     &.is-#{$name}
       background-color: $color
       color: $color-invert
-      a:not(.button),
+      a:not(.button):not(.dropdown-item):not(.tag),
       strong
         color: inherit
       .title
