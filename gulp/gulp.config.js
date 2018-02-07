@@ -38,8 +38,8 @@ const libs = {
     `${nodeModules}/scrollmagic/scrollmagic/minified/ScrollMagic.min.js`,
     `${nodeModules}/scrollmagic/scrollmagic/minified/plugins/debug.addIndicators.min.js`,
     `${nodeModules}/scrollmagic/scrollmagic/minified/plugins/animation.gsap.min.js`,
-    `${nodeModules}/tether/dist/js/tether.min.js`,
-    `${nodeModules}/tether-drop/dist/js/drop.min.js`,
+    //`${nodeModules}/tether/dist/js/tether.min.js`,
+    //`${nodeModules}/tether-drop/dist/js/drop.min.js`,
     `${nodeModules}/sweet-modal/dist/min/jquery.sweet-modal.min.js`,
     `${nodeModules}/sweet-dropdown/dist/min/jquery.sweet-dropdown.min.js`,
     `${nodeModules}/select2/dist/js/select2.full.min.js`,
@@ -108,9 +108,10 @@ const bundles = {
     `${nodeModules}/lodash/lodash.min.js`,
 
     // cookies, localStorage etc
+    // @deprected use lokijs
     `${nodeModules}/localforage/dist/localforage.min.js`,
 
-    // polyfill
+    // picture polyfill
     `${nodeModules}/picturefill/dist/picturefill.min.js`,
 
     // overlay, modal, gallery
@@ -135,8 +136,8 @@ const bundles = {
     `${nodeModules}/scrollmagic/scrollmagic/minified/plugins/animation.gsap.min.js`,
 
     // dropdown, positions, modals
-    `${nodeModules}/tether/dist/js/tether.min.js`,
-    `${nodeModules}/tether-drop/dist/js/drop.min.js`,
+    //`${nodeModules}/tether/dist/js/tether.min.js`,
+    //`${nodeModules}/tether-drop/dist/js/drop.min.js`,
     `${nodeModules}/sweet-modal/dist/min/jquery.sweet-modal.min.js`,
     `${nodeModules}/sweet-dropdown/dist/min/jquery.sweet-dropdown.min.js`,
 
@@ -260,18 +261,17 @@ const styles = {
     // [!] required `${nodeModules}/photoswipe/dist/photoswipe-ui-default.min.js`,
 
     `${nodeModules}/animate.css/animate.min.css`,
-
     `${nodeModules}/swiper/dist/css/swiper.min.css`,
 
-    `${nodeModules}/tether/dist/css/tether.min.css`,
-    `${nodeModules}/tether/dist/css/tether-theme-basic.min.css`,
-    `${nodeModules}/tether/dist/css/tether-theme-arrows.min.css`,
-    `${nodeModules}/tether/dist/css/tether-theme-arrows-dark.min.css`,
-    `${nodeModules}/tether-drop/dist/css/drop-theme-basic.min.css`,
-    `${nodeModules}/tether-drop/dist/css/drop-theme-arrows-bounce-dark.min.css`,
-    `${nodeModules}/tether-drop/dist/css/drop-theme-arrows-bounce.min.css`,
-    `${nodeModules}/tether-drop/dist/css/drop-theme-arrows.min.css`,
-    `${nodeModules}/tether-drop/dist/css/drop-theme-twipsy.min.css`,
+    //`${nodeModules}/tether/dist/css/tether.min.css`,
+    //`${nodeModules}/tether/dist/css/tether-theme-basic.min.css`,
+    //`${nodeModules}/tether/dist/css/tether-theme-arrows.min.css`,
+    //`${nodeModules}/tether/dist/css/tether-theme-arrows-dark.min.css`,
+    //`${nodeModules}/tether-drop/dist/css/drop-theme-basic.min.css`,
+    //`${nodeModules}/tether-drop/dist/css/drop-theme-arrows-bounce-dark.min.css`,
+    //`${nodeModules}/tether-drop/dist/css/drop-theme-arrows-bounce.min.css`,
+    //`${nodeModules}/tether-drop/dist/css/drop-theme-arrows.min.css`,
+    //`${nodeModules}/tether-drop/dist/css/drop-theme-twipsy.min.css`,
 
     // `${nodeModules}/tether-drop/dist/css/drop-theme-arrows-bounce.min.css`,
     // `${nodeModules}/tether-drop/dist/css/drop-theme-twipsy.min.css`
@@ -293,9 +293,14 @@ const styles = {
     `${nodeModules}/messenger/build/css/messenger.css`,
 
     // alertifyjs
+    // @deprecated will be removed
     `${nodeModules}/alertifyjs/build/css/alertify.min.css`,
     `${nodeModules}/alertifyjs/build/css/themes/default.min.css`,
-    `${nodeModules}/alertifyjs/build/css/themes/semantic.min.css`
+    `${nodeModules}/alertifyjs/build/css/themes/semantic.min.css`,
+
+    // photoswipe
+    `${nodeModules}/photoswipe/dist/photoswipe.css`,
+    `${nodeModules}/photoswipe/dist/default-skin/default-skin.css`
   ],
   'platform.utils.css': [ /* no styles required */ ]
 }
