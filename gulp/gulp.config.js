@@ -12,24 +12,9 @@ const libs = {
     `${nodeModules}/vue-router/dist/vue-router.min.js`,
     `${nodeModules}/axios/dist/axios.js`
   ],
-  'platform.angular.js': [
-    `${nodeModules}/angular/angular.min.js`,
-    `${nodeModules}/angular-animate/angular-animate.min.js`,
-    `${nodeModules}/angular-messages/angular-messages.min.js`,
-    `${nodeModules}/angular-sanitize/angular-sanitize.min.js`
-  ],
-  'platform.material.js': [
-    `${nodeModules}/angular/angular.min.js`,
-    `${nodeModules}/angular-aria/angular-aria.min.js`,
-    `${nodeModules}/angular-animate/angular-animate.min.js`,
-    `${nodeModules}/angular-messages/angular-messages.min.js`,
-    `${nodeModules}/angular-sanitize/angular-sanitize.min.js`,
-    `${nodeModules}/angular-material/angular-material.min.js`
-  ],
   'platform.media.js': [
     `${nodeModules}/jquery-colorbox/jquery.colorbox-min.js`,
     `${nodeModules}/swiper/dist/js/swiper.min.js`,
-    `${nodeModules}/swiper/dist/js/swiper.jquery.min.js`,
     `${nodeModules}/photoswipe/dist/photoswipe.min.js`,
     `${nodeModules}/photoswipe/dist/photoswipe-ui-default.min.js`,
     `${nodeModules}/gsap/src/minified/TweenMax.min.js`,
@@ -38,10 +23,6 @@ const libs = {
     `${nodeModules}/scrollmagic/scrollmagic/minified/ScrollMagic.min.js`,
     `${nodeModules}/scrollmagic/scrollmagic/minified/plugins/debug.addIndicators.min.js`,
     `${nodeModules}/scrollmagic/scrollmagic/minified/plugins/animation.gsap.min.js`,
-    //`${nodeModules}/tether/dist/js/tether.min.js`,
-    //`${nodeModules}/tether-drop/dist/js/drop.min.js`,
-    `${nodeModules}/sweet-modal/dist/min/jquery.sweet-modal.min.js`,
-    `${nodeModules}/sweet-dropdown/dist/min/jquery.sweet-dropdown.min.js`,
     `${nodeModules}/select2/dist/js/select2.full.min.js`,
     `${nodeModules}/scrollup/dist/lib/jquery.easing.js`,
     `${nodeModules}/scrollup/dist/jquery.scrollUp.min.js`,
@@ -119,7 +100,6 @@ const bundles = {
 
     // slider
     `${nodeModules}/swiper/dist/js/swiper.min.js`,
-    `${nodeModules}/swiper/dist/js/swiper.jquery.min.js`,
 
     // gallery
     `${nodeModules}/photoswipe/dist/photoswipe.min.js`,
@@ -136,10 +116,6 @@ const bundles = {
     `${nodeModules}/scrollmagic/scrollmagic/minified/plugins/animation.gsap.min.js`,
 
     // dropdown, positions, modals
-    //`${nodeModules}/tether/dist/js/tether.min.js`,
-    //`${nodeModules}/tether-drop/dist/js/drop.min.js`,
-    `${nodeModules}/sweet-modal/dist/min/jquery.sweet-modal.min.js`,
-    `${nodeModules}/sweet-dropdown/dist/min/jquery.sweet-dropdown.min.js`,
 
     // ui
     `${nodeModules}/select2/dist/js/select2.full.min.js`,
@@ -164,95 +140,10 @@ const bundles = {
 
     // alertify (used by insales)
     `${nodeModules}/alertifyjs/build/alertify.min.js`
-  ],
-  /**
-   * @deprecated не будет использоваться
-   */
-  material: [
-    `${nodeModules}/jquery/dist/jquery.min.js`,
-    `${nodeModules}/lodash/lodash.min.js`,
-    `${nodeModules}/picturefill/dist/picturefill.min.js`,
-    `${nodeModules}/jquery-colorbox/jquery.colorbox-min.js`,
-    `${nodeModules}/swiper/dist/js/swiper.min.js`,
-    `${nodeModules}/swiper/dist/js/swiper.jquery.min.js`,
-    `${nodeModules}/photoswipe/dist/photoswipe.min.js`,
-    `${nodeModules}/photoswipe/dist/photoswipe-ui-default.min.js`,
-    `${nodeModules}/gsap/src/minified/TweenMax.min.js`,
-    `${nodeModules}/gsap/src/minified/plugins/CSSPlugin.min.js`,
-    `${nodeModules}/gsap/src/minified/plugins/ScrollToPlugin.min.js`,
-    `${nodeModules}/scrollmagic/scrollmagic/minified/ScrollMagic.min.js`,
-    `${nodeModules}/scrollmagic/scrollmagic/minified/plugins/debug.addIndicators.min.js`,
-    `${nodeModules}/scrollmagic/scrollmagic/minified/plugins/animation.gsap.min.js`,
-    `${nodeModules}/sweet-modal/dist/min/jquery.sweet-modal.min.js`,
-    `${nodeModules}/sweet-dropdown/dist/min/jquery.sweet-dropdown.min.js`,
-    `${nodeModules}/angular/angular.min.js`,
-    `${nodeModules}/angular-aria/angular-aria.min.js`,
-    `${nodeModules}/angular-animate/angular-animate.min.js`,
-    `${nodeModules}/angular-sanitize/angular-sanitize.min.js`,
-    `${nodeModules}/angular-messages/angular-messages.min.js`,
-    `${nodeModules}/angular-material/angular-material.min.js`,
-    `${nodeModules}/scrollup/dist/lib/jquery.easing.js`,
-    `${nodeModules}/scrollup/dist/jquery.scrollUp.min.js`
-  ],
-  'material-slim': [
-    `${nodeModules}/jquery/dist/jquery.slim.min.js`,
-    `${nodeModules}/lodash/lodash.min.js`,
-    `${nodeModules}/picturefill/dist/picturefill.min.js`,
-    `${nodeModules}/jquery-colorbox/jquery.colorbox-min.js`,
-    `${nodeModules}/swiper/dist/js/swiper.min.js`,
-    `${nodeModules}/swiper/dist/js/swiper.jquery.min.js`,
-    `${nodeModules}/photoswipe/dist/photoswipe.min.js`,
-    `${nodeModules}/photoswipe/dist/photoswipe-ui-default.min.js`,
-    `${nodeModules}/gsap/src/minified/TweenMax.min.js`,
-    `${nodeModules}/gsap/src/minified/plugins/CSSPlugin.min.js`,
-    `${nodeModules}/gsap/src/minified/plugins/ScrollToPlugin.min.js`,
-    `${nodeModules}/scrollmagic/scrollmagic/minified/ScrollMagic.min.js`,
-    `${nodeModules}/scrollmagic/scrollmagic/minified/plugins/debug.addIndicators.min.js`,
-    `${nodeModules}/scrollmagic/scrollmagic/minified/plugins/animation.gsap.min.js`,
-    `${nodeModules}/sweet-modal/dist/min/jquery.sweet-modal.min.js`,
-    `${nodeModules}/sweet-dropdown/dist/min/jquery.sweet-dropdown.min.js`,
-    `${nodeModules}/angular/angular.min.js`,
-    `${nodeModules}/angular-aria/angular-aria.min.js`,
-    `${nodeModules}/angular-animate/angular-animate.min.js`,
-    `${nodeModules}/angular-sanitize/angular-sanitize.min.js`,
-    `${nodeModules}/angular-messages/angular-messages.min.js`,
-    `${nodeModules}/angular-material/angular-material.min.js`
-  ],
-    /**
-     * @note for diera.ru
-     * bundle для работы с внешней библиотекой jquery
-     * обычно это нужно для подключения нестандартной
-     * версии jquery.
-     * <jquery
-     * <bundle-legacy
-     */
-    'material-legacy': [
-    `${nodeModules}/jquery-colorbox/jquery.colorbox-min.js`,
-    `${nodeModules}/swiper/dist/js/swiper.min.js`,
-    `${nodeModules}/swiper/dist/js/swiper.jquery.min.js`,
-    `${nodeModules}/photoswipe/dist/photoswipe.min.js`,
-    `${nodeModules}/photoswipe/dist/photoswipe-ui-default.min.js`,
-    `${nodeModules}/gsap/src/minified/TweenMax.min.js`,
-    `${nodeModules}/gsap/src/minified/plugins/CSSPlugin.min.js`,
-    `${nodeModules}/gsap/src/minified/plugins/ScrollToPlugin.min.js`,
-    `${nodeModules}/scrollmagic/scrollmagic/minified/ScrollMagic.min.js`,
-    `${nodeModules}/scrollmagic/scrollmagic/minified/plugins/debug.addIndicators.min.js`,
-    `${nodeModules}/scrollmagic/scrollmagic/minified/plugins/animation.gsap.min.js`,
-    `${nodeModules}/angular/angular.min.js`,
-    `${nodeModules}/angular-aria/angular-aria.min.js`,
-    `${nodeModules}/angular-animate/angular-animate.min.js`,
-    `${nodeModules}/angular-sanitize/angular-sanitize.min.js`,
-    `${nodeModules}/angular-messages/angular-messages.min.js`,
-    `${nodeModules}/angular-material/angular-material.min.js`
   ]
 }
 
 const styles = {
-  'platform.vue.css': [ /* no styles required */ ],
-  'platform.angular.css': [ /* no styles required */ ],
-  'platform.material.css': [
-    `${nodeModules}/angular-material/angular-material.min.css`
-  ],
   'platform.media.css': [
     // @note for diera.ru можно просто скопировать в assets/platform/css/*
     // !!! PHOTOSWIPE & COLORBOX >>> REQUIRED IMAGES !!!
@@ -276,9 +167,6 @@ const styles = {
     // `${nodeModules}/tether-drop/dist/css/drop-theme-arrows-bounce.min.css`,
     // `${nodeModules}/tether-drop/dist/css/drop-theme-twipsy.min.css`
 
-    `${nodeModules}/sweet-modal/dist/min/jquery.sweet-modal.min.css`,
-    `${nodeModules}/sweet-dropdown/dist/min/jquery.sweet-dropdown.min.css`,
-
     // ui
     `${nodeModules}/select2/dist/css/select2.min.css`,
 
@@ -301,8 +189,7 @@ const styles = {
     // photoswipe
     `${nodeModules}/photoswipe/dist/photoswipe.css`,
     `${nodeModules}/photoswipe/dist/default-skin/default-skin.css`
-  ],
-  'platform.utils.css': [ /* no styles required */ ]
+  ]
 }
 
 module.exports = {
