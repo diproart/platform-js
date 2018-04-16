@@ -25,7 +25,12 @@ a.box
 
 $button-color: $grey-darker !default
 $button-background-color: $white !default
+
 $button-border-color: $grey-lighter !default
+$button-border-width: $control-border-width !default
+
+$button-padding-vertical: calc(0.375em - #{$button-border-width}) !default
+$button-padding-horizontal: 0.75em !default
 
 $button-hover-color: $link-hover !default
 $button-hover-border-color: $link-hover-border !default
@@ -65,11 +70,14 @@ $button-static-border-color: $grey-lighter !default
   +unselectable
   background-color: $button-background-color
   border-color: $button-border-color
+  border-width: $button-border-width
   color: $button-color
   cursor: pointer
   justify-content: center
-  padding-left: 0.75em
-  padding-right: 0.75em
+  padding-bottom: $button-padding-vertical
+  padding-left: $button-padding-horizontal
+  padding-right: $button-padding-horizontal
+  padding-top: $button-padding-vertical
   text-align: center
   white-space: nowrap
   strong
@@ -82,14 +90,14 @@ $button-static-border-color: $grey-lighter !default
       height: 1.5em
       width: 1.5em
     &:first-child:not(:last-child)
-      margin-left: calc(-0.375em - 1px)
+      margin-left: calc(-0.375em - #{$button-border-width})
       margin-right: 0.1875em
     &:last-child:not(:first-child)
       margin-left: 0.1875em
-      margin-right: calc(-0.375em - 1px)
+      margin-right: calc(-0.375em - #{$button-border-width})
     &:first-child:last-child
-      margin-left: calc(-0.375em - 1px)
-      margin-right: calc(-0.375em - 1px)
+      margin-left: calc(-0.375em - #{$button-border-width})
+      margin-right: calc(-0.375em - #{$button-border-width})
   // States
   &:hover,
   &.is-hovered
@@ -163,7 +171,7 @@ $button-static-border-color: $grey-lighter !default
           box-shadow: none
           color: $color
       &.is-loading
-        &:after
+        &::after
           border-color: transparent transparent $color-invert $color-invert !important
       &.is-outlined
         background-color: transparent
@@ -175,7 +183,7 @@ $button-static-border-color: $grey-lighter !default
           border-color: $color
           color: $color-invert
         &.is-loading
-          &:after
+          &::after
             border-color: transparent transparent $color $color !important
         &[disabled]
           background-color: transparent
@@ -214,7 +222,7 @@ $button-static-border-color: $grey-lighter !default
   &.is-loading
     color: transparent !important
     pointer-events: none
-    &:after
+    &::after
       +loader
       +center(1em)
       position: absolute !important
@@ -264,6 +272,8 @@ $button-static-border-color: $grey-lighter !default
         z-index: 3
         &:hover
           z-index: 4
+      &.is-expanded
+        flex-grow: 1
   &.is-centered
     justify-content: center
   &.is-right
@@ -272,7 +282,7 @@ $button-static-border-color: $grey-lighter !default
 .container
   margin: 0 auto
   position: relative
-  +from($desktop)
+  +desktop
     max-width: $desktop - (2 * $gap)
     width: $desktop - (2 * $gap)
     &.is-fluid
@@ -280,22 +290,23 @@ $button-static-border-color: $grey-lighter !default
       margin-right: $gap
       max-width: none
       width: auto
-  +until($widescreen)
+  +until-widescreen
     &.is-widescreen
       max-width: $widescreen - (2 * $gap)
       width: auto
-  +until($fullhd)
+  +until-fullhd
     &.is-fullhd
       max-width: $fullhd - (2 * $gap)
       width: auto
-  +from($widescreen)
+  +widescreen
     max-width: $widescreen - (2 * $gap)
     width: $widescreen - (2 * $gap)
-  +from($fullhd)
+  +fullhd
     max-width: $fullhd - (2 * $gap)
     width: $fullhd - (2 * $gap)
+
 $content-heading-color: $text-strong !default
-$content-heading-weight: $weight-normal !default
+$content-heading-weight: $weight-semibold !default
 $content-heading-line-height: 1.125 !default
 
 $content-blockquote-background-color: $background !default
@@ -308,7 +319,6 @@ $content-table-cell-border: 1px solid $border !default
 $content-table-cell-border-width: 0 0 1px !default
 $content-table-cell-padding: 0.5em 0.75em !default
 $content-table-cell-heading-color: $text-strong !default
-$content-table-row-hover-background-color: $background !default
 $content-table-head-cell-border-width: 0 0 2px !default
 $content-table-head-cell-color: $text-strong !default
 $content-table-foot-cell-border-width: 2px 0 0 !default
@@ -413,9 +423,6 @@ $content-table-foot-cell-color: $text-strong !default
     th
       color: $content-table-cell-heading-color
       text-align: left
-    tr
-      &:hover
-        background-color: $content-table-row-hover-background-color
     thead
       td,
       th
@@ -561,7 +568,7 @@ $help-size: $size-small !default
     max-height: 600px
     min-height: 120px
   &[rows]
-    height: unset
+    height: initial
   // Modifiers
   &.has-fixed-size
     resize: none
@@ -591,11 +598,10 @@ $help-size: $size-small !default
   vertical-align: top
   &:not(.is-multiple)
     height: 2.25em
+  &:not(.is-multiple):not(.is-loading)
     &::after
       +arrow($input-arrow)
-      margin-top: -0.375em
       right: 1.125em
-      top: 50%
       z-index: 4
   &.is-rounded
     select
@@ -615,24 +621,30 @@ $help-size: $size-small !default
     &:not([multiple])
       padding-right: 2.5em
     &[multiple]
-      height: unset
+      height: initial
       padding: 0
       option
         padding: 0.5em 1em
   // States
-  &:hover
+  &:not(.is-multiple):not(.is-loading):hover
     &::after
       border-color: $input-hover-color
   // Colors
   @each $name, $pair in $colors
     $color: nth($pair, 1)
-    &.is-#{$name} select
-      border-color: $color
-      &:focus,
-      &.is-focused,
-      &:active,
-      &.is-active
-        box-shadow: $input-focus-box-shadow-size rgba($color, 0.25)
+    &.is-#{$name}
+      &:not(:hover)::after
+        border-color: $color
+      select
+        border-color: $color
+        &:hover,
+        &.is-hovered
+          border-color: darken($color, 5%)
+        &:focus,
+        &.is-focused,
+        &:active,
+        &.is-active
+          box-shadow: $input-focus-box-shadow-size rgba($color, 0.25)
   // Sizes
   &.is-small
     +control-small
@@ -1097,10 +1109,20 @@ $dimensions: 16 24 32 48 64 96 128 !default
   // Ratio
   &.is-square,
   &.is-1by1,
+  &.is-5by4,
   &.is-4by3,
   &.is-3by2,
+  &.is-5by3,
   &.is-16by9,
-  &.is-2by1
+  &.is-2by1,
+  &.is-3by1,
+  &.is-4by5,
+  &.is-3by4,
+  &.is-2by3,
+  &.is-3by5,
+  &.is-9by16,
+  &.is-1by2,
+  &.is-1by3
     img
       +overlay
       height: 100%
@@ -1108,14 +1130,34 @@ $dimensions: 16 24 32 48 64 96 128 !default
   &.is-square,
   &.is-1by1
     padding-top: 100%
+  &.is-5by4
+    padding-top: 80%
   &.is-4by3
     padding-top: 75%
   &.is-3by2
     padding-top: 66.6666%
+  &.is-5by3
+    padding-top: 60%
   &.is-16by9
     padding-top: 56.25%
   &.is-2by1
     padding-top: 50%
+  &.is-3by1
+    padding-top: 33.3333%
+  &.is-4by5
+    padding-top: 125%
+  &.is-3by4
+    padding-top: 133.3333%
+  &.is-2by3
+    padding-top: 150%
+  &.is-3by5
+    padding-top: 166.6666%
+  &.is-9by16
+    padding-top: 177.7777%
+  &.is-1by2
+    padding-top: 200%
+  &.is-1by3
+    padding-top: 300%
   // Sizes
   @each $dimension in $dimensions
     &.is-#{$dimension}x#{$dimension}
@@ -1221,9 +1263,9 @@ $table-striped-row-even-background-color: $white-bis !default
 $table-striped-row-even-hover-background-color: $white-ter !default
 
 .table
+  +block
   background-color: $table-background-color
   color: $table-color
-  margin-bottom: 1.5rem
   td,
   th
     border: $table-cell-border
@@ -1310,6 +1352,13 @@ $table-striped-row-even-hover-background-color: $white-ter !default
         &:nth-child(even)
           background-color: $table-striped-row-even-background-color
 
+.table-container
+  +block
+  +overflow-touch
+  overflow: auto
+  overflow-y: hidden
+  max-width: 100%
+
 $tag-background-color: $background !default
 $tag-color: $text !default
 $tag-radius: $radius !default
@@ -1364,8 +1413,8 @@ $tag-delete-margin: 1px !default
   padding-right: 0.75em
   white-space: nowrap
   .delete
-    margin-left: 0.25em
-    margin-right: -0.375em
+    margin-left: 0.25rem
+    margin-right: -0.375rem
   // Colors
   @each $name, $pair in $colors
     $color: nth($pair, 1)
@@ -1394,8 +1443,8 @@ $tag-delete-margin: 1px !default
     padding: 0
     position: relative
     width: 2em
-    &:before,
-    &:after
+    &::before,
+    &::after
       background-color: currentColor
       content: ""
       display: block
@@ -1404,10 +1453,10 @@ $tag-delete-margin: 1px !default
       top: 50%
       transform: translateX(-50%) translateY(-50%) rotate(45deg)
       transform-origin: center center
-    &:before
+    &::before
       height: 1px
       width: 50%
-    &:after
+    &::after
       height: 50%
       width: 1px
     &:hover,
@@ -1425,6 +1474,7 @@ a.tag
 $title-color: $grey-darker !default
 $title-size: $size-3 !default
 $title-weight: $weight-semibold !default
+$title-line-height: 1.125 !default
 $title-strong-color: inherit !default
 $title-strong-weight: inherit !default
 $title-sub-size: 0.75em !default
@@ -1433,8 +1483,10 @@ $title-sup-size: 0.75em !default
 $subtitle-color: $grey-dark !default
 $subtitle-size: $size-5 !default
 $subtitle-weight: $weight-normal !default
+$subtitle-line-height: 1.25 !default
 $subtitle-strong-color: $grey-darker !default
 $subtitle-strong-weight: $weight-semibold !default
+$subtitle-negative-margin: -1.25rem !default
 
 .title,
 .subtitle
@@ -1454,14 +1506,14 @@ $subtitle-strong-weight: $weight-semibold !default
   color: $title-color
   font-size: $title-size
   font-weight: $title-weight
-  line-height: 1.125
+  line-height: $title-line-height
   strong
     color: $title-strong-color
     font-weight: $title-strong-weight
   & + .highlight
     margin-top: -0.75rem
   &:not(.is-spaced) + .subtitle
-    margin-top: -1.5rem
+    margin-top: $subtitle-negative-margin
   // Sizes
   @each $size in $sizes
     $i: index($sizes, $size)
@@ -1472,12 +1524,12 @@ $subtitle-strong-weight: $weight-semibold !default
   color: $subtitle-color
   font-size: $subtitle-size
   font-weight: $subtitle-weight
-  line-height: 1.25
+  line-height: $subtitle-line-height
   strong
     color: $subtitle-strong-color
     font-weight: $subtitle-strong-weight
   &:not(.is-spaced) + .title
-    margin-top: -1.5rem
+    margin-top: $subtitle-negative-margin
   // Sizes
   @each $size in $sizes
     $i: index($sizes, $size)

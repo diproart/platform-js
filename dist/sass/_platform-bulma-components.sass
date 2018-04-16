@@ -2,23 +2,22 @@ $breadcrumb-item-color: $link !default
 $breadcrumb-item-hover-color: $link-hover !default
 $breadcrumb-item-active-color: $text-strong !default
 
-$breadcrumb-item-separator-color: $text !default
+$breadcrumb-item-padding-vertical: 0 !default
+$breadcrumb-item-padding-horizontal: 0.75em !default
+
+$breadcrumb-item-separator-color: $grey-light !default
 
 .breadcrumb
   +block
   +unselectable
-  align-items: stretch
-  display: flex
   font-size: $size-normal
-  overflow: hidden
-  overflow-x: auto
   white-space: nowrap
   a
     align-items: center
     color: $breadcrumb-item-color
     display: flex
     justify-content: center
-    padding: 0.5em 0.75em
+    padding: $breadcrumb-item-padding-vertical $breadcrumb-item-padding-horizontal
     &:hover
       color: $breadcrumb-item-hover-color
   li
@@ -34,11 +33,11 @@ $breadcrumb-item-separator-color: $text !default
     & + li::before
       color: $breadcrumb-item-separator-color
       content: "\0002f"
-  ul, ol
-    align-items: center
+  ul,
+  ol
+    align-items: flex-start
     display: flex
-    flex-grow: 1
-    flex-shrink: 0
+    flex-wrap: wrap
     justify-content: flex-start
   .icon
     &:first-child
@@ -47,10 +46,12 @@ $breadcrumb-item-separator-color: $text !default
       margin-left: 0.5em
   // Alignment
   &.is-centered
-    ol, ul
+    ol,
+    ul
       justify-content: center
   &.is-right
-    ol, ul
+    ol,
+    ul
       justify-content: flex-end
   // Sizes
   &.is-small
@@ -77,10 +78,14 @@ $card-color: $text !default
 $card-background-color: $white !default
 $card-shadow: 0 2px 3px rgba($black, 0.1), 0 0 0 1px rgba($black, 0.1) !default
 
+$card-header-background-color: none !default
 $card-header-color: $text-strong !default
 $card-header-shadow: 0 1px 2px rgba($black, 0.1) !default
 $card-header-weight: $weight-bold !default
 
+$card-content-background-color: none !default
+
+$card-footer-background-color: none !default
 $card-footer-border-top: 1px solid $border !default
 
 .card
@@ -91,6 +96,7 @@ $card-footer-border-top: 1px solid $border !default
   position: relative
 
 .card-header
+  background-color: $card-header-background-color
   align-items: stretch
   box-shadow: $card-header-shadow
   display: flex
@@ -117,9 +123,11 @@ $card-footer-border-top: 1px solid $border !default
   position: relative
 
 .card-content
+  background-color: $card-content-background-color
   padding: 1.5rem
 
 .card-footer
+  background-color: $card-footer-background-color
   border-top: $card-footer-border-top
   align-items: stretch
   display: flex
@@ -172,7 +180,7 @@ $dropdown-divider-background-color: $border !default
     .dropdown-menu
       bottom: 100%
       padding-bottom: $dropdown-content-offset
-      padding-top: unset
+      padding-top: initial
       top: auto
 
 .dropdown-menu
@@ -335,7 +343,6 @@ a.dropdown-item
   flex-basis: auto
   flex-grow: 1
   flex-shrink: 1
-  overflow: auto
   text-align: left
 
 $menu-item-color: $text !default
@@ -394,16 +401,20 @@ $message-radius: $radius !default
 
 $message-header-background-color: $text !default
 $message-header-color: $text-invert !default
-$message-header-padding: 0.5em 0.75em !default
+$message-header-weight: $weight-bold !default
+$message-header-padding: 0.75em 1em !default
 $message-header-radius: $radius !default
 
-$message-body-border: 1px solid $border !default
+$message-body-border-color: $border !default
+$message-body-border-width: 0 0 0 4px !default
 $message-body-color: $text !default
-$message-body-padding: 1em 1.25em !default
+$message-body-padding: 1.25em 1.5em !default
 $message-body-radius: $radius !default
 
 $message-body-pre-background-color: $white !default
 $message-body-pre-code-background-color: transparent !default
+
+$message-header-body-border-width: 0 !default
 
 .message
   +block
@@ -445,6 +456,7 @@ $message-body-pre-code-background-color: transparent !default
   border-radius: $message-header-radius $message-header-radius 0 0
   color: $message-header-color
   display: flex
+  font-weight: $message-header-weight
   justify-content: space-between
   line-height: 1.25
   padding: $message-header-padding
@@ -454,13 +466,15 @@ $message-body-pre-code-background-color: transparent !default
     flex-shrink: 0
     margin-left: 0.75em
   & + .message-body
+    border-width: $message-header-body-border-width
     border-top-left-radius: 0
     border-top-right-radius: 0
-    border-top: none
 
 .message-body
-  border: $message-body-border
+  border-color: $message-body-border-color
   border-radius: $message-body-radius
+  border-style: solid
+  border-width: $message-body-border-width
   color: $message-body-color
   padding: $message-body-padding
   code,
@@ -582,12 +596,17 @@ $modal-card-body-padding: 20px !default
   padding: $modal-card-body-padding
 
 $navbar-background-color: $white !default
+$navbar-box-shadow-size: 0 2px 0 0 !default
+$navbar-box-shadow-color: $background !default
 $navbar-height: 3.25rem !default
+$navbar-padding-vertical: 1rem !default
+$navbar-padding-horizontal: 2rem !default
+$navbar-z: 30 !default
 $navbar-fixed-z: 30 !default
 
 $navbar-item-color: $grey-dark !default
 $navbar-item-hover-color: $link !default
-$navbar-item-hover-background-color: $background !default
+$navbar-item-hover-background-color: $white-bis !default
 $navbar-item-active-color: $black !default
 $navbar-item-active-background-color: transparent !default
 $navbar-item-img-max-height: 1.75rem !default
@@ -601,7 +620,7 @@ $navbar-tab-active-border-bottom-style: solid !default
 $navbar-tab-active-border-bottom-width: 3px !default
 
 $navbar-dropdown-background-color: $white !default
-$navbar-dropdown-border-top: 1px solid $border !default
+$navbar-dropdown-border-top: 2px solid $border !default
 $navbar-dropdown-offset: -4px !default
 $navbar-dropdown-arrow: $link !default
 $navbar-dropdown-radius: $radius-large !default
@@ -615,7 +634,8 @@ $navbar-dropdown-item-hover-background-color: $background !default
 $navbar-dropdown-item-active-color: $link !default
 $navbar-dropdown-item-active-background-color: $background !default
 
-$navbar-divider-background-color: $border !default
+$navbar-divider-background-color: $background !default
+$navbar-divider-height: 2px !default
 
 =navbar-fixed
   left: 0
@@ -623,15 +643,12 @@ $navbar-divider-background-color: $border !default
   right: 0
   z-index: $navbar-fixed-z
 
-=navbar-fixed-html
-  left: 0
-  position: fixed
-  right: 0
-
 .navbar
   background-color: $navbar-background-color
+  box-shadow: $navbar-box-shadow-size $navbar-box-shadow-color
   min-height: $navbar-height
   position: relative
+  z-index: $navbar-z
   @each $name, $pair in $colors
     $color: nth($pair, 1)
     $color-invert: nth($pair, 2)
@@ -692,11 +709,12 @@ $navbar-divider-background-color: $border !default
   &.is-fixed-top
     top: 0
 
-html.has-navbar-fixed-top
-  padding-top: $navbar-height
-
-html.has-navbar-fixed-bottom
-  padding-bottom: $navbar-height
+html,
+body
+  &.has-navbar-fixed-top
+    padding-top: $navbar-height
+  &.has-navbar-fixed-bottom
+    padding-bottom: $navbar-height
 
 .navbar-brand,
 .navbar-tabs
@@ -704,6 +722,11 @@ html.has-navbar-fixed-bottom
   display: flex
   flex-shrink: 0
   min-height: $navbar-height
+
+.navbar-brand
+  a.navbar-item
+    &:hover
+      background-color: transparent
 
 .navbar-tabs
   +overflow-touch
@@ -723,17 +746,23 @@ html.has-navbar-fixed-bottom
   color: $navbar-item-color
   display: block
   line-height: 1.5
-  padding: 0.5rem 1rem
+  padding: 0.5rem 0.75rem
   position: relative
+  .icon
+    &:only-child
+      margin-left: -0.25rem
+      margin-right: -0.25rem
 
 a.navbar-item,
-a.navbar-link
+.navbar-link
+  cursor: pointer
   &:hover,
   &.is-active
     background-color: $navbar-item-hover-background-color
     color: $navbar-item-hover-color
 
 .navbar-item
+  display: block
   flex-grow: 0
   flex-shrink: 0
   img
@@ -764,6 +793,10 @@ a.navbar-link
 
 .navbar-link
   padding-right: 2.5em
+  &::after
+    +arrow($navbar-dropdown-arrow)
+    margin-top: -0.375em
+    right: 1.125em
 
 .navbar-dropdown
   font-size: 0.875rem
@@ -777,7 +810,7 @@ a.navbar-link
   background-color: $navbar-divider-background-color
   border: none
   display: none
-  height: 1px
+  height: $navbar-divider-height
   margin: 0.5rem 0
 
 +touch
@@ -788,6 +821,9 @@ a.navbar-link
     .navbar-item
       align-items: center
       display: flex
+  .navbar-link
+    &::after
+      display: none
   .navbar-menu
     background-color: $navbar-background-color
     box-shadow: 0 8px 16px rgba($black, 0.1)
@@ -811,10 +847,12 @@ a.navbar-link
         +overflow-touch
         max-height: calc(100vh - #{$navbar-height})
         overflow: auto
-  html.has-navbar-fixed-top-touch
-    padding-top: $navbar-height
-  html.has-navbar-fixed-bottom-touch
-    padding-bottom: $navbar-height
+  html,
+  body
+    &.has-navbar-fixed-top-touch
+      padding-top: $navbar-height
+    &.has-navbar-fixed-bottom-touch
+      padding-bottom: $navbar-height
 
 +desktop
   .navbar,
@@ -825,9 +863,17 @@ a.navbar-link
     display: flex
   .navbar
     min-height: $navbar-height
+    &.is-spaced
+      padding: $navbar-padding-vertical $navbar-padding-horizontal
+      .navbar-start,
+      .navbar-end
+        align-items: center
+      a.navbar-item,
+      .navbar-link
+        border-radius: $radius
     &.is-transparent
       a.navbar-item,
-      a.navbar-link
+      .navbar-link
         &:hover,
         &.is-active
           background-color: transparent !important
@@ -851,6 +897,7 @@ a.navbar-link
     align-items: center
     display: flex
   .navbar-item
+    display: flex
     &.has-dropdown
       align-items: stretch
     &.has-dropdown-up
@@ -867,16 +914,11 @@ a.navbar-link
     &.is-hoverable:hover
       .navbar-dropdown
         display: block
+        .navbar.is-spaced &,
         &.is-boxed
           opacity: 1
           pointer-events: auto
           transform: translateY(0)
-  .navbar-link
-    &::after
-      +arrow($navbar-dropdown-arrow)
-      margin-top: -0.375em
-      right: 1.125em
-      top: 50%
   .navbar-menu
     flex-grow: 1
     flex-shrink: 0
@@ -910,6 +952,7 @@ a.navbar-link
       &.is-active
         background-color: $navbar-dropdown-item-active-background-color
         color: $navbar-dropdown-item-active-color
+    .navbar.is-spaced &,
     &.is-boxed
       border-radius: $navbar-dropdown-boxed-radius
       border-top: none
@@ -943,13 +986,19 @@ a.navbar-link
         box-shadow: 0 -2px 3px rgba($black, 0.1)
     &.is-fixed-top-desktop
       top: 0
-  html.has-navbar-fixed-top-desktop
-    padding-top: $navbar-height
-  html.has-navbar-fixed-bottom-desktop
-    padding-bottom: $navbar-height
+  html,
+  body
+    &.has-navbar-fixed-top-desktop
+      padding-top: $navbar-height
+    &.has-navbar-fixed-bottom-desktop
+      padding-bottom: $navbar-height
+    &.has-spaced-navbar-fixed-top
+      padding-top: $navbar-height + ($navbar-padding-vertical * 2)
+    &.has-spaced-navbar-fixed-bottom
+      padding-bottom: $navbar-height + ($navbar-padding-vertical * 2)
   // Hover/Active states
   a.navbar-item,
-  a.navbar-link
+  .navbar-link
     &.is-active
       color: $navbar-item-active-color
     &.is-active:not(:hover)

@@ -46,28 +46,64 @@ $weight-bold: 700 !default
 // Responsiveness
 
 // The container horizontal gap, which acts as the offset for breakpoints
-$gap: 32px !default
+$gap: 64px !default
 // 960, 1152, and 1344 have been chosen because they are divisible by both 12 and 16
 $tablet: 769px !default
 // 960px container + 4rem
 $desktop: 960px + (2 * $gap) !default
 // 1152px container + 4rem
 $widescreen: 1152px + (2 * $gap) !default
+$widescreen-enabled: true !default
 // 1344px container + 4rem
 $fullhd: 1344px + (2 * $gap) !default
+$fullhd-enabled: true !default
 
 // Miscellaneous
 
 $easing: ease-out !default
 $radius-small: 2px !default
-$radius: 3px !default
-$radius-large: 5px !default
+$radius: 4px !default
+$radius-large: 6px !default
 $radius-rounded: 290486px !default
 $speed: 86ms !default
 
 // Flags
 
 $variable-columns: true !default
+
+@function mergeColorMaps($bulma-colors, $custom-colors)
+  // we return at least bulma hardcoded colors
+  $merged-colors: $bulma-colors
+
+  // we want a map as input
+  @if type-of($custom-colors) == 'map'
+    @each $name, $components in $custom-colors
+      // color name should be a string and colors pair a list with at least one element
+      @if type-of($name) == 'string' and (type-of($components) == 'list' or type-of($components) == 'color') and length($components) >= 1
+        $color-base: null
+
+        // the param can either be a single color
+        // or a list of 2 colors
+        @if type-of($components) == 'color'
+          $color-base: $components
+        @else if type-of($components) == 'list'
+          $color-base: nth($components, 1)
+
+        $color-invert: null
+        // is an inverted color provided in the list
+        @if length($components) > 1
+          $color-invert: nth($components, 2)
+
+        // we only want a color as base color
+        @if type-of($color-base) == 'color'
+          // if inverted color is not provided or is not a color we compute it
+          @if type-of($color-invert) != 'color'
+            $color-invert: findColorInvert($color-base)
+
+          // we merge this colors elements as map with bulma colors (we can override them this way, no multiple definition for the same name)
+          $merged-colors: map_merge($merged-colors, ($name: ($color-base, $color-invert)))
+
+  @return $merged-colors
 
 @function powerNumber($number, $exp)
   $value: 1
@@ -175,9 +211,11 @@ $size-medium: $size-5 !default
 $size-large: $size-4 !default
 
 // Lists and maps
+$custom-colors: null !default
+$custom-shades: null !default
 
-$colors: ("white": ($white, $black), "black": ($black, $white), "light": ($light, $light-invert), "dark": ($dark, $dark-invert), "primary": ($primary, $primary-invert), "link": ($link, $link-invert), "info": ($info, $info-invert), "success": ($success, $success-invert), "warning": ($warning, $warning-invert), "danger": ($danger, $danger-invert)) !default
-$shades: ("black-bis": $black-bis, "black-ter": $black-ter, "grey-darker": $grey-darker, "grey-dark": $grey-dark, "grey": $grey, "grey-light": $grey-light, "grey-lighter": $grey-lighter, "white-ter": $white-ter, "white-bis": $white-bis) !default
+$colors: mergeColorMaps(("white": ($white, $black), "black": ($black, $white), "light": ($light, $light-invert), "dark": ($dark, $dark-invert), "primary": ($primary, $primary-invert), "link": ($link, $link-invert), "info": ($info, $info-invert), "success": ($success, $success-invert), "warning": ($warning, $warning-invert), "danger": ($danger, $danger-invert)), $custom-colors) !default
+$shades: mergeColorMaps(("black-bis": $black-bis, "black-ter": $black-ter, "grey-darker": $grey-darker, "grey-dark": $grey-dark, "grey": $grey, "grey-light": $grey-light, "grey-lighter": $grey-lighter, "white-ter": $white-ter, "white-bis": $white-bis), $custom-shades) !default
 
 $sizes: $size-1 $size-2 $size-3 $size-4 $size-5 $size-6 $size-7 !default
 
@@ -189,25 +227,8 @@ $sizes: $size-1 $size-2 $size-3 $size-4 $size-5 $size-6 $size-7 !default
 
 @import "initial-variables"
 
-=arrow($color)
-  border: 1px solid $color
-  border-right: 0
-  border-top: 0
-  content: " "
-  display: block
-  height: 0.5em
-  pointer-events: none
-  position: absolute
-  transform: rotate(-45deg)
-  transform-origin: center
-  width: 0.5em
-
-=block
-  &:not(:last-child)
-    margin-bottom: 1.5rem
-
 =clearfix
-  &:after
+  &::after
     clear: both
     content: " "
     display: table
@@ -220,71 +241,6 @@ $sizes: $size-1 $size-2 $size-3 $size-4 $size-5 $size-6 $size-7 !default
   @else
     left: calc(50% - (#{$width} / 2))
     top: calc(50% - (#{$width} / 2))
-
-=delete
-  +unselectable
-  -moz-appearance: none
-  -webkit-appearance: none
-  background-color: rgba($black, 0.2)
-  border: none
-  border-radius: $radius-rounded
-  cursor: pointer
-  display: inline-block
-  flex-grow: 0
-  flex-shrink: 0
-  font-size: 0
-  height: 20px
-  max-height: 20px
-  max-width: 20px
-  min-height: 20px
-  min-width: 20px
-  outline: none
-  position: relative
-  vertical-align: top
-  width: 20px
-  &:before,
-  &:after
-    background-color: $white
-    content: ""
-    display: block
-    left: 50%
-    position: absolute
-    top: 50%
-    transform: translateX(-50%) translateY(-50%) rotate(45deg)
-    transform-origin: center center
-  &:before
-    height: 2px
-    width: 50%
-  &:after
-    height: 50%
-    width: 2px
-  &:hover,
-  &:focus
-    background-color: rgba($black, 0.3)
-  &:active
-    background-color: rgba($black, 0.4)
-  // Sizes
-  &.is-small
-    height: 16px
-    max-height: 16px
-    max-width: 16px
-    min-height: 16px
-    min-width: 16px
-    width: 16px
-  &.is-medium
-    height: 24px
-    max-height: 24px
-    max-width: 24px
-    min-height: 24px
-    min-width: 24px
-    width: 24px
-  &.is-large
-    height: 32px
-    max-height: 32px
-    max-width: 32px
-    min-height: 32px
-    min-width: 32px
-    width: 32px
 
 =fa($size, $dimensions)
   display: inline-block
@@ -330,40 +286,14 @@ $sizes: $size-1 $size-2 $size-3 $size-4 $size-5 $size-6 $size-7 !default
       &:nth-child(3)
         transform: translateY(-5px) rotate(-45deg)
 
-=loader
-  animation: spinAround 500ms infinite linear
-  border: 2px solid $border
-  border-radius: $radius-rounded
-  border-right-color: transparent
-  border-top-color: transparent
-  content: ""
-  display: block
-  height: 1em
-  position: relative
-  width: 1em
-
 =overflow-touch
   -webkit-overflow-scrolling: touch
-
-=overlay($offset: 0)
-  bottom: $offset
-  left: $offset
-  position: absolute
-  right: $offset
-  top: $offset
 
 =placeholder
   $placeholders: ':-moz' ':-webkit-input' '-moz' '-ms-input'
   @each $placeholder in $placeholders
     &:#{$placeholder}-placeholder
       @content
-
-=unselectable
-  -webkit-touch-callout: none
-  -webkit-user-select: none
-  -moz-user-select: none
-  -ms-user-select: none
-  user-select: none
 
 // Responsiveness
 
@@ -396,32 +326,185 @@ $sizes: $size-1 $size-2 $size-3 $size-4 $size-5 $size-6 $size-7 !default
     @content
 
 =desktop-only
-  @media screen and (min-width: $desktop) and (max-width: $widescreen - 1px)
-    @content
+  @if $widescreen-enabled
+    @media screen and (min-width: $desktop) and (max-width: $widescreen - 1px)
+      @content
+
+=until-widescreen
+  @if $widescreen-enabled
+    @media screen and (max-width: $widescreen - 1px)
+      @content
 
 =widescreen
-  @media screen and (min-width: $widescreen)
-    @content
+  @if $widescreen-enabled
+    @media screen and (min-width: $widescreen)
+      @content
 
 =widescreen-only
-  @media screen and (min-width: $widescreen) and (max-width: $fullhd - 1px)
-    @content
+  @if $widescreen-enabled and $fullhd-enabled
+    @media screen and (min-width: $widescreen) and (max-width: $fullhd - 1px)
+      @content
+
+=until-fullhd
+  @if $fullhd-enabled
+    @media screen and (max-width: $fullhd - 1px)
+      @content
 
 =fullhd
-  @media screen and (min-width: $fullhd)
-    @content
+  @if $fullhd-enabled
+    @media screen and (min-width: $fullhd)
+      @content
+
+// Placeholders
+
+%unselectable
+  -webkit-touch-callout: none
+  -webkit-user-select: none
+  -moz-user-select: none
+  -ms-user-select: none
+  user-select: none
+
+=unselectable
+  @extend %unselectable
+
+%arrow
+  border: 3px solid transparent
+  border-radius: 2px
+  border-right: 0
+  border-top: 0
+  content: " "
+  display: block
+  height: 0.625em
+  margin-top: -0.4375em
+  pointer-events: none
+  position: absolute
+  top: 50%
+  transform: rotate(-45deg)
+  transform-origin: center
+  width: 0.625em
+
+=arrow($color)
+  @extend %arrow
+  border-color: $color
+
+%block
+  &:not(:last-child)
+    margin-bottom: 1.5rem
+
+=block
+  @extend %block
+
+%delete
+  @extend %unselectable
+  -moz-appearance: none
+  -webkit-appearance: none
+  background-color: rgba($black, 0.2)
+  border: none
+  border-radius: $radius-rounded
+  cursor: pointer
+  display: inline-block
+  flex-grow: 0
+  flex-shrink: 0
+  font-size: 0
+  height: 20px
+  max-height: 20px
+  max-width: 20px
+  min-height: 20px
+  min-width: 20px
+  outline: none
+  position: relative
+  vertical-align: top
+  width: 20px
+  &::before,
+  &::after
+    background-color: $white
+    content: ""
+    display: block
+    left: 50%
+    position: absolute
+    top: 50%
+    transform: translateX(-50%) translateY(-50%) rotate(45deg)
+    transform-origin: center center
+  &::before
+    height: 2px
+    width: 50%
+  &::after
+    height: 50%
+    width: 2px
+  &:hover,
+  &:focus
+    background-color: rgba($black, 0.3)
+  &:active
+    background-color: rgba($black, 0.4)
+  // Sizes
+  &.is-small
+    height: 16px
+    max-height: 16px
+    max-width: 16px
+    min-height: 16px
+    min-width: 16px
+    width: 16px
+  &.is-medium
+    height: 24px
+    max-height: 24px
+    max-width: 24px
+    min-height: 24px
+    min-width: 24px
+    width: 24px
+  &.is-large
+    height: 32px
+    max-height: 32px
+    max-width: 32px
+    min-height: 32px
+    min-width: 32px
+    width: 32px
+
+=delete
+  @extend %delete
+
+%loader
+  animation: spinAround 500ms infinite linear
+  border: 2px solid $border
+  border-radius: $radius-rounded
+  border-right-color: transparent
+  border-top-color: transparent
+  content: ""
+  display: block
+  height: 1em
+  position: relative
+  width: 1em
+
+=loader
+  @extend %loader
+
+%overlay
+  bottom: 0
+  left: 0
+  position: absolute
+  right: 0
+  top: 0
+
+=overlay($offset: 0)
+  @extend %overlay
+  @if $offset != 0
+    bottom: $offset
+    left: $offset
+    right: $offset
+    top: $offset
 
 $control-radius: $radius !default
 $control-radius-small: $radius-small !default
 
-$control-padding-vertical: calc(0.375em - 1px) !default
-$control-padding-horizontal: calc(0.625em - 1px) !default
+$control-border-width: 1px !default
 
-=control
+$control-padding-vertical: calc(0.375em - #{$control-border-width}) !default
+$control-padding-horizontal: calc(0.625em - #{$control-border-width}) !default
+
+%control
   -moz-appearance: none
   -webkit-appearance: none
   align-items: center
-  border: 1px solid transparent
+  border: $control-border-width solid transparent
   border-radius: $control-radius
   box-shadow: none
   display: inline-flex
@@ -444,6 +527,9 @@ $control-padding-horizontal: calc(0.625em - 1px) !default
   &[disabled]
     cursor: not-allowed
 
+=control
+  @extend %control
+
 // The controls sizes use mixins so they can be used at different breakpoints
 =control-small
   border-radius: $control-radius-small
@@ -453,7 +539,7 @@ $control-padding-horizontal: calc(0.625em - 1px) !default
 =control-large
   font-size: $size-large
 
-/*! minireset.css v0.0.2 | MIT License | github.com/jgthms/minireset.css */
+/*! minireset.css v0.0.3 | MIT License | github.com/jgthms/minireset.css */
 // Blocks
 html,
 body,
@@ -507,17 +593,16 @@ html
   box-sizing: border-box
 
 *
-  box-sizing: inherit
-  &:before,
-  &:after
+  &,
+  &::before,
+  &::after
     box-sizing: inherit
 
 // Media
 img,
-embed,
-object,
 audio,
 video
+  height: auto
   max-width: 100%
 
 // Iframe
@@ -547,8 +632,8 @@ $code-padding: 0.25em 0.5em 0.25em !default
 $code-weight: normal !default
 $code-size: 0.875em !default
 
-$hr-background-color: $border !default
-$hr-height: 1px !default
+$hr-background-color: $background !default
+$hr-height: 2px !default
 $hr-margin: 1.5rem 0 !default
 
 $strong-color: $text-strong !default
@@ -716,6 +801,8 @@ $alignments: ('centered': 'center', 'justified': 'justify', 'left': 'left', 'rig
 @each $alignment, $text-align in $alignments
   .has-text-#{$alignment}
     text-align: #{$text-align} !important
+
+@each $alignment, $text-align in $alignments
   +mobile
     .has-text-#{$alignment}-mobile
       text-align: #{$text-align} !important
@@ -764,6 +851,8 @@ $alignments: ('centered': 'center', 'justified': 'justify', 'left': 'left', 'rig
     &:hover,
     &:focus
       color: darken($color, 10%) !important
+  .has-background-#{$name}
+    background-color: $color !important
 
 @each $name, $shade in $shades
   .has-text-#{$name}
@@ -935,7 +1024,12 @@ a.box
 
 $button-color: $grey-darker !default
 $button-background-color: $white !default
+
 $button-border-color: $grey-lighter !default
+$button-border-width: $control-border-width !default
+
+$button-padding-vertical: calc(0.375em - #{$button-border-width}) !default
+$button-padding-horizontal: 0.75em !default
 
 $button-hover-color: $link-hover !default
 $button-hover-border-color: $link-hover-border !default
@@ -975,11 +1069,14 @@ $button-static-border-color: $grey-lighter !default
   +unselectable
   background-color: $button-background-color
   border-color: $button-border-color
+  border-width: $button-border-width
   color: $button-color
   cursor: pointer
   justify-content: center
-  padding-left: 0.75em
-  padding-right: 0.75em
+  padding-bottom: $button-padding-vertical
+  padding-left: $button-padding-horizontal
+  padding-right: $button-padding-horizontal
+  padding-top: $button-padding-vertical
   text-align: center
   white-space: nowrap
   strong
@@ -992,14 +1089,14 @@ $button-static-border-color: $grey-lighter !default
       height: 1.5em
       width: 1.5em
     &:first-child:not(:last-child)
-      margin-left: calc(-0.375em - 1px)
+      margin-left: calc(-0.375em - #{$button-border-width})
       margin-right: 0.1875em
     &:last-child:not(:first-child)
       margin-left: 0.1875em
-      margin-right: calc(-0.375em - 1px)
+      margin-right: calc(-0.375em - #{$button-border-width})
     &:first-child:last-child
-      margin-left: calc(-0.375em - 1px)
-      margin-right: calc(-0.375em - 1px)
+      margin-left: calc(-0.375em - #{$button-border-width})
+      margin-right: calc(-0.375em - #{$button-border-width})
   // States
   &:hover,
   &.is-hovered
@@ -1073,7 +1170,7 @@ $button-static-border-color: $grey-lighter !default
           box-shadow: none
           color: $color
       &.is-loading
-        &:after
+        &::after
           border-color: transparent transparent $color-invert $color-invert !important
       &.is-outlined
         background-color: transparent
@@ -1085,7 +1182,7 @@ $button-static-border-color: $grey-lighter !default
           border-color: $color
           color: $color-invert
         &.is-loading
-          &:after
+          &::after
             border-color: transparent transparent $color $color !important
         &[disabled]
           background-color: transparent
@@ -1124,7 +1221,7 @@ $button-static-border-color: $grey-lighter !default
   &.is-loading
     color: transparent !important
     pointer-events: none
-    &:after
+    &::after
       +loader
       +center(1em)
       position: absolute !important
@@ -1174,6 +1271,8 @@ $button-static-border-color: $grey-lighter !default
         z-index: 3
         &:hover
           z-index: 4
+      &.is-expanded
+        flex-grow: 1
   &.is-centered
     justify-content: center
   &.is-right
@@ -1182,7 +1281,7 @@ $button-static-border-color: $grey-lighter !default
 .container
   margin: 0 auto
   position: relative
-  +from($desktop)
+  +desktop
     max-width: $desktop - (2 * $gap)
     width: $desktop - (2 * $gap)
     &.is-fluid
@@ -1190,22 +1289,23 @@ $button-static-border-color: $grey-lighter !default
       margin-right: $gap
       max-width: none
       width: auto
-  +until($widescreen)
+  +until-widescreen
     &.is-widescreen
       max-width: $widescreen - (2 * $gap)
       width: auto
-  +until($fullhd)
+  +until-fullhd
     &.is-fullhd
       max-width: $fullhd - (2 * $gap)
       width: auto
-  +from($widescreen)
+  +widescreen
     max-width: $widescreen - (2 * $gap)
     width: $widescreen - (2 * $gap)
-  +from($fullhd)
+  +fullhd
     max-width: $fullhd - (2 * $gap)
     width: $fullhd - (2 * $gap)
+
 $content-heading-color: $text-strong !default
-$content-heading-weight: $weight-normal !default
+$content-heading-weight: $weight-semibold !default
 $content-heading-line-height: 1.125 !default
 
 $content-blockquote-background-color: $background !default
@@ -1218,7 +1318,6 @@ $content-table-cell-border: 1px solid $border !default
 $content-table-cell-border-width: 0 0 1px !default
 $content-table-cell-padding: 0.5em 0.75em !default
 $content-table-cell-heading-color: $text-strong !default
-$content-table-row-hover-background-color: $background !default
 $content-table-head-cell-border-width: 0 0 2px !default
 $content-table-head-cell-color: $text-strong !default
 $content-table-foot-cell-border-width: 2px 0 0 !default
@@ -1323,9 +1422,6 @@ $content-table-foot-cell-color: $text-strong !default
     th
       color: $content-table-cell-heading-color
       text-align: left
-    tr
-      &:hover
-        background-color: $content-table-row-hover-background-color
     thead
       td,
       th
@@ -1471,7 +1567,7 @@ $help-size: $size-small !default
     max-height: 600px
     min-height: 120px
   &[rows]
-    height: unset
+    height: initial
   // Modifiers
   &.has-fixed-size
     resize: none
@@ -1501,11 +1597,10 @@ $help-size: $size-small !default
   vertical-align: top
   &:not(.is-multiple)
     height: 2.25em
+  &:not(.is-multiple):not(.is-loading)
     &::after
       +arrow($input-arrow)
-      margin-top: -0.375em
       right: 1.125em
-      top: 50%
       z-index: 4
   &.is-rounded
     select
@@ -1525,24 +1620,30 @@ $help-size: $size-small !default
     &:not([multiple])
       padding-right: 2.5em
     &[multiple]
-      height: unset
+      height: initial
       padding: 0
       option
         padding: 0.5em 1em
   // States
-  &:hover
+  &:not(.is-multiple):not(.is-loading):hover
     &::after
       border-color: $input-hover-color
   // Colors
   @each $name, $pair in $colors
     $color: nth($pair, 1)
-    &.is-#{$name} select
-      border-color: $color
-      &:focus,
-      &.is-focused,
-      &:active,
-      &.is-active
-        box-shadow: $input-focus-box-shadow-size rgba($color, 0.25)
+    &.is-#{$name}
+      &:not(:hover)::after
+        border-color: $color
+      select
+        border-color: $color
+        &:hover,
+        &.is-hovered
+          border-color: darken($color, 5%)
+        &:focus,
+        &.is-focused,
+        &:active,
+        &.is-active
+          box-shadow: $input-focus-box-shadow-size rgba($color, 0.25)
   // Sizes
   &.is-small
     +control-small
@@ -2007,10 +2108,20 @@ $dimensions: 16 24 32 48 64 96 128 !default
   // Ratio
   &.is-square,
   &.is-1by1,
+  &.is-5by4,
   &.is-4by3,
   &.is-3by2,
+  &.is-5by3,
   &.is-16by9,
-  &.is-2by1
+  &.is-2by1,
+  &.is-3by1,
+  &.is-4by5,
+  &.is-3by4,
+  &.is-2by3,
+  &.is-3by5,
+  &.is-9by16,
+  &.is-1by2,
+  &.is-1by3
     img
       +overlay
       height: 100%
@@ -2018,14 +2129,34 @@ $dimensions: 16 24 32 48 64 96 128 !default
   &.is-square,
   &.is-1by1
     padding-top: 100%
+  &.is-5by4
+    padding-top: 80%
   &.is-4by3
     padding-top: 75%
   &.is-3by2
     padding-top: 66.6666%
+  &.is-5by3
+    padding-top: 60%
   &.is-16by9
     padding-top: 56.25%
   &.is-2by1
     padding-top: 50%
+  &.is-3by1
+    padding-top: 33.3333%
+  &.is-4by5
+    padding-top: 125%
+  &.is-3by4
+    padding-top: 133.3333%
+  &.is-2by3
+    padding-top: 150%
+  &.is-3by5
+    padding-top: 166.6666%
+  &.is-9by16
+    padding-top: 177.7777%
+  &.is-1by2
+    padding-top: 200%
+  &.is-1by3
+    padding-top: 300%
   // Sizes
   @each $dimension in $dimensions
     &.is-#{$dimension}x#{$dimension}
@@ -2131,9 +2262,9 @@ $table-striped-row-even-background-color: $white-bis !default
 $table-striped-row-even-hover-background-color: $white-ter !default
 
 .table
+  +block
   background-color: $table-background-color
   color: $table-color
-  margin-bottom: 1.5rem
   td,
   th
     border: $table-cell-border
@@ -2220,6 +2351,13 @@ $table-striped-row-even-hover-background-color: $white-ter !default
         &:nth-child(even)
           background-color: $table-striped-row-even-background-color
 
+.table-container
+  +block
+  +overflow-touch
+  overflow: auto
+  overflow-y: hidden
+  max-width: 100%
+
 $tag-background-color: $background !default
 $tag-color: $text !default
 $tag-radius: $radius !default
@@ -2274,8 +2412,8 @@ $tag-delete-margin: 1px !default
   padding-right: 0.75em
   white-space: nowrap
   .delete
-    margin-left: 0.25em
-    margin-right: -0.375em
+    margin-left: 0.25rem
+    margin-right: -0.375rem
   // Colors
   @each $name, $pair in $colors
     $color: nth($pair, 1)
@@ -2304,8 +2442,8 @@ $tag-delete-margin: 1px !default
     padding: 0
     position: relative
     width: 2em
-    &:before,
-    &:after
+    &::before,
+    &::after
       background-color: currentColor
       content: ""
       display: block
@@ -2314,10 +2452,10 @@ $tag-delete-margin: 1px !default
       top: 50%
       transform: translateX(-50%) translateY(-50%) rotate(45deg)
       transform-origin: center center
-    &:before
+    &::before
       height: 1px
       width: 50%
-    &:after
+    &::after
       height: 50%
       width: 1px
     &:hover,
@@ -2335,6 +2473,7 @@ a.tag
 $title-color: $grey-darker !default
 $title-size: $size-3 !default
 $title-weight: $weight-semibold !default
+$title-line-height: 1.125 !default
 $title-strong-color: inherit !default
 $title-strong-weight: inherit !default
 $title-sub-size: 0.75em !default
@@ -2343,8 +2482,10 @@ $title-sup-size: 0.75em !default
 $subtitle-color: $grey-dark !default
 $subtitle-size: $size-5 !default
 $subtitle-weight: $weight-normal !default
+$subtitle-line-height: 1.25 !default
 $subtitle-strong-color: $grey-darker !default
 $subtitle-strong-weight: $weight-semibold !default
+$subtitle-negative-margin: -1.25rem !default
 
 .title,
 .subtitle
@@ -2364,14 +2505,14 @@ $subtitle-strong-weight: $weight-semibold !default
   color: $title-color
   font-size: $title-size
   font-weight: $title-weight
-  line-height: 1.125
+  line-height: $title-line-height
   strong
     color: $title-strong-color
     font-weight: $title-strong-weight
   & + .highlight
     margin-top: -0.75rem
   &:not(.is-spaced) + .subtitle
-    margin-top: -1.5rem
+    margin-top: $subtitle-negative-margin
   // Sizes
   @each $size in $sizes
     $i: index($sizes, $size)
@@ -2382,12 +2523,12 @@ $subtitle-strong-weight: $weight-semibold !default
   color: $subtitle-color
   font-size: $subtitle-size
   font-weight: $subtitle-weight
-  line-height: 1.25
+  line-height: $subtitle-line-height
   strong
     color: $subtitle-strong-color
     font-weight: $subtitle-strong-weight
   &:not(.is-spaced) + .title
-    margin-top: -1.5rem
+    margin-top: $subtitle-negative-margin
   // Sizes
   @each $size in $sizes
     $i: index($sizes, $size)
@@ -2438,23 +2579,22 @@ $breadcrumb-item-color: $link !default
 $breadcrumb-item-hover-color: $link-hover !default
 $breadcrumb-item-active-color: $text-strong !default
 
-$breadcrumb-item-separator-color: $text !default
+$breadcrumb-item-padding-vertical: 0 !default
+$breadcrumb-item-padding-horizontal: 0.75em !default
+
+$breadcrumb-item-separator-color: $grey-light !default
 
 .breadcrumb
   +block
   +unselectable
-  align-items: stretch
-  display: flex
   font-size: $size-normal
-  overflow: hidden
-  overflow-x: auto
   white-space: nowrap
   a
     align-items: center
     color: $breadcrumb-item-color
     display: flex
     justify-content: center
-    padding: 0.5em 0.75em
+    padding: $breadcrumb-item-padding-vertical $breadcrumb-item-padding-horizontal
     &:hover
       color: $breadcrumb-item-hover-color
   li
@@ -2470,11 +2610,11 @@ $breadcrumb-item-separator-color: $text !default
     & + li::before
       color: $breadcrumb-item-separator-color
       content: "\0002f"
-  ul, ol
-    align-items: center
+  ul,
+  ol
+    align-items: flex-start
     display: flex
-    flex-grow: 1
-    flex-shrink: 0
+    flex-wrap: wrap
     justify-content: flex-start
   .icon
     &:first-child
@@ -2483,10 +2623,12 @@ $breadcrumb-item-separator-color: $text !default
       margin-left: 0.5em
   // Alignment
   &.is-centered
-    ol, ul
+    ol,
+    ul
       justify-content: center
   &.is-right
-    ol, ul
+    ol,
+    ul
       justify-content: flex-end
   // Sizes
   &.is-small
@@ -2513,10 +2655,14 @@ $card-color: $text !default
 $card-background-color: $white !default
 $card-shadow: 0 2px 3px rgba($black, 0.1), 0 0 0 1px rgba($black, 0.1) !default
 
+$card-header-background-color: none !default
 $card-header-color: $text-strong !default
 $card-header-shadow: 0 1px 2px rgba($black, 0.1) !default
 $card-header-weight: $weight-bold !default
 
+$card-content-background-color: none !default
+
+$card-footer-background-color: none !default
 $card-footer-border-top: 1px solid $border !default
 
 .card
@@ -2527,6 +2673,7 @@ $card-footer-border-top: 1px solid $border !default
   position: relative
 
 .card-header
+  background-color: $card-header-background-color
   align-items: stretch
   box-shadow: $card-header-shadow
   display: flex
@@ -2553,9 +2700,11 @@ $card-footer-border-top: 1px solid $border !default
   position: relative
 
 .card-content
+  background-color: $card-content-background-color
   padding: 1.5rem
 
 .card-footer
+  background-color: $card-footer-background-color
   border-top: $card-footer-border-top
   align-items: stretch
   display: flex
@@ -2608,7 +2757,7 @@ $dropdown-divider-background-color: $border !default
     .dropdown-menu
       bottom: 100%
       padding-bottom: $dropdown-content-offset
-      padding-top: unset
+      padding-top: initial
       top: auto
 
 .dropdown-menu
@@ -2771,7 +2920,6 @@ a.dropdown-item
   flex-basis: auto
   flex-grow: 1
   flex-shrink: 1
-  overflow: auto
   text-align: left
 
 $menu-item-color: $text !default
@@ -2830,16 +2978,20 @@ $message-radius: $radius !default
 
 $message-header-background-color: $text !default
 $message-header-color: $text-invert !default
-$message-header-padding: 0.5em 0.75em !default
+$message-header-weight: $weight-bold !default
+$message-header-padding: 0.75em 1em !default
 $message-header-radius: $radius !default
 
-$message-body-border: 1px solid $border !default
+$message-body-border-color: $border !default
+$message-body-border-width: 0 0 0 4px !default
 $message-body-color: $text !default
-$message-body-padding: 1em 1.25em !default
+$message-body-padding: 1.25em 1.5em !default
 $message-body-radius: $radius !default
 
 $message-body-pre-background-color: $white !default
 $message-body-pre-code-background-color: transparent !default
+
+$message-header-body-border-width: 0 !default
 
 .message
   +block
@@ -2881,6 +3033,7 @@ $message-body-pre-code-background-color: transparent !default
   border-radius: $message-header-radius $message-header-radius 0 0
   color: $message-header-color
   display: flex
+  font-weight: $message-header-weight
   justify-content: space-between
   line-height: 1.25
   padding: $message-header-padding
@@ -2890,13 +3043,15 @@ $message-body-pre-code-background-color: transparent !default
     flex-shrink: 0
     margin-left: 0.75em
   & + .message-body
+    border-width: $message-header-body-border-width
     border-top-left-radius: 0
     border-top-right-radius: 0
-    border-top: none
 
 .message-body
-  border: $message-body-border
+  border-color: $message-body-border-color
   border-radius: $message-body-radius
+  border-style: solid
+  border-width: $message-body-border-width
   color: $message-body-color
   padding: $message-body-padding
   code,
@@ -3018,12 +3173,17 @@ $modal-card-body-padding: 20px !default
   padding: $modal-card-body-padding
 
 $navbar-background-color: $white !default
+$navbar-box-shadow-size: 0 2px 0 0 !default
+$navbar-box-shadow-color: $background !default
 $navbar-height: 3.25rem !default
+$navbar-padding-vertical: 1rem !default
+$navbar-padding-horizontal: 2rem !default
+$navbar-z: 30 !default
 $navbar-fixed-z: 30 !default
 
 $navbar-item-color: $grey-dark !default
 $navbar-item-hover-color: $link !default
-$navbar-item-hover-background-color: $background !default
+$navbar-item-hover-background-color: $white-bis !default
 $navbar-item-active-color: $black !default
 $navbar-item-active-background-color: transparent !default
 $navbar-item-img-max-height: 1.75rem !default
@@ -3037,7 +3197,7 @@ $navbar-tab-active-border-bottom-style: solid !default
 $navbar-tab-active-border-bottom-width: 3px !default
 
 $navbar-dropdown-background-color: $white !default
-$navbar-dropdown-border-top: 1px solid $border !default
+$navbar-dropdown-border-top: 2px solid $border !default
 $navbar-dropdown-offset: -4px !default
 $navbar-dropdown-arrow: $link !default
 $navbar-dropdown-radius: $radius-large !default
@@ -3051,7 +3211,8 @@ $navbar-dropdown-item-hover-background-color: $background !default
 $navbar-dropdown-item-active-color: $link !default
 $navbar-dropdown-item-active-background-color: $background !default
 
-$navbar-divider-background-color: $border !default
+$navbar-divider-background-color: $background !default
+$navbar-divider-height: 2px !default
 
 =navbar-fixed
   left: 0
@@ -3059,15 +3220,12 @@ $navbar-divider-background-color: $border !default
   right: 0
   z-index: $navbar-fixed-z
 
-=navbar-fixed-html
-  left: 0
-  position: fixed
-  right: 0
-
 .navbar
   background-color: $navbar-background-color
+  box-shadow: $navbar-box-shadow-size $navbar-box-shadow-color
   min-height: $navbar-height
   position: relative
+  z-index: $navbar-z
   @each $name, $pair in $colors
     $color: nth($pair, 1)
     $color-invert: nth($pair, 2)
@@ -3128,11 +3286,12 @@ $navbar-divider-background-color: $border !default
   &.is-fixed-top
     top: 0
 
-html.has-navbar-fixed-top
-  padding-top: $navbar-height
-
-html.has-navbar-fixed-bottom
-  padding-bottom: $navbar-height
+html,
+body
+  &.has-navbar-fixed-top
+    padding-top: $navbar-height
+  &.has-navbar-fixed-bottom
+    padding-bottom: $navbar-height
 
 .navbar-brand,
 .navbar-tabs
@@ -3140,6 +3299,11 @@ html.has-navbar-fixed-bottom
   display: flex
   flex-shrink: 0
   min-height: $navbar-height
+
+.navbar-brand
+  a.navbar-item
+    &:hover
+      background-color: transparent
 
 .navbar-tabs
   +overflow-touch
@@ -3159,17 +3323,23 @@ html.has-navbar-fixed-bottom
   color: $navbar-item-color
   display: block
   line-height: 1.5
-  padding: 0.5rem 1rem
+  padding: 0.5rem 0.75rem
   position: relative
+  .icon
+    &:only-child
+      margin-left: -0.25rem
+      margin-right: -0.25rem
 
 a.navbar-item,
-a.navbar-link
+.navbar-link
+  cursor: pointer
   &:hover,
   &.is-active
     background-color: $navbar-item-hover-background-color
     color: $navbar-item-hover-color
 
 .navbar-item
+  display: block
   flex-grow: 0
   flex-shrink: 0
   img
@@ -3200,6 +3370,10 @@ a.navbar-link
 
 .navbar-link
   padding-right: 2.5em
+  &::after
+    +arrow($navbar-dropdown-arrow)
+    margin-top: -0.375em
+    right: 1.125em
 
 .navbar-dropdown
   font-size: 0.875rem
@@ -3213,7 +3387,7 @@ a.navbar-link
   background-color: $navbar-divider-background-color
   border: none
   display: none
-  height: 1px
+  height: $navbar-divider-height
   margin: 0.5rem 0
 
 +touch
@@ -3224,6 +3398,9 @@ a.navbar-link
     .navbar-item
       align-items: center
       display: flex
+  .navbar-link
+    &::after
+      display: none
   .navbar-menu
     background-color: $navbar-background-color
     box-shadow: 0 8px 16px rgba($black, 0.1)
@@ -3247,10 +3424,12 @@ a.navbar-link
         +overflow-touch
         max-height: calc(100vh - #{$navbar-height})
         overflow: auto
-  html.has-navbar-fixed-top-touch
-    padding-top: $navbar-height
-  html.has-navbar-fixed-bottom-touch
-    padding-bottom: $navbar-height
+  html,
+  body
+    &.has-navbar-fixed-top-touch
+      padding-top: $navbar-height
+    &.has-navbar-fixed-bottom-touch
+      padding-bottom: $navbar-height
 
 +desktop
   .navbar,
@@ -3261,9 +3440,17 @@ a.navbar-link
     display: flex
   .navbar
     min-height: $navbar-height
+    &.is-spaced
+      padding: $navbar-padding-vertical $navbar-padding-horizontal
+      .navbar-start,
+      .navbar-end
+        align-items: center
+      a.navbar-item,
+      .navbar-link
+        border-radius: $radius
     &.is-transparent
       a.navbar-item,
-      a.navbar-link
+      .navbar-link
         &:hover,
         &.is-active
           background-color: transparent !important
@@ -3287,6 +3474,7 @@ a.navbar-link
     align-items: center
     display: flex
   .navbar-item
+    display: flex
     &.has-dropdown
       align-items: stretch
     &.has-dropdown-up
@@ -3303,16 +3491,11 @@ a.navbar-link
     &.is-hoverable:hover
       .navbar-dropdown
         display: block
+        .navbar.is-spaced &,
         &.is-boxed
           opacity: 1
           pointer-events: auto
           transform: translateY(0)
-  .navbar-link
-    &::after
-      +arrow($navbar-dropdown-arrow)
-      margin-top: -0.375em
-      right: 1.125em
-      top: 50%
   .navbar-menu
     flex-grow: 1
     flex-shrink: 0
@@ -3346,6 +3529,7 @@ a.navbar-link
       &.is-active
         background-color: $navbar-dropdown-item-active-background-color
         color: $navbar-dropdown-item-active-color
+    .navbar.is-spaced &,
     &.is-boxed
       border-radius: $navbar-dropdown-boxed-radius
       border-top: none
@@ -3379,13 +3563,19 @@ a.navbar-link
         box-shadow: 0 -2px 3px rgba($black, 0.1)
     &.is-fixed-top-desktop
       top: 0
-  html.has-navbar-fixed-top-desktop
-    padding-top: $navbar-height
-  html.has-navbar-fixed-bottom-desktop
-    padding-bottom: $navbar-height
+  html,
+  body
+    &.has-navbar-fixed-top-desktop
+      padding-top: $navbar-height
+    &.has-navbar-fixed-bottom-desktop
+      padding-bottom: $navbar-height
+    &.has-spaced-navbar-fixed-top
+      padding-top: $navbar-height + ($navbar-padding-vertical * 2)
+    &.has-spaced-navbar-fixed-bottom
+      padding-bottom: $navbar-height + ($navbar-padding-vertical * 2)
   // Hover/Active states
   a.navbar-item,
-  a.navbar-link
+  .navbar-link
     &.is-active
       color: $navbar-item-active-color
     &.is-active:not(:hover)
@@ -3855,9 +4045,9 @@ $column-gap: 0.75rem !default
   @for $i from 1 through 12
     .columns.is-mobile > &.is-#{$i}
       flex: none
-      width: ($i / 12) * 100%
+      width: percentage($i / 12)
     .columns.is-mobile > &.is-offset-#{$i}
-      margin-left: ($i / 12) * 100%
+      margin-left: percentage($i / 12)
   +mobile
     &.is-narrow-mobile
       flex: none
@@ -3912,9 +4102,9 @@ $column-gap: 0.75rem !default
     @for $i from 1 through 12
       &.is-#{$i}-mobile
         flex: none
-        width: ($i / 12) * 100%
+        width: percentage($i / 12)
       &.is-offset-#{$i}-mobile
-        margin-left: ($i / 12) * 100%
+        margin-left: percentage($i / 12)
   +tablet
     &.is-narrow,
     &.is-narrow-tablet
@@ -3990,10 +4180,10 @@ $column-gap: 0.75rem !default
       &.is-#{$i},
       &.is-#{$i}-tablet
         flex: none
-        width: ($i / 12) * 100%
+        width: percentage($i / 12)
       &.is-offset-#{$i},
       &.is-offset-#{$i}-tablet
-        margin-left: ($i / 12) * 100%
+        margin-left: percentage($i / 12)
   +touch
     &.is-narrow-touch
       flex: none
@@ -4048,9 +4238,9 @@ $column-gap: 0.75rem !default
     @for $i from 1 through 12
       &.is-#{$i}-touch
         flex: none
-        width: ($i / 12) * 100%
+        width: percentage($i / 12)
       &.is-offset-#{$i}-touch
-        margin-left: ($i / 12) * 100%
+        margin-left: percentage($i / 12)
   +desktop
     &.is-narrow-desktop
       flex: none
@@ -4105,9 +4295,9 @@ $column-gap: 0.75rem !default
     @for $i from 1 through 12
       &.is-#{$i}-desktop
         flex: none
-        width: ($i / 12) * 100%
+        width: percentage($i / 12)
       &.is-offset-#{$i}-desktop
-        margin-left: ($i / 12) * 100%
+        margin-left: percentage($i / 12)
   +widescreen
     &.is-narrow-widescreen
       flex: none
@@ -4162,9 +4352,9 @@ $column-gap: 0.75rem !default
     @for $i from 1 through 12
       &.is-#{$i}-widescreen
         flex: none
-        width: ($i / 12) * 100%
+        width: percentage($i / 12)
       &.is-offset-#{$i}-widescreen
-        margin-left: ($i / 12) * 100%
+        margin-left: percentage($i / 12)
   +fullhd
     &.is-narrow-fullhd
       flex: none
@@ -4219,9 +4409,9 @@ $column-gap: 0.75rem !default
     @for $i from 1 through 12
       &.is-#{$i}-fullhd
         flex: none
-        width: ($i / 12) * 100%
+        width: percentage($i / 12)
       &.is-offset-#{$i}-fullhd
-        margin-left: ($i / 12) * 100%
+        margin-left: percentage($i / 12)
 
 .columns
   margin-left: (-$column-gap)
@@ -4475,7 +4665,7 @@ $section-padding-large: 18rem 1.5rem !default
     &.is-large
       padding: $section-padding-large
 
-$footer-background-color: $background !default
+$footer-background-color: $white-bis !default
 
 .footer
   background-color: $footer-background-color

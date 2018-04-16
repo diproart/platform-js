@@ -1,4 +1,4 @@
-/*! minireset.css v0.0.2 | MIT License | github.com/jgthms/minireset.css */
+/*! minireset.css v0.0.3 | MIT License | github.com/jgthms/minireset.css */
 // Blocks
 html,
 body,
@@ -52,17 +52,16 @@ html
   box-sizing: border-box
 
 *
-  box-sizing: inherit
-  &:before,
-  &:after
+  &,
+  &::before,
+  &::after
     box-sizing: inherit
 
 // Media
 img,
-embed,
-object,
 audio,
 video
+  height: auto
   max-width: 100%
 
 // Iframe
@@ -92,8 +91,8 @@ $code-padding: 0.25em 0.5em 0.25em !default
 $code-weight: normal !default
 $code-size: 0.875em !default
 
-$hr-background-color: $border !default
-$hr-height: 1px !default
+$hr-background-color: $background !default
+$hr-height: 2px !default
 $hr-margin: 1.5rem 0 !default
 
 $strong-color: $text-strong !default
@@ -261,6 +260,8 @@ $alignments: ('centered': 'center', 'justified': 'justify', 'left': 'left', 'rig
 @each $alignment, $text-align in $alignments
   .has-text-#{$alignment}
     text-align: #{$text-align} !important
+
+@each $alignment, $text-align in $alignments
   +mobile
     .has-text-#{$alignment}-mobile
       text-align: #{$text-align} !important
@@ -309,6 +310,8 @@ $alignments: ('centered': 'center', 'justified': 'justify', 'left': 'left', 'rig
     &:hover,
     &:focus
       color: darken($color, 10%) !important
+  .has-background-#{$name}
+    background-color: $color !important
 
 @each $name, $shade in $shades
   .has-text-#{$name}

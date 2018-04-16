@@ -46,28 +46,64 @@ $weight-bold: 700 !default
 // Responsiveness
 
 // The container horizontal gap, which acts as the offset for breakpoints
-$gap: 32px !default
+$gap: 64px !default
 // 960, 1152, and 1344 have been chosen because they are divisible by both 12 and 16
 $tablet: 769px !default
 // 960px container + 4rem
 $desktop: 960px + (2 * $gap) !default
 // 1152px container + 4rem
 $widescreen: 1152px + (2 * $gap) !default
+$widescreen-enabled: true !default
 // 1344px container + 4rem
 $fullhd: 1344px + (2 * $gap) !default
+$fullhd-enabled: true !default
 
 // Miscellaneous
 
 $easing: ease-out !default
 $radius-small: 2px !default
-$radius: 3px !default
-$radius-large: 5px !default
+$radius: 4px !default
+$radius-large: 6px !default
 $radius-rounded: 290486px !default
 $speed: 86ms !default
 
 // Flags
 
 $variable-columns: true !default
+
+@function mergeColorMaps($bulma-colors, $custom-colors)
+  // we return at least bulma hardcoded colors
+  $merged-colors: $bulma-colors
+
+  // we want a map as input
+  @if type-of($custom-colors) == 'map'
+    @each $name, $components in $custom-colors
+      // color name should be a string and colors pair a list with at least one element
+      @if type-of($name) == 'string' and (type-of($components) == 'list' or type-of($components) == 'color') and length($components) >= 1
+        $color-base: null
+
+        // the param can either be a single color
+        // or a list of 2 colors
+        @if type-of($components) == 'color'
+          $color-base: $components
+        @else if type-of($components) == 'list'
+          $color-base: nth($components, 1)
+
+        $color-invert: null
+        // is an inverted color provided in the list
+        @if length($components) > 1
+          $color-invert: nth($components, 2)
+
+        // we only want a color as base color
+        @if type-of($color-base) == 'color'
+          // if inverted color is not provided or is not a color we compute it
+          @if type-of($color-invert) != 'color'
+            $color-invert: findColorInvert($color-base)
+
+          // we merge this colors elements as map with bulma colors (we can override them this way, no multiple definition for the same name)
+          $merged-colors: map_merge($merged-colors, ($name: ($color-base, $color-invert)))
+
+  @return $merged-colors
 
 @function powerNumber($number, $exp)
   $value: 1
@@ -175,9 +211,11 @@ $size-medium: $size-5 !default
 $size-large: $size-4 !default
 
 // Lists and maps
+$custom-colors: null !default
+$custom-shades: null !default
 
-$colors: ("white": ($white, $black), "black": ($black, $white), "light": ($light, $light-invert), "dark": ($dark, $dark-invert), "primary": ($primary, $primary-invert), "link": ($link, $link-invert), "info": ($info, $info-invert), "success": ($success, $success-invert), "warning": ($warning, $warning-invert), "danger": ($danger, $danger-invert)) !default
-$shades: ("black-bis": $black-bis, "black-ter": $black-ter, "grey-darker": $grey-darker, "grey-dark": $grey-dark, "grey": $grey, "grey-light": $grey-light, "grey-lighter": $grey-lighter, "white-ter": $white-ter, "white-bis": $white-bis) !default
+$colors: mergeColorMaps(("white": ($white, $black), "black": ($black, $white), "light": ($light, $light-invert), "dark": ($dark, $dark-invert), "primary": ($primary, $primary-invert), "link": ($link, $link-invert), "info": ($info, $info-invert), "success": ($success, $success-invert), "warning": ($warning, $warning-invert), "danger": ($danger, $danger-invert)), $custom-colors) !default
+$shades: mergeColorMaps(("black-bis": $black-bis, "black-ter": $black-ter, "grey-darker": $grey-darker, "grey-dark": $grey-dark, "grey": $grey, "grey-light": $grey-light, "grey-lighter": $grey-lighter, "white-ter": $white-ter, "white-bis": $white-bis), $custom-shades) !default
 
 $sizes: $size-1 $size-2 $size-3 $size-4 $size-5 $size-6 $size-7 !default
 
@@ -189,25 +227,8 @@ $sizes: $size-1 $size-2 $size-3 $size-4 $size-5 $size-6 $size-7 !default
 
 @import "initial-variables"
 
-=arrow($color)
-  border: 1px solid $color
-  border-right: 0
-  border-top: 0
-  content: " "
-  display: block
-  height: 0.5em
-  pointer-events: none
-  position: absolute
-  transform: rotate(-45deg)
-  transform-origin: center
-  width: 0.5em
-
-=block
-  &:not(:last-child)
-    margin-bottom: 1.5rem
-
 =clearfix
-  &:after
+  &::after
     clear: both
     content: " "
     display: table
@@ -220,71 +241,6 @@ $sizes: $size-1 $size-2 $size-3 $size-4 $size-5 $size-6 $size-7 !default
   @else
     left: calc(50% - (#{$width} / 2))
     top: calc(50% - (#{$width} / 2))
-
-=delete
-  +unselectable
-  -moz-appearance: none
-  -webkit-appearance: none
-  background-color: rgba($black, 0.2)
-  border: none
-  border-radius: $radius-rounded
-  cursor: pointer
-  display: inline-block
-  flex-grow: 0
-  flex-shrink: 0
-  font-size: 0
-  height: 20px
-  max-height: 20px
-  max-width: 20px
-  min-height: 20px
-  min-width: 20px
-  outline: none
-  position: relative
-  vertical-align: top
-  width: 20px
-  &:before,
-  &:after
-    background-color: $white
-    content: ""
-    display: block
-    left: 50%
-    position: absolute
-    top: 50%
-    transform: translateX(-50%) translateY(-50%) rotate(45deg)
-    transform-origin: center center
-  &:before
-    height: 2px
-    width: 50%
-  &:after
-    height: 50%
-    width: 2px
-  &:hover,
-  &:focus
-    background-color: rgba($black, 0.3)
-  &:active
-    background-color: rgba($black, 0.4)
-  // Sizes
-  &.is-small
-    height: 16px
-    max-height: 16px
-    max-width: 16px
-    min-height: 16px
-    min-width: 16px
-    width: 16px
-  &.is-medium
-    height: 24px
-    max-height: 24px
-    max-width: 24px
-    min-height: 24px
-    min-width: 24px
-    width: 24px
-  &.is-large
-    height: 32px
-    max-height: 32px
-    max-width: 32px
-    min-height: 32px
-    min-width: 32px
-    width: 32px
 
 =fa($size, $dimensions)
   display: inline-block
@@ -330,40 +286,14 @@ $sizes: $size-1 $size-2 $size-3 $size-4 $size-5 $size-6 $size-7 !default
       &:nth-child(3)
         transform: translateY(-5px) rotate(-45deg)
 
-=loader
-  animation: spinAround 500ms infinite linear
-  border: 2px solid $border
-  border-radius: $radius-rounded
-  border-right-color: transparent
-  border-top-color: transparent
-  content: ""
-  display: block
-  height: 1em
-  position: relative
-  width: 1em
-
 =overflow-touch
   -webkit-overflow-scrolling: touch
-
-=overlay($offset: 0)
-  bottom: $offset
-  left: $offset
-  position: absolute
-  right: $offset
-  top: $offset
 
 =placeholder
   $placeholders: ':-moz' ':-webkit-input' '-moz' '-ms-input'
   @each $placeholder in $placeholders
     &:#{$placeholder}-placeholder
       @content
-
-=unselectable
-  -webkit-touch-callout: none
-  -webkit-user-select: none
-  -moz-user-select: none
-  -ms-user-select: none
-  user-select: none
 
 // Responsiveness
 
@@ -396,32 +326,185 @@ $sizes: $size-1 $size-2 $size-3 $size-4 $size-5 $size-6 $size-7 !default
     @content
 
 =desktop-only
-  @media screen and (min-width: $desktop) and (max-width: $widescreen - 1px)
-    @content
+  @if $widescreen-enabled
+    @media screen and (min-width: $desktop) and (max-width: $widescreen - 1px)
+      @content
+
+=until-widescreen
+  @if $widescreen-enabled
+    @media screen and (max-width: $widescreen - 1px)
+      @content
 
 =widescreen
-  @media screen and (min-width: $widescreen)
-    @content
+  @if $widescreen-enabled
+    @media screen and (min-width: $widescreen)
+      @content
 
 =widescreen-only
-  @media screen and (min-width: $widescreen) and (max-width: $fullhd - 1px)
-    @content
+  @if $widescreen-enabled and $fullhd-enabled
+    @media screen and (min-width: $widescreen) and (max-width: $fullhd - 1px)
+      @content
+
+=until-fullhd
+  @if $fullhd-enabled
+    @media screen and (max-width: $fullhd - 1px)
+      @content
 
 =fullhd
-  @media screen and (min-width: $fullhd)
-    @content
+  @if $fullhd-enabled
+    @media screen and (min-width: $fullhd)
+      @content
+
+// Placeholders
+
+%unselectable
+  -webkit-touch-callout: none
+  -webkit-user-select: none
+  -moz-user-select: none
+  -ms-user-select: none
+  user-select: none
+
+=unselectable
+  @extend %unselectable
+
+%arrow
+  border: 3px solid transparent
+  border-radius: 2px
+  border-right: 0
+  border-top: 0
+  content: " "
+  display: block
+  height: 0.625em
+  margin-top: -0.4375em
+  pointer-events: none
+  position: absolute
+  top: 50%
+  transform: rotate(-45deg)
+  transform-origin: center
+  width: 0.625em
+
+=arrow($color)
+  @extend %arrow
+  border-color: $color
+
+%block
+  &:not(:last-child)
+    margin-bottom: 1.5rem
+
+=block
+  @extend %block
+
+%delete
+  @extend %unselectable
+  -moz-appearance: none
+  -webkit-appearance: none
+  background-color: rgba($black, 0.2)
+  border: none
+  border-radius: $radius-rounded
+  cursor: pointer
+  display: inline-block
+  flex-grow: 0
+  flex-shrink: 0
+  font-size: 0
+  height: 20px
+  max-height: 20px
+  max-width: 20px
+  min-height: 20px
+  min-width: 20px
+  outline: none
+  position: relative
+  vertical-align: top
+  width: 20px
+  &::before,
+  &::after
+    background-color: $white
+    content: ""
+    display: block
+    left: 50%
+    position: absolute
+    top: 50%
+    transform: translateX(-50%) translateY(-50%) rotate(45deg)
+    transform-origin: center center
+  &::before
+    height: 2px
+    width: 50%
+  &::after
+    height: 50%
+    width: 2px
+  &:hover,
+  &:focus
+    background-color: rgba($black, 0.3)
+  &:active
+    background-color: rgba($black, 0.4)
+  // Sizes
+  &.is-small
+    height: 16px
+    max-height: 16px
+    max-width: 16px
+    min-height: 16px
+    min-width: 16px
+    width: 16px
+  &.is-medium
+    height: 24px
+    max-height: 24px
+    max-width: 24px
+    min-height: 24px
+    min-width: 24px
+    width: 24px
+  &.is-large
+    height: 32px
+    max-height: 32px
+    max-width: 32px
+    min-height: 32px
+    min-width: 32px
+    width: 32px
+
+=delete
+  @extend %delete
+
+%loader
+  animation: spinAround 500ms infinite linear
+  border: 2px solid $border
+  border-radius: $radius-rounded
+  border-right-color: transparent
+  border-top-color: transparent
+  content: ""
+  display: block
+  height: 1em
+  position: relative
+  width: 1em
+
+=loader
+  @extend %loader
+
+%overlay
+  bottom: 0
+  left: 0
+  position: absolute
+  right: 0
+  top: 0
+
+=overlay($offset: 0)
+  @extend %overlay
+  @if $offset != 0
+    bottom: $offset
+    left: $offset
+    right: $offset
+    top: $offset
 
 $control-radius: $radius !default
 $control-radius-small: $radius-small !default
 
-$control-padding-vertical: calc(0.375em - 1px) !default
-$control-padding-horizontal: calc(0.625em - 1px) !default
+$control-border-width: 1px !default
 
-=control
+$control-padding-vertical: calc(0.375em - #{$control-border-width}) !default
+$control-padding-horizontal: calc(0.625em - #{$control-border-width}) !default
+
+%control
   -moz-appearance: none
   -webkit-appearance: none
   align-items: center
-  border: 1px solid transparent
+  border: $control-border-width solid transparent
   border-radius: $control-radius
   box-shadow: none
   display: inline-flex
@@ -443,6 +526,9 @@ $control-padding-horizontal: calc(0.625em - 1px) !default
     outline: none
   &[disabled]
     cursor: not-allowed
+
+=control
+  @extend %control
 
 // The controls sizes use mixins so they can be used at different breakpoints
 =control-small
