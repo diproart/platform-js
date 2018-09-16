@@ -43,7 +43,7 @@ const libs = {
     //* `${nodeModules}/picturefill/dist/plugins/**/*.min.js`,
   ],
   'platform.utils.js': [
-    // чат в zammad требует $.animation (этого нет slim)
+    // чат в zammad требует $.animation (этого нет в slim)
     // `${nodeModules}/jquery/dist/jquery.slim.min.js`,
     // полная версия
     `${nodeModules}/jquery/dist/jquery.min.js`,
@@ -51,6 +51,10 @@ const libs = {
     `${nodeModules}/picturefill/dist/picturefill.min.js`,
     `${nodeModules}/localforage/dist/localforage.min.js`
     //* `${nodeModules}/picturefill/dist/plugins/**/*.min.js`,
+  ],
+  'platform.3party.js': [
+    `${nodeModules}/lodash/lodash.min.js`,
+    `${nodeModules}/localforage/dist/localforage.min.js`
   ]
 }
 
@@ -63,10 +67,12 @@ const bundles = {
     `${nodeModules}/jquery/dist/jquery.slim.min.js`,
 
     // utils
-    `${nodeModules}/lodash/lodash.min.js`,
+    // @deprected since 0.7.2
+    // `${nodeModules}/lodash/lodash.min.js`,
 
     // cookies, localStorage etc
-    `${nodeModules}/localforage/dist/localforage.min.js`,
+    // @deprecated since 0.7.2
+    //`${nodeModules}/localforage/dist/localforage.min.js`,
 
     // http
     `${nodeModules}/axios/dist/axios.js`,
@@ -78,22 +84,25 @@ const bundles = {
     `${nodeModules}/vee-validate/dist/vee-validate.min.js` // form validate
   ],
   /**
-   * full build for platform
+   * "full" static platform build
    */
-  'vue': [
+  vue: [
     // DOM, jQuery
     `${nodeModules}/jquery/dist/jquery.min.js`,
     `${nodeModules}/jquery.cookie/jquery.cookie.js`,
 
-    // utils
-    `${nodeModules}/lodash/lodash.min.js`,
+    //  utils
+    // @deprecated
+    // `${nodeModules}/lodash/lodash.min.js`,
 
     // cookies, localStorage etc
     // @deprected use lokijs
-    `${nodeModules}/localforage/dist/localforage.min.js`,
+    // @deprecated since 0.7.2
+    // `${nodeModules}/localforage/dist/localforage.min.js`,
 
     // picture polyfill
-    `${nodeModules}/picturefill/dist/picturefill.min.js`,
+    // @deprecated since 0.7.2
+    // `${nodeModules}/picturefill/dist/picturefill.min.js`,
 
     // overlay, modal, gallery
     `${nodeModules}/jquery-colorbox/jquery.colorbox-min.js`,
@@ -106,6 +115,7 @@ const bundles = {
     `${nodeModules}/photoswipe/dist/photoswipe-ui-default.min.js`,
 
     // pro* animations
+    // @deprecated will remove
     `${nodeModules}/gsap/src/minified/TweenMax.min.js`,
     `${nodeModules}/gsap/src/minified/plugins/CSSPlugin.min.js`,
     `${nodeModules}/gsap/src/minified/plugins/ScrollToPlugin.min.js`,
@@ -118,16 +128,18 @@ const bundles = {
     // dropdown, positions, modals
 
     // ui
-    `${nodeModules}/select2/dist/js/select2.full.min.js`,
+    // @deprecated since 0.7.2
+    // `${nodeModules}/select2/dist/js/select2.full.min.js`,
 
     // кнопка наверх
     `${nodeModules}/scrollup/dist/lib/jquery.easing.js`,
     `${nodeModules}/scrollup/dist/jquery.scrollUp.min.js`,
 
     // messenger
-    `${nodeModules}/messenger/build/js/messenger.min.js`,
-    `${nodeModules}/messenger/build/js/messenger-theme-flat.js`,
-    `${nodeModules}/messenger/build/js/messenger-theme-future.js`,
+    // @deprecated since 0.7.2
+    // `${nodeModules}/messenger/build/js/messenger.min.js`,
+    // `${nodeModules}/messenger/build/js/messenger-theme-flat.js`,
+    // `${nodeModules}/messenger/build/js/messenger-theme-future.js`,
 
     // http
     `${nodeModules}/axios/dist/axios.js`,
@@ -136,10 +148,11 @@ const bundles = {
     `${nodeModules}/vue/dist/vue.min.js`, // core
     `${nodeModules}/vuex/dist/vuex.min.js`, // immutable (flux, redux pattern)
     `${nodeModules}/vee-validate/dist/vee-validate.min.js`, // form validate
-    `${nodeModules}/vue-router/dist/vue-router.min.js`, // router,
+    `${nodeModules}/vue-router/dist/vue-router.min.js` // router
 
     // alertify (used by insales)
-    `${nodeModules}/alertifyjs/build/alertify.min.js`
+    // @deprecated
+    // `${nodeModules}/alertifyjs/build/alertify.min.js`
   ]
 }
 
@@ -168,23 +181,26 @@ const styles = {
     // `${nodeModules}/tether-drop/dist/css/drop-theme-twipsy.min.css`
 
     // ui
-    `${nodeModules}/select2/dist/css/select2.min.css`,
+    // @deprecated since 0.7.2
+    // `${nodeModules}/select2/dist/css/select2.min.css`,
 
     // toastr
     `${nodeModules}/toastr/build/toastr.min.css`,
-    `${nodeModules}/messenger/build/css/messenger-spinner.css`,
-    `${nodeModules}/messenger/build/css/messenger-theme-air.css`,
-    `${nodeModules}/messenger/build/css/messenger-theme-block.css`,
-    `${nodeModules}/messenger/build/css/messenger-theme-flat.css`,
-    `${nodeModules}/messenger/build/css/messenger-theme-future.css`,
-    `${nodeModules}/messenger/build/css/messenger-theme-ice.css`,
-    `${nodeModules}/messenger/build/css/messenger.css`,
+
+    // @deprecated since 0.7.2
+    // `${nodeModules}/messenger/build/css/messenger-spinner.css`,
+    // `${nodeModules}/messenger/build/css/messenger-theme-air.css`,
+    // `${nodeModules}/messenger/build/css/messenger-theme-block.css`,
+    // `${nodeModules}/messenger/build/css/messenger-theme-flat.css`,
+    // `${nodeModules}/messenger/build/css/messenger-theme-future.css`,
+    // `${nodeModules}/messenger/build/css/messenger-theme-ice.css`,
+    // `${nodeModules}/messenger/build/css/messenger.css`,
 
     // alertifyjs
-    // @deprecated will be removed
-    `${nodeModules}/alertifyjs/build/css/alertify.min.css`,
-    `${nodeModules}/alertifyjs/build/css/themes/default.min.css`,
-    `${nodeModules}/alertifyjs/build/css/themes/semantic.min.css`,
+    // @deprecated will be removed (0.7.2)
+    //`${nodeModules}/alertifyjs/build/css/alertify.min.css`,
+    //`${nodeModules}/alertifyjs/build/css/themes/default.min.css`,
+    //`${nodeModules}/alertifyjs/build/css/themes/semantic.min.css`,
 
     // photoswipe
     `${nodeModules}/photoswipe/dist/photoswipe.css`,
@@ -195,5 +211,5 @@ const styles = {
 module.exports = {
   libs: libs,
   bundles: bundles,
-  styles: styles,
+  styles: styles
 }
