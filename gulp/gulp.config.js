@@ -151,8 +151,7 @@ const bundles = {
     `${nodeModules}/vue-router/dist/vue-router.min.js` // router
 
     // alertify (used by insales)
-    // @deprecated
-    // `${nodeModules}/alertifyjs/build/alertify.min.js`
+    `${nodeModules}/alertifyjs/build/alertify.min.js`
   ]
 }
 
@@ -197,8 +196,8 @@ const styles = {
     // `${nodeModules}/messenger/build/css/messenger.css`,
 
     // alertifyjs
-    // `${nodeModules}/alertifyjs/build/css/alertify.min.css`,
-    // `${nodeModules}/alertifyjs/build/css/themes/default.min.css`,
+    `${nodeModules}/alertifyjs/build/css/alertify.min.css`,
+    `${nodeModules}/alertifyjs/build/css/themes/default.min.css`,
 
     // photoswipe
     `${nodeModules}/photoswipe/dist/photoswipe.css`,
