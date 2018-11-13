@@ -10,7 +10,7 @@ const libs = {
     `${nodeModules}/vuex/dist/vuex.min.js`,
     `${nodeModules}/vee-validate/dist/vee-validate.min.js`,
     `${nodeModules}/vue-router/dist/vue-router.min.js`,
-    `${nodeModules}/axios/dist/axios.js`
+    `${nodeModules}/axios/dist/axios.min.js`
   ],
   'platform.media.js': [
     `${nodeModules}/jquery-colorbox/jquery.colorbox-min.js`,
@@ -75,7 +75,7 @@ const bundles = {
     //`${nodeModules}/localforage/dist/localforage.min.js`,
 
     // http
-    `${nodeModules}/axios/dist/axios.js`,
+    `${nodeModules}/axios/dist/axios.min.js`,
 
     // vue framework
     `${nodeModules}/vue/dist/vue.min.js`, // core
@@ -142,7 +142,7 @@ const bundles = {
     // `${nodeModules}/messenger/build/js/messenger-theme-future.js`,
 
     // http
-    `${nodeModules}/axios/dist/axios.js`,
+    `${nodeModules}/axios/dist/axios.min.js`,
 
     // vue framework
     `${nodeModules}/vue/dist/vue.min.js`, // core
@@ -197,10 +197,8 @@ const styles = {
     // `${nodeModules}/messenger/build/css/messenger.css`,
 
     // alertifyjs
-    // @deprecated will be removed (0.7.2)
-    //`${nodeModules}/alertifyjs/build/css/alertify.min.css`,
-    //`${nodeModules}/alertifyjs/build/css/themes/default.min.css`,
-    //`${nodeModules}/alertifyjs/build/css/themes/semantic.min.css`,
+    // `${nodeModules}/alertifyjs/build/css/alertify.min.css`,
+    // `${nodeModules}/alertifyjs/build/css/themes/default.min.css`,
 
     // photoswipe
     `${nodeModules}/photoswipe/dist/photoswipe.css`,
