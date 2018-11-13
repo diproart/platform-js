@@ -8,7 +8,7 @@ $box-link-hover-shadow: 0 2px 3px rgba($black, 0.1), 0 0 0 1px $link !default
 $box-link-active-shadow: inset 0 1px 2px rgba($black, 0.2), 0 0 0 1px $link !default
 
 .box
-  +block
+  @extend %block
   background-color: $box-background-color
   border-radius: $box-radius
   box-shadow: $box-shadow
@@ -66,8 +66,8 @@ $button-static-border-color: $grey-lighter !default
   font-size: $size-large
 
 .button
-  +control
-  +unselectable
+  @extend %control
+  @extend %unselectable
   background-color: $button-background-color
   border-color: $button-border-color
   border-width: $button-border-width
@@ -223,7 +223,7 @@ $button-static-border-color: $grey-lighter !default
     color: transparent !important
     pointer-events: none
     &::after
-      +loader
+      @extend %loader
       +center(1em)
       position: absolute !important
   &.is-static
@@ -244,7 +244,7 @@ $button-static-border-color: $grey-lighter !default
   justify-content: flex-start
   .button
     margin-bottom: 0.5rem
-    &:not(:last-child)
+    &:not(:last-child):not(.is-fullwidth)
       margin-right: 0.5rem
   &:last-child
     margin-bottom: -0.5rem
@@ -325,7 +325,7 @@ $content-table-foot-cell-border-width: 2px 0 0 !default
 $content-table-foot-cell-color: $text-strong !default
 
 .content
-  +block
+  @extend %block
   // Inline
   li + li
     margin-top: 0.25em
@@ -377,9 +377,19 @@ $content-table-foot-cell-color: $text-strong !default
     border-left: $content-blockquote-border-left
     padding: $content-blockquote-padding
   ol
-    list-style: decimal outside
+    list-style-position: outside
     margin-left: 2em
     margin-top: 1em
+    &:not([type])
+      list-style-type: decimal
+      &.is-lower-alpha
+        list-style-type: lower-alpha
+      &.is-lower-roman
+        list-style-type: lower-roman
+      &.is-upper-alpha
+        list-style-type: upper-alpha
+      &.is-upper-roman
+        list-style-type: upper-roman
   ul
     list-style: disc outside
     margin-left: 2em
@@ -450,6 +460,7 @@ $content-table-foot-cell-color: $text-strong !default
 $input-color: $grey-darker !default
 $input-background-color: $white !default
 $input-border-color: $grey-lighter !default
+$input-height: $control-height !default
 $input-shadow: inset 0 1px 2px rgba($black, 0.1) !default
 
 $input-hover-color: $grey-darker !default
@@ -490,7 +501,7 @@ $label-weight: $weight-bold !default
 $help-size: $size-small !default
 
 =input
-  +control
+  @extend %control
   background-color: $input-background-color
   border-color: $input-border-color
   color: $input-color
@@ -597,10 +608,11 @@ $help-size: $size-small !default
   position: relative
   vertical-align: top
   &:not(.is-multiple)
-    height: 2.25em
+    height: $input-height
   &:not(.is-multiple):not(.is-loading)
     &::after
-      +arrow($input-arrow)
+      @extend %arrow
+      border-color: $input-arrow
       right: 1.125em
       z-index: 4
   &.is-rounded
@@ -621,7 +633,7 @@ $help-size: $size-small !default
     &:not([multiple])
       padding-right: 2.5em
     &[multiple]
-      height: initial
+      height: auto
       padding: 0
       option
         padding: 0.5em 1em
@@ -662,7 +674,7 @@ $help-size: $size-small !default
       width: 100%
   &.is-loading
     &::after
-      +loader
+      @extend %loader
       margin-top: 0
       position: absolute
       right: 0.625em
@@ -676,7 +688,7 @@ $help-size: $size-small !default
       font-size: $size-large
 
 .file
-  +unselectable
+  @extend %unselectable
   align-items: stretch
   display: flex
   justify-content: flex-start
@@ -801,16 +813,17 @@ $help-size: $size-small !default
       border-color: darken($file-name-border-color, 5%)
 
 .file-input
-  height: 0.01em
+  height: 100%
   left: 0
+  opacity: 0
   outline: none
   position: absolute
   top: 0
-  width: 0.01em
+  width: 100%
 
 .file-cta,
 .file-name
-  +control
+  @extend %control
   border-color: $file-border-color
   border-radius: $file-radius
   font-size: 1em
@@ -898,16 +911,17 @@ $help-size: $size-small !default
       .button,
       .input,
       .select select
-        &:hover,
-        &.is-hovered
-          z-index: 2
-        &:focus,
-        &.is-focused,
-        &:active,
-        &.is-active
-          z-index: 3
-          &:hover
-            z-index: 4
+        &:not([disabled])
+          &:hover,
+          &.is-hovered
+            z-index: 2
+          &:focus,
+          &.is-focused,
+          &:active,
+          &.is-active
+            z-index: 3
+            &:hover
+              z-index: 4
       &.is-expanded
         flex-grow: 1
     &.has-addons-centered
@@ -989,6 +1003,7 @@ $help-size: $size-small !default
         margin-right: 0.75rem
 
 .control
+  clear: both //fixes the icon floating out of the input when help text is floated right
   font-size: $size-normal
   position: relative
   text-align: left
@@ -997,11 +1012,11 @@ $help-size: $size-small !default
   &.has-icon
     .icon
       color: $input-icon-color
-      height: 2.25em
+      height: $input-height
       pointer-events: none
       position: absolute
       top: 0
-      width: 2.25em
+      width: $input-height
       z-index: 4
     .input
       &:focus
@@ -1020,12 +1035,12 @@ $help-size: $size-small !default
       .icon
         left: 0
       .input
-        padding-left: 2.25em
+        padding-left: $input-height
     &.has-icon-right
       .icon
         right: 0
       .input
-        padding-right: 2.25em
+        padding-right: $input-height
   &.has-icons-left,
   &.has-icons-right
     .input,
@@ -1041,27 +1056,27 @@ $help-size: $size-small !default
         font-size: $size-large
     .icon
       color: $input-icon-color
-      height: 2.25em
+      height: $input-height
       pointer-events: none
       position: absolute
       top: 0
-      width: 2.25em
+      width: $input-height
       z-index: 4
   &.has-icons-left
     .input,
     .select select
-      padding-left: 2.25em
+      padding-left: $input-height
     .icon.is-left
       left: 0
   &.has-icons-right
     .input,
     .select select
-      padding-right: 2.25em
+      padding-right: $input-height
     .icon.is-right
       right: 0
   &.is-loading
     &::after
-      +loader
+      @extend %loader
       position: absolute !important
       right: 0.625em
       top: 0.625em
@@ -1124,7 +1139,7 @@ $dimensions: 16 24 32 48 64 96 128 !default
   &.is-1by2,
   &.is-1by3
     img
-      +overlay
+      @extend %overlay
       height: 100%
       width: 100%
   &.is-square,
@@ -1169,12 +1184,12 @@ $notification-radius: $radius !default
 $notification-padding: 1.25rem 2.5rem 1.25rem 1.5rem !default
 
 .notification
-  +block
+  @extend %block
   background-color: $notification-background-color
   border-radius: $notification-radius
   padding: $notification-padding
   position: relative
-  a:not(.button)
+  a:not(.button):not(.dropdown-item)
     color: currentColor
     text-decoration: underline
   strong
@@ -1204,7 +1219,7 @@ $progress-bar-background-color: $border !default
 $progress-value-background-color: $text !default
 
 .progress
-  +block
+  @extend %block
   -moz-appearance: none
   -webkit-appearance: none
   border: none
@@ -1263,7 +1278,7 @@ $table-striped-row-even-background-color: $white-bis !default
 $table-striped-row-even-hover-background-color: $white-ter !default
 
 .table
-  +block
+  @extend %block
   background-color: $table-background-color
   color: $table-color
   td,
@@ -1341,7 +1356,9 @@ $table-striped-row-even-hover-background-color: $white-ter !default
       tbody
         tr:not(.is-selected)
           &:hover
-            background-color: $table-striped-row-even-hover-background-color
+            background-color: $table-row-hover-background-color
+            &:nth-child(even)
+              background-color: $table-striped-row-even-hover-background-color
   &.is-narrow
     td,
     th
@@ -1353,7 +1370,7 @@ $table-striped-row-even-hover-background-color: $white-ter !default
           background-color: $table-striped-row-even-background-color
 
 .table-container
-  +block
+  @extend %block
   +overflow-touch
   overflow: auto
   overflow-y: hidden
@@ -1490,7 +1507,7 @@ $subtitle-negative-margin: -1.25rem !default
 
 .title,
 .subtitle
-  +block
+  @extend %block
   word-break: break-word
   em,
   span
@@ -1537,10 +1554,10 @@ $subtitle-negative-margin: -1.25rem !default
       font-size: $size
 
 .block
-  +block
+  @extend %block
 
 .delete
-  +delete
+  @extend %delete
 
 .heading
   display: block
@@ -1550,7 +1567,7 @@ $subtitle-negative-margin: -1.25rem !default
   text-transform: uppercase
 
 .highlight
-  +block
+  @extend %block
   font-weight: $weight-normal
   max-width: 100%
   overflow: hidden
@@ -1560,7 +1577,7 @@ $subtitle-negative-margin: -1.25rem !default
     max-width: 100%
 
 .loader
-  +loader
+  @extend %loader
 
 .number
   align-items: center

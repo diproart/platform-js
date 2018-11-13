@@ -357,18 +357,18 @@ $sizes: $size-1 $size-2 $size-3 $size-4 $size-5 $size-6 $size-7 !default
 
 // Placeholders
 
-%unselectable
+=unselectable
   -webkit-touch-callout: none
   -webkit-user-select: none
   -moz-user-select: none
   -ms-user-select: none
   user-select: none
 
-=unselectable
-  @extend %unselectable
+%unselectable
+  +unselectable
 
-%arrow
-  border: 3px solid transparent
+=arrow($color: transparent)
+  border: 3px solid $color
   border-radius: 2px
   border-right: 0
   border-top: 0
@@ -383,18 +383,17 @@ $sizes: $size-1 $size-2 $size-3 $size-4 $size-5 $size-6 $size-7 !default
   transform-origin: center
   width: 0.625em
 
-=arrow($color)
-  @extend %arrow
-  border-color: $color
+%arrow
+  +arrow
 
-%block
+=block
   &:not(:last-child)
     margin-bottom: 1.5rem
 
-=block
-  @extend %block
+%block
+  +block
 
-%delete
+=delete
   @extend %unselectable
   -moz-appearance: none
   -webkit-appearance: none
@@ -402,6 +401,7 @@ $sizes: $size-1 $size-2 $size-3 $size-4 $size-5 $size-6 $size-7 !default
   border: none
   border-radius: $radius-rounded
   cursor: pointer
+  pointer-events: auto
   display: inline-block
   flex-grow: 0
   flex-shrink: 0
@@ -459,12 +459,12 @@ $sizes: $size-1 $size-2 $size-3 $size-4 $size-5 $size-6 $size-7 !default
     min-width: 32px
     width: 32px
 
-=delete
-  @extend %delete
+%delete
+  +delete
 
-%loader
+=loader
   animation: spinAround 500ms infinite linear
-  border: 2px solid $border
+  border: 2px solid $grey-lighter
   border-radius: $radius-rounded
   border-right-color: transparent
   border-top-color: transparent
@@ -474,33 +474,31 @@ $sizes: $size-1 $size-2 $size-3 $size-4 $size-5 $size-6 $size-7 !default
   position: relative
   width: 1em
 
-=loader
-  @extend %loader
-
-%overlay
-  bottom: 0
-  left: 0
-  position: absolute
-  right: 0
-  top: 0
+%loader
+  +loader
 
 =overlay($offset: 0)
-  @extend %overlay
-  @if $offset != 0
-    bottom: $offset
-    left: $offset
-    right: $offset
-    top: $offset
+  bottom: $offset
+  left: $offset
+  position: absolute
+  right: $offset
+  top: $offset
+
+%overlay
+  +overlay
 
 $control-radius: $radius !default
 $control-radius-small: $radius-small !default
 
 $control-border-width: 1px !default
 
+$control-height: 2.25em !default
+$control-line-height: 1.5 !default
+
 $control-padding-vertical: calc(0.375em - #{$control-border-width}) !default
 $control-padding-horizontal: calc(0.625em - #{$control-border-width}) !default
 
-%control
+=control
   -moz-appearance: none
   -webkit-appearance: none
   align-items: center
@@ -509,9 +507,9 @@ $control-padding-horizontal: calc(0.625em - #{$control-border-width}) !default
   box-shadow: none
   display: inline-flex
   font-size: $size-normal
-  height: 2.25em
+  height: $control-height
   justify-content: flex-start
-  line-height: 1.5
+  line-height: $control-line-height
   padding-bottom: $control-padding-vertical
   padding-left: $control-padding-horizontal
   padding-right: $control-padding-horizontal
@@ -527,8 +525,8 @@ $control-padding-horizontal: calc(0.625em - #{$control-border-width}) !default
   &[disabled]
     cursor: not-allowed
 
-=control
-  @extend %control
+%control
+  +control
 
 // The controls sizes use mixins so they can be used at different breakpoints
 =control-small

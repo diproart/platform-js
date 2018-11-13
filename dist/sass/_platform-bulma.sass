@@ -357,18 +357,18 @@ $sizes: $size-1 $size-2 $size-3 $size-4 $size-5 $size-6 $size-7 !default
 
 // Placeholders
 
-%unselectable
+=unselectable
   -webkit-touch-callout: none
   -webkit-user-select: none
   -moz-user-select: none
   -ms-user-select: none
   user-select: none
 
-=unselectable
-  @extend %unselectable
+%unselectable
+  +unselectable
 
-%arrow
-  border: 3px solid transparent
+=arrow($color: transparent)
+  border: 3px solid $color
   border-radius: 2px
   border-right: 0
   border-top: 0
@@ -383,18 +383,17 @@ $sizes: $size-1 $size-2 $size-3 $size-4 $size-5 $size-6 $size-7 !default
   transform-origin: center
   width: 0.625em
 
-=arrow($color)
-  @extend %arrow
-  border-color: $color
+%arrow
+  +arrow
 
-%block
+=block
   &:not(:last-child)
     margin-bottom: 1.5rem
 
-=block
-  @extend %block
+%block
+  +block
 
-%delete
+=delete
   @extend %unselectable
   -moz-appearance: none
   -webkit-appearance: none
@@ -402,6 +401,7 @@ $sizes: $size-1 $size-2 $size-3 $size-4 $size-5 $size-6 $size-7 !default
   border: none
   border-radius: $radius-rounded
   cursor: pointer
+  pointer-events: auto
   display: inline-block
   flex-grow: 0
   flex-shrink: 0
@@ -459,12 +459,12 @@ $sizes: $size-1 $size-2 $size-3 $size-4 $size-5 $size-6 $size-7 !default
     min-width: 32px
     width: 32px
 
-=delete
-  @extend %delete
+%delete
+  +delete
 
-%loader
+=loader
   animation: spinAround 500ms infinite linear
-  border: 2px solid $border
+  border: 2px solid $grey-lighter
   border-radius: $radius-rounded
   border-right-color: transparent
   border-top-color: transparent
@@ -474,33 +474,31 @@ $sizes: $size-1 $size-2 $size-3 $size-4 $size-5 $size-6 $size-7 !default
   position: relative
   width: 1em
 
-=loader
-  @extend %loader
-
-%overlay
-  bottom: 0
-  left: 0
-  position: absolute
-  right: 0
-  top: 0
+%loader
+  +loader
 
 =overlay($offset: 0)
-  @extend %overlay
-  @if $offset != 0
-    bottom: $offset
-    left: $offset
-    right: $offset
-    top: $offset
+  bottom: $offset
+  left: $offset
+  position: absolute
+  right: $offset
+  top: $offset
+
+%overlay
+  +overlay
 
 $control-radius: $radius !default
 $control-radius-small: $radius-small !default
 
 $control-border-width: 1px !default
 
+$control-height: 2.25em !default
+$control-line-height: 1.5 !default
+
 $control-padding-vertical: calc(0.375em - #{$control-border-width}) !default
 $control-padding-horizontal: calc(0.625em - #{$control-border-width}) !default
 
-%control
+=control
   -moz-appearance: none
   -webkit-appearance: none
   align-items: center
@@ -509,9 +507,9 @@ $control-padding-horizontal: calc(0.625em - #{$control-border-width}) !default
   box-shadow: none
   display: inline-flex
   font-size: $size-normal
-  height: 2.25em
+  height: $control-height
   justify-content: flex-start
-  line-height: 1.5
+  line-height: $control-line-height
   padding-bottom: $control-padding-vertical
   padding-left: $control-padding-horizontal
   padding-right: $control-padding-horizontal
@@ -527,8 +525,8 @@ $control-padding-horizontal: calc(0.625em - #{$control-border-width}) !default
   &[disabled]
     cursor: not-allowed
 
-=control
-  @extend %control
+%control
+  +control
 
 // The controls sizes use mixins so they can be used at different breakpoints
 =control-small
@@ -766,7 +764,7 @@ table
 // Overlay
 
 .is-overlay
-  +overlay
+  @extend %overlay
 
 // Typography
 
@@ -907,6 +905,16 @@ $displays: 'block' 'flex' 'inline' 'inline-block' 'inline-flex'
 .is-hidden
   display: none !important
 
+.is-sr-only
+  border: none !important
+  clip: rect(0, 0, 0, 0) !important
+  height: 0.01em !important
+  overflow: hidden !important
+  padding: 0 !important
+  position: absolute !important
+  white-space: nowrap !important
+  width: 0.01em !important
+
 +mobile
   .is-hidden-mobile
     display: none !important
@@ -997,7 +1005,7 @@ $displays: 'block' 'flex' 'inline' 'inline-block' 'inline-flex'
   box-shadow: none !important
 
 .is-unselectable
-  +unselectable
+  @extend %unselectable
 
 $box-color: $text !default
 $box-background-color: $white !default
@@ -1009,7 +1017,7 @@ $box-link-hover-shadow: 0 2px 3px rgba($black, 0.1), 0 0 0 1px $link !default
 $box-link-active-shadow: inset 0 1px 2px rgba($black, 0.2), 0 0 0 1px $link !default
 
 .box
-  +block
+  @extend %block
   background-color: $box-background-color
   border-radius: $box-radius
   box-shadow: $box-shadow
@@ -1067,8 +1075,8 @@ $button-static-border-color: $grey-lighter !default
   font-size: $size-large
 
 .button
-  +control
-  +unselectable
+  @extend %control
+  @extend %unselectable
   background-color: $button-background-color
   border-color: $button-border-color
   border-width: $button-border-width
@@ -1224,7 +1232,7 @@ $button-static-border-color: $grey-lighter !default
     color: transparent !important
     pointer-events: none
     &::after
-      +loader
+      @extend %loader
       +center(1em)
       position: absolute !important
   &.is-static
@@ -1245,7 +1253,7 @@ $button-static-border-color: $grey-lighter !default
   justify-content: flex-start
   .button
     margin-bottom: 0.5rem
-    &:not(:last-child)
+    &:not(:last-child):not(.is-fullwidth)
       margin-right: 0.5rem
   &:last-child
     margin-bottom: -0.5rem
@@ -1326,7 +1334,7 @@ $content-table-foot-cell-border-width: 2px 0 0 !default
 $content-table-foot-cell-color: $text-strong !default
 
 .content
-  +block
+  @extend %block
   // Inline
   li + li
     margin-top: 0.25em
@@ -1378,9 +1386,19 @@ $content-table-foot-cell-color: $text-strong !default
     border-left: $content-blockquote-border-left
     padding: $content-blockquote-padding
   ol
-    list-style: decimal outside
+    list-style-position: outside
     margin-left: 2em
     margin-top: 1em
+    &:not([type])
+      list-style-type: decimal
+      &.is-lower-alpha
+        list-style-type: lower-alpha
+      &.is-lower-roman
+        list-style-type: lower-roman
+      &.is-upper-alpha
+        list-style-type: upper-alpha
+      &.is-upper-roman
+        list-style-type: upper-roman
   ul
     list-style: disc outside
     margin-left: 2em
@@ -1451,6 +1469,7 @@ $content-table-foot-cell-color: $text-strong !default
 $input-color: $grey-darker !default
 $input-background-color: $white !default
 $input-border-color: $grey-lighter !default
+$input-height: $control-height !default
 $input-shadow: inset 0 1px 2px rgba($black, 0.1) !default
 
 $input-hover-color: $grey-darker !default
@@ -1491,7 +1510,7 @@ $label-weight: $weight-bold !default
 $help-size: $size-small !default
 
 =input
-  +control
+  @extend %control
   background-color: $input-background-color
   border-color: $input-border-color
   color: $input-color
@@ -1598,10 +1617,11 @@ $help-size: $size-small !default
   position: relative
   vertical-align: top
   &:not(.is-multiple)
-    height: 2.25em
+    height: $input-height
   &:not(.is-multiple):not(.is-loading)
     &::after
-      +arrow($input-arrow)
+      @extend %arrow
+      border-color: $input-arrow
       right: 1.125em
       z-index: 4
   &.is-rounded
@@ -1622,7 +1642,7 @@ $help-size: $size-small !default
     &:not([multiple])
       padding-right: 2.5em
     &[multiple]
-      height: initial
+      height: auto
       padding: 0
       option
         padding: 0.5em 1em
@@ -1663,7 +1683,7 @@ $help-size: $size-small !default
       width: 100%
   &.is-loading
     &::after
-      +loader
+      @extend %loader
       margin-top: 0
       position: absolute
       right: 0.625em
@@ -1677,7 +1697,7 @@ $help-size: $size-small !default
       font-size: $size-large
 
 .file
-  +unselectable
+  @extend %unselectable
   align-items: stretch
   display: flex
   justify-content: flex-start
@@ -1802,16 +1822,17 @@ $help-size: $size-small !default
       border-color: darken($file-name-border-color, 5%)
 
 .file-input
-  height: 0.01em
+  height: 100%
   left: 0
+  opacity: 0
   outline: none
   position: absolute
   top: 0
-  width: 0.01em
+  width: 100%
 
 .file-cta,
 .file-name
-  +control
+  @extend %control
   border-color: $file-border-color
   border-radius: $file-radius
   font-size: 1em
@@ -1899,16 +1920,17 @@ $help-size: $size-small !default
       .button,
       .input,
       .select select
-        &:hover,
-        &.is-hovered
-          z-index: 2
-        &:focus,
-        &.is-focused,
-        &:active,
-        &.is-active
-          z-index: 3
-          &:hover
-            z-index: 4
+        &:not([disabled])
+          &:hover,
+          &.is-hovered
+            z-index: 2
+          &:focus,
+          &.is-focused,
+          &:active,
+          &.is-active
+            z-index: 3
+            &:hover
+              z-index: 4
       &.is-expanded
         flex-grow: 1
     &.has-addons-centered
@@ -1990,6 +2012,7 @@ $help-size: $size-small !default
         margin-right: 0.75rem
 
 .control
+  clear: both //fixes the icon floating out of the input when help text is floated right
   font-size: $size-normal
   position: relative
   text-align: left
@@ -1998,11 +2021,11 @@ $help-size: $size-small !default
   &.has-icon
     .icon
       color: $input-icon-color
-      height: 2.25em
+      height: $input-height
       pointer-events: none
       position: absolute
       top: 0
-      width: 2.25em
+      width: $input-height
       z-index: 4
     .input
       &:focus
@@ -2021,12 +2044,12 @@ $help-size: $size-small !default
       .icon
         left: 0
       .input
-        padding-left: 2.25em
+        padding-left: $input-height
     &.has-icon-right
       .icon
         right: 0
       .input
-        padding-right: 2.25em
+        padding-right: $input-height
   &.has-icons-left,
   &.has-icons-right
     .input,
@@ -2042,27 +2065,27 @@ $help-size: $size-small !default
         font-size: $size-large
     .icon
       color: $input-icon-color
-      height: 2.25em
+      height: $input-height
       pointer-events: none
       position: absolute
       top: 0
-      width: 2.25em
+      width: $input-height
       z-index: 4
   &.has-icons-left
     .input,
     .select select
-      padding-left: 2.25em
+      padding-left: $input-height
     .icon.is-left
       left: 0
   &.has-icons-right
     .input,
     .select select
-      padding-right: 2.25em
+      padding-right: $input-height
     .icon.is-right
       right: 0
   &.is-loading
     &::after
-      +loader
+      @extend %loader
       position: absolute !important
       right: 0.625em
       top: 0.625em
@@ -2125,7 +2148,7 @@ $dimensions: 16 24 32 48 64 96 128 !default
   &.is-1by2,
   &.is-1by3
     img
-      +overlay
+      @extend %overlay
       height: 100%
       width: 100%
   &.is-square,
@@ -2170,12 +2193,12 @@ $notification-radius: $radius !default
 $notification-padding: 1.25rem 2.5rem 1.25rem 1.5rem !default
 
 .notification
-  +block
+  @extend %block
   background-color: $notification-background-color
   border-radius: $notification-radius
   padding: $notification-padding
   position: relative
-  a:not(.button)
+  a:not(.button):not(.dropdown-item)
     color: currentColor
     text-decoration: underline
   strong
@@ -2205,7 +2228,7 @@ $progress-bar-background-color: $border !default
 $progress-value-background-color: $text !default
 
 .progress
-  +block
+  @extend %block
   -moz-appearance: none
   -webkit-appearance: none
   border: none
@@ -2264,7 +2287,7 @@ $table-striped-row-even-background-color: $white-bis !default
 $table-striped-row-even-hover-background-color: $white-ter !default
 
 .table
-  +block
+  @extend %block
   background-color: $table-background-color
   color: $table-color
   td,
@@ -2342,7 +2365,9 @@ $table-striped-row-even-hover-background-color: $white-ter !default
       tbody
         tr:not(.is-selected)
           &:hover
-            background-color: $table-striped-row-even-hover-background-color
+            background-color: $table-row-hover-background-color
+            &:nth-child(even)
+              background-color: $table-striped-row-even-hover-background-color
   &.is-narrow
     td,
     th
@@ -2354,7 +2379,7 @@ $table-striped-row-even-hover-background-color: $white-ter !default
           background-color: $table-striped-row-even-background-color
 
 .table-container
-  +block
+  @extend %block
   +overflow-touch
   overflow: auto
   overflow-y: hidden
@@ -2491,7 +2516,7 @@ $subtitle-negative-margin: -1.25rem !default
 
 .title,
 .subtitle
-  +block
+  @extend %block
   word-break: break-word
   em,
   span
@@ -2538,10 +2563,10 @@ $subtitle-negative-margin: -1.25rem !default
       font-size: $size
 
 .block
-  +block
+  @extend %block
 
 .delete
-  +delete
+  @extend %delete
 
 .heading
   display: block
@@ -2551,7 +2576,7 @@ $subtitle-negative-margin: -1.25rem !default
   text-transform: uppercase
 
 .highlight
-  +block
+  @extend %block
   font-weight: $weight-normal
   max-width: 100%
   overflow: hidden
@@ -2561,7 +2586,7 @@ $subtitle-negative-margin: -1.25rem !default
     max-width: 100%
 
 .loader
-  +loader
+  @extend %loader
 
 .number
   align-items: center
@@ -2587,8 +2612,8 @@ $breadcrumb-item-padding-horizontal: 0.75em !default
 $breadcrumb-item-separator-color: $grey-light !default
 
 .breadcrumb
-  +block
-  +unselectable
+  @extend %block
+  @extend %unselectable
   font-size: $size-normal
   white-space: nowrap
   a
@@ -2657,14 +2682,14 @@ $card-color: $text !default
 $card-background-color: $white !default
 $card-shadow: 0 2px 3px rgba($black, 0.1), 0 0 0 1px rgba($black, 0.1) !default
 
-$card-header-background-color: none !default
+$card-header-background-color: transparent !default
 $card-header-color: $text-strong !default
 $card-header-shadow: 0 1px 2px rgba($black, 0.1) !default
 $card-header-weight: $weight-bold !default
 
-$card-content-background-color: none !default
+$card-content-background-color: transparent !default
 
-$card-footer-background-color: none !default
+$card-footer-background-color: transparent !default
 $card-footer-border-top: 1px solid $border !default
 
 .card
@@ -2786,9 +2811,12 @@ $dropdown-divider-background-color: $border !default
   padding: 0.375rem 1rem
   position: relative
 
-a.dropdown-item
+a.dropdown-item,
+button.dropdown-item
   padding-right: 3rem
+  text-align: left
   white-space: nowrap
+  width: 100%
   &:hover
     background-color: $dropdown-item-hover-background-color
     color: $dropdown-item-hover-color
@@ -2804,7 +2832,7 @@ a.dropdown-item
   margin: 0.5rem 0
 
 .level
-  +block
+  @extend %block
   align-items: center
   justify-content: space-between
   code
@@ -2823,9 +2851,9 @@ a.dropdown-item
     .level-item
       &:not(:last-child)
         margin-bottom: 0
+        margin-right: 0.75rem
       &:not(.is-narrow)
         flex-grow: 1
-      margin-right: 0.75rem
   // Responsiveness
   +tablet
     display: flex
@@ -2879,6 +2907,45 @@ a.dropdown-item
   +tablet
     display: flex
 
+$list-background-color: $white !default
+$list-shadow: 0 2px 3px rgba($black, 0.1), 0 0 0 1px rgba($black, 0.1) !default
+$list-radius: $radius !default
+
+$list-item-border: 1px solid $border !default
+$list-item-color: $text !default
+$list-item-active-background-color: $link !default
+$list-item-active-color: $link-invert !default
+$list-item-hover-background-color: $background !default
+
+.list
+  @extend %block
+  background-color: $list-background-color
+  border-radius: $list-radius
+  box-shadow: $list-shadow
+  // &.is-hoverable > .list-item:hover:not(.is-active)
+  //   background-color: $list-item-hover-background-color
+  //   cursor: pointer
+
+.list-item
+  display: block
+  padding: 0.5em 1em
+  &:not(a)
+    color: $list-item-color
+  &:first-child
+    border-top-left-radius: $list-radius
+    border-top-right-radius: $list-radius
+  &:last-child
+    border-top-left-radius: $list-radius
+    border-top-right-radius: $list-radius
+  &:not(:last-child)
+    border-bottom: $list-item-border
+  &.is-active
+    background-color: $list-item-active-background-color
+    color: $list-item-active-color
+
+a.list-item
+  background-color: $list-item-hover-background-color
+  cursor: pointer
 .media
   align-items: flex-start
   display: flex
@@ -2923,6 +2990,10 @@ a.dropdown-item
   flex-grow: 1
   flex-shrink: 1
   text-align: left
+
++mobile
+  .media-content
+    overflow-x: auto
 
 $menu-item-color: $text !default
 $menu-item-radius: $radius-small !default
@@ -2996,7 +3067,7 @@ $message-body-pre-code-background-color: transparent !default
 $message-header-body-border-width: 0 !default
 
 .message
-  +block
+  @extend %block
   background-color: $message-background-color
   border-radius: $message-radius
   font-size: $size-normal
@@ -3093,9 +3164,10 @@ $modal-card-body-background-color: $white !default
 $modal-card-body-padding: 20px !default
 
 .modal
-  +overlay
+  @extend %overlay
   align-items: center
   display: none
+  flex-direction: column
   justify-content: center
   overflow: hidden
   position: fixed
@@ -3105,7 +3177,7 @@ $modal-card-body-padding: 20px !default
     display: flex
 
 .modal-background
-  +overlay
+  @extend %overlay
   background-color: $modal-background-background-color
 
 .modal-content,
@@ -3122,7 +3194,7 @@ $modal-card-body-padding: 20px !default
     width: $modal-content-width
 
 .modal-close
-  +delete
+  @extend %delete
   background: none
   height: $modal-close-dimensions
   position: fixed
@@ -3135,6 +3207,7 @@ $modal-card-body-padding: 20px !default
   flex-direction: column
   max-height: calc(100vh - #{$modal-card-spacing})
   overflow: hidden
+  -ms-overflow-y: visible
 
 .modal-card-head,
 .modal-card-foot
@@ -3190,6 +3263,8 @@ $navbar-item-active-color: $black !default
 $navbar-item-active-background-color: transparent !default
 $navbar-item-img-max-height: 1.75rem !default
 
+$navbar-burger-color: $navbar-item-color !default
+
 $navbar-tab-hover-background-color: transparent !default
 $navbar-tab-hover-border-bottom-color: $link !default
 $navbar-tab-active-color: $link !default
@@ -3217,6 +3292,8 @@ $navbar-divider-background-color: $background !default
 $navbar-divider-height: 2px !default
 
 $navbar-bottom-box-shadow-size: 0 -2px 0 0 !default
+
+$navbar-breakpoint: $desktop !default
 
 =navbar-fixed
   left: 0
@@ -3248,7 +3325,9 @@ $navbar-bottom-box-shadow-size: 0 -2px 0 0 !default
         .navbar-link
           &::after
             border-color: $color-invert
-      +desktop
+      .navbar-burger
+        color: $color-invert
+      +from($navbar-breakpoint)
         .navbar-start,
         .navbar-end
           & > .navbar-item,
@@ -3315,6 +3394,7 @@ body
   overflow-y: hidden
 
 .navbar-burger
+  color: $navbar-burger-color
   +hamburger($navbar-height)
   margin-left: auto
 
@@ -3371,10 +3451,11 @@ a.navbar-item,
   flex-grow: 1
   flex-shrink: 1
 
-.navbar-link
+.navbar-link:not(.is-arrowless)
   padding-right: 2.5em
   &::after
-    +arrow($navbar-dropdown-arrow)
+    @extend %arrow
+    border-color: $navbar-dropdown-arrow
     margin-top: -0.375em
     right: 1.125em
 
@@ -3393,7 +3474,7 @@ a.navbar-item,
   height: $navbar-divider-height
   margin: 0.5rem 0
 
-+touch
++until($navbar-breakpoint)
   .navbar > .container
     display: block
   .navbar-brand,
@@ -3434,7 +3515,7 @@ a.navbar-item,
     &.has-navbar-fixed-bottom-touch
       padding-bottom: $navbar-height
 
-+desktop
++from($navbar-breakpoint)
   .navbar,
   .navbar-menu,
   .navbar-start,
@@ -3552,9 +3633,9 @@ a.navbar-item,
   .navbar > .container,
   .container > .navbar
     .navbar-brand
-      margin-left: -1rem
+      margin-left: -.75rem
     .navbar-menu
-      margin-right: -1rem
+      margin-right: -.75rem
   // Fixed navbar
   .navbar
     &.is-fixed-bottom-desktop,
@@ -3592,6 +3673,7 @@ a.navbar-item,
 $pagination-color: $grey-darker !default
 $pagination-border-color: $grey-lighter !default
 $pagination-margin: -0.25rem !default
+$pagination-min-width: $control-height !default
 
 $pagination-hover-color: $link-hover !default
 $pagination-hover-border-color: $link-hover-border !default
@@ -3644,8 +3726,8 @@ $pagination-shadow-inset: inset 0 1px 2px rgba($black, 0.2)
 .pagination-next,
 .pagination-link,
 .pagination-ellipsis
-  +control
-  +unselectable
+  @extend %control
+  @extend %unselectable
   font-size: 1em
   padding-left: 0.5em
   padding-right: 0.5em
@@ -3658,7 +3740,7 @@ $pagination-shadow-inset: inset 0 1px 2px rgba($black, 0.2)
 .pagination-link
   border-color: $pagination-border-color
   color: $pagination-color
-  min-width: 2.25em
+  min-width: $pagination-min-width
   &:hover
     border-color: $pagination-hover-border-color
     color: $pagination-hover-color
@@ -3864,9 +3946,9 @@ $tabs-toggle-link-active-border-color: $link !default
 $tabs-toggle-link-active-color: $link-invert !default
 
 .tabs
-  +block
+  @extend %block
   +overflow-touch
-  +unselectable
+  @extend %unselectable
   align-items: stretch
   display: flex
   font-size: $size-normal
@@ -4464,6 +4546,33 @@ $column-gap: 0.75rem !default
     @for $i from 0 through 8
       &.is-#{$i}
         --columnGap: #{$i * 0.25rem}
+      +mobile
+        &.is-#{$i}-mobile
+          --columnGap: #{$i * 0.25rem}
+      +tablet
+        &.is-#{$i}-tablet
+          --columnGap: #{$i * 0.25rem}
+      +tablet-only
+        &.is-#{$i}-tablet-only
+          --columnGap: #{$i * 0.25rem}
+      +touch
+        &.is-#{$i}-touch
+          --columnGap: #{$i * 0.25rem}
+      +desktop
+        &.is-#{$i}-desktop
+          --columnGap: #{$i * 0.25rem}
+      +desktop-only
+        &.is-#{$i}-desktop-only
+          --columnGap: #{$i * 0.25rem}
+      +widescreen
+        &.is-#{$i}-widescreen
+          --columnGap: #{$i * 0.25rem}
+      +widescreen-only
+        &.is-#{$i}-widescreen-only
+          --columnGap: #{$i * 0.25rem}
+      +fullhd
+        &.is-#{$i}-fullhd
+          --columnGap: #{$i * 0.25rem}
 
 .tile
   align-items: stretch
@@ -4597,7 +4706,8 @@ $column-gap: 0.75rem !default
         padding-bottom: 18rem
         padding-top: 18rem
   &.is-halfheight,
-  &.is-fullheight
+  &.is-fullheight,
+  &.is-fullheight-with-navbar
     .hero-body
       align-items: center
       display: flex
@@ -4608,11 +4718,13 @@ $column-gap: 0.75rem !default
     min-height: 50vh
   &.is-fullheight
     min-height: 100vh
+  &.is-fullheight-with-navbar
+    min-height: calc(100vh - #{$navbar-height})
 
 // Components
 
 .hero-video
-  +overlay
+  @extend %overlay
   overflow: hidden
   video
     left: 50%
