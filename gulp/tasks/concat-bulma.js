@@ -18,11 +18,11 @@ let components = [
   "sass/components/card.sass",
   "sass/components/dropdown.sass",
   "sass/components/level.sass",
+  "sass/components/list.sass",
   "sass/components/media.sass",
   "sass/components/menu.sass",
   "sass/components/message.sass",
   "sass/components/modal.sass",
-  //"sass/components/nav.sass", // since 0.6.0
   "sass/components/navbar.sass",
   "sass/components/pagination.sass",
   "sass/components/panel.sass",
