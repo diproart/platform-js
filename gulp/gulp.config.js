@@ -148,7 +148,7 @@ const bundles = {
     `${nodeModules}/vue/dist/vue.min.js`, // core
     `${nodeModules}/vuex/dist/vuex.min.js`, // immutable (flux, redux pattern)
     `${nodeModules}/vee-validate/dist/vee-validate.min.js`, // form validate
-    `${nodeModules}/vue-router/dist/vue-router.min.js` // router
+    `${nodeModules}/vue-router/dist/vue-router.min.js`, // router
 
     // alertify (used by insales)
     `${nodeModules}/alertifyjs/build/alertify.min.js`
