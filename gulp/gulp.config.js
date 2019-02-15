@@ -9,6 +9,7 @@ const libs = {
     `${nodeModules}/vue/dist/vue.min.js`,
     `${nodeModules}/vuex/dist/vuex.min.js`,
     `${nodeModules}/vee-validate/dist/vee-validate.min.js`,
+    `${nodeModules}/vee-validate/dist/locale/ru.js`,
     `${nodeModules}/vue-router/dist/vue-router.min.js`,
     `${nodeModules}/axios/dist/axios.min.js`
   ],
@@ -81,7 +82,8 @@ const bundles = {
     `${nodeModules}/vue/dist/vue.min.js`, // core
     `${nodeModules}/vuex/dist/vuex.min.js`, // immutable (flux, redux pattern)
     `${nodeModules}/vue-router/dist/vue-router.min.js`,
-    `${nodeModules}/vee-validate/dist/vee-validate.min.js` // form validate
+    `${nodeModules}/vee-validate/dist/vee-validate.min.js`, // form validate
+    `${nodeModules}/vee-validate/dist/locale/ru.js`
   ],
   /**
    * "full" static platform build
@@ -148,6 +150,7 @@ const bundles = {
     `${nodeModules}/vue/dist/vue.min.js`, // core
     `${nodeModules}/vuex/dist/vuex.min.js`, // immutable (flux, redux pattern)
     `${nodeModules}/vee-validate/dist/vee-validate.min.js`, // form validate
+    `${nodeModules}/vee-validate/dist/locale/ru.js`,
     `${nodeModules}/vue-router/dist/vue-router.min.js`, // router
 
     // alertify (used by insales)
