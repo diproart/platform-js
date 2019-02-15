@@ -469,7 +469,7 @@ $message-header-body-border-width: 0 !default
   font-size: $size-normal
   strong
     color: currentColor
-  a:not(.button):not(.tag)
+  a:not(.button):not(.tag):not(.dropdown-item)
     color: currentColor
     text-decoration: underline
   // Sizes
@@ -1065,6 +1065,12 @@ a.navbar-item,
     &.is-active
       .navbar-link
         background-color: $navbar-item-hover-background-color
+
+// Combination
+
+.hero
+  &.is-fullheight-with-navbar
+    min-height: calc(100vh - #{$navbar-height})
 
 $pagination-color: $grey-darker !default
 $pagination-border-color: $grey-lighter !default

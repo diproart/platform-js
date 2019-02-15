@@ -60,6 +60,8 @@ $button-static-border-color: $grey-lighter !default
 =button-small
   border-radius: $radius-small
   font-size: $size-small
+=button-normal
+  font-size: $size-normal
 =button-medium
   font-size: $size-medium
 =button-large
@@ -129,7 +131,8 @@ $button-static-border-color: $grey-lighter !default
     &.is-active
       background-color: darken($button-text-hover-background-color, 5%)
       color: $button-text-hover-color
-    &[disabled]
+    &[disabled],
+    fieldset[disabled] &
       background-color: transparent
       border-color: transparent
       box-shadow: none
@@ -156,7 +159,8 @@ $button-static-border-color: $grey-lighter !default
         background-color: darken($color, 5%)
         border-color: transparent
         color: $color-invert
-      &[disabled]
+      &[disabled],
+      fieldset[disabled] &
         background-color: $color
         border-color: transparent
         box-shadow: none
@@ -165,7 +169,8 @@ $button-static-border-color: $grey-lighter !default
         color: $color
         &:hover
           background-color: darken($color-invert, 5%)
-        &[disabled]
+        &[disabled],
+        fieldset[disabled] &
           background-color: $color-invert
           border-color: transparent
           box-shadow: none
@@ -185,7 +190,8 @@ $button-static-border-color: $grey-lighter !default
         &.is-loading
           &::after
             border-color: transparent transparent $color $color !important
-        &[disabled]
+        &[disabled],
+        fieldset[disabled] &
           background-color: transparent
           border-color: $color
           box-shadow: none
@@ -198,7 +204,8 @@ $button-static-border-color: $grey-lighter !default
         &:focus
           background-color: $color-invert
           color: $color
-        &[disabled]
+        &[disabled],
+        fieldset[disabled] &
           background-color: transparent
           border-color: $color-invert
           box-shadow: none
@@ -206,12 +213,15 @@ $button-static-border-color: $grey-lighter !default
   // Sizes
   &.is-small
     +button-small
+  &.is-normal
+    +button-normal
   &.is-medium
     +button-medium
   &.is-large
     +button-large
   // Modifiers
-  &[disabled]
+  &[disabled],
+  fieldset[disabled] &
     background-color: $button-disabled-background-color
     border-color: $button-disabled-border-color
     box-shadow: $button-disabled-shadow
@@ -250,6 +260,16 @@ $button-static-border-color: $grey-lighter !default
     margin-bottom: -0.5rem
   &:not(:last-child)
     margin-bottom: 1rem
+  // Sizes
+  &.are-small
+    .button:not(.is-normal):not(.is-medium):not(.is-large)
+      +button-small
+  &.are-medium
+    .button:not(.is-small):not(.is-normal):not(.is-large)
+      +button-medium
+  &.are-large
+    .button:not(.is-small):not(.is-normal):not(.is-medium)
+      +button-large
   &.has-addons
     .button
       &:not(:first-child)
@@ -462,6 +482,7 @@ $input-background-color: $white !default
 $input-border-color: $grey-lighter !default
 $input-height: $control-height !default
 $input-shadow: inset 0 1px 2px rgba($black, 0.1) !default
+$input-placeholder-color: rgba($input-color, 0.3) !default
 
 $input-hover-color: $grey-darker !default
 $input-hover-border-color: $grey-light !default
@@ -474,6 +495,7 @@ $input-focus-box-shadow-color: rgba($link, 0.25) !default
 $input-disabled-color: $text-light !default
 $input-disabled-background-color: $background !default
 $input-disabled-border-color: $background !default
+$input-disabled-placeholder-color: rgba($input-disabled-color, 0.3) !default
 
 $input-arrow: $link !default
 
@@ -506,7 +528,7 @@ $help-size: $size-small !default
   border-color: $input-border-color
   color: $input-color
   +placeholder
-    color: rgba($input-color, 0.3)
+    color: $input-placeholder-color
   &:hover,
   &.is-hovered
     border-color: $input-hover-border-color
@@ -516,13 +538,14 @@ $help-size: $size-small !default
   &.is-active
     border-color: $input-focus-border-color
     box-shadow: $input-focus-box-shadow-size $input-focus-box-shadow-color
-  &[disabled]
+  &[disabled],
+  fieldset[disabled] &
     background-color: $input-disabled-background-color
     border-color: $input-disabled-border-color
     box-shadow: none
     color: $input-disabled-color
     +placeholder
-      color: rgba($input-disabled-color, 0.3)
+      color: $input-disabled-placeholder-color
 
 .input,
 .textarea
@@ -594,7 +617,8 @@ $help-size: $size-small !default
     cursor: pointer
   &:hover
     color: $input-hover-color
-  &[disabled]
+  &[disabled],
+  fieldset[disabled] &
     color: $input-disabled-color
     cursor: not-allowed
 
@@ -628,7 +652,8 @@ $help-size: $size-small !default
     outline: none
     &::-ms-expand
       display: none
-    &[disabled]:hover
+    &[disabled]:hover,
+    fieldset[disabled] &:hover
       border-color: $input-disabled-border-color
     &:not([multiple])
       padding-right: 2.5em
@@ -896,13 +921,13 @@ $help-size: $size-small !default
         .input,
         .select select
           border-radius: 0
-      &:first-child
+      &:first-child:not(:only-child)
         .button,
         .input,
         .select select
           border-bottom-right-radius: 0
           border-top-right-radius: 0
-      &:last-child
+      &:last-child:not(:only-child)
         .button,
         .input,
         .select select
@@ -957,7 +982,6 @@ $help-size: $size-small !default
         margin-bottom: -0.75rem
       &:not(:last-child)
         margin-bottom: 0
-
   &.is-horizontal
     +tablet
       display: flex
@@ -1003,44 +1027,12 @@ $help-size: $size-small !default
         margin-right: 0.75rem
 
 .control
+  box-sizing: border-box
   clear: both //fixes the icon floating out of the input when help text is floated right
   font-size: $size-normal
   position: relative
   text-align: left
   // Modifiers
-  // DEPRECATED
-  &.has-icon
-    .icon
-      color: $input-icon-color
-      height: $input-height
-      pointer-events: none
-      position: absolute
-      top: 0
-      width: $input-height
-      z-index: 4
-    .input
-      &:focus
-        & + .icon
-          color: $input-icon-active-color
-      &.is-small
-        & + .icon
-          font-size: $size-small
-      &.is-medium
-        & + .icon
-          font-size: $size-medium
-      &.is-large
-        & + .icon
-          font-size: $size-large
-    &:not(.has-icon-right)
-      .icon
-        left: 0
-      .input
-        padding-left: $input-height
-    &.has-icon-right
-      .icon
-        right: 0
-      .input
-        padding-right: $input-height
   &.has-icons-left,
   &.has-icons-right
     .input,
@@ -1138,7 +1130,8 @@ $dimensions: 16 24 32 48 64 96 128 !default
   &.is-9by16,
   &.is-1by2,
   &.is-1by3
-    img
+    img,
+    .has-ratio
       @extend %overlay
       height: 100%
       width: 100%
@@ -1218,6 +1211,8 @@ $notification-padding: 1.25rem 2.5rem 1.25rem 1.5rem !default
 $progress-bar-background-color: $border !default
 $progress-value-background-color: $text !default
 
+$progress-indeterminate-duration: 1.5s !default
+
 .progress
   @extend %block
   -moz-appearance: none
@@ -1238,6 +1233,20 @@ $progress-value-background-color: $text !default
   &::-ms-fill
     background-color: $progress-value-background-color
     border: none
+  &:indeterminate
+    animation-duration: $progress-indeterminate-duration
+    animation-iteration-count: infinite
+    animation-name: moveIndeterminate
+    animation-timing-function: linear
+    background-color: $progress-bar-background-color
+    background-image: linear-gradient(to right, $text 30%, $progress-bar-background-color 30%)
+    background-position: top left
+    background-repeat: no-repeat
+    background-size: 150% 150%
+    &::-webkit-progress-bar
+      background-color: transparent
+    &::-moz-progress-bar
+      background-color: transparent
   // Colors
   @each $name, $pair in $colors
     $color: nth($pair, 1)
@@ -1248,6 +1257,9 @@ $progress-value-background-color: $text !default
         background-color: $color
       &::-ms-fill
         background-color: $color
+      &:indeterminate
+        background-image: linear-gradient(to right, $color 30%, $progress-bar-background-color 30%)
+
   // Sizes
   &.is-small
     height: $size-small
@@ -1255,6 +1267,12 @@ $progress-value-background-color: $text !default
     height: $size-medium
   &.is-large
     height: $size-large
+
+@keyframes moveIndeterminate
+  from
+    background-position: 200% 0
+  to
+    background-position: -200% 0
 
 $table-color: $grey-darker !default
 $table-background-color: $white !default
@@ -1268,6 +1286,10 @@ $table-head-cell-border-width: 0 0 2px !default
 $table-head-cell-color: $text-strong !default
 $table-foot-cell-border-width: 2px 0 0 !default
 $table-foot-cell-color: $text-strong !default
+
+$table-head-background-color: transparent !default
+$table-body-background-color: transparent !default
+$table-foot-background-color: transparent !default
 
 $table-row-hover-background-color: $white-bis !default
 
@@ -1320,16 +1342,19 @@ $table-striped-row-even-hover-background-color: $white-ter !default
         border-color: $table-row-active-color
         color: currentColor
   thead
+    background-color: $table-head-background-color
     td,
     th
       border-width: $table-head-cell-border-width
       color: $table-head-cell-color
   tfoot
+    background-color: $table-foot-background-color
     td,
     th
       border-width: $table-foot-cell-border-width
       color: $table-foot-cell-color
   tbody
+    background-color: $table-body-background-color
     tr
       &:last-child
         td,
@@ -1394,6 +1419,13 @@ $tag-delete-margin: 1px !default
     margin-bottom: -0.5rem
   &:not(:last-child)
     margin-bottom: 1rem
+  // Sizes
+  &.are-medium
+    .tag:not(.is-normal):not(.is-large)
+      font-size: $size-normal
+  &.are-large
+    .tag:not(.is-normal):not(.is-medium)
+      font-size: $size-medium
   &.has-addons
     .tag
       margin-right: 0
@@ -1415,6 +1447,16 @@ $tag-delete-margin: 1px !default
         margin-left: 0.5rem
       &:not(:last-child)
         margin-right: 0
+  &.has-addons
+    .tag
+      margin-right: 0
+      &:not(:first-child)
+        margin-left: 0
+        border-bottom-left-radius: 0
+        border-top-left-radius: 0
+      &:not(:last-child)
+        border-bottom-right-radius: 0
+        border-top-right-radius: 0
 
 .tag:not(body)
   align-items: center
@@ -1440,6 +1482,8 @@ $tag-delete-margin: 1px !default
       background-color: $color
       color: $color-invert
   // Sizes
+  &.is-normal
+    font-size: $size-small
   &.is-medium
     font-size: $size-normal
   &.is-large

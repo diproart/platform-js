@@ -203,6 +203,7 @@ $link-active-border: $grey-dark !default
 // Typography
 
 $family-primary: $family-sans-serif !default
+$family-secondary: $family-sans-serif !default
 $family-code: $family-monospace !default
 
 $size-small: $size-7 !default
@@ -522,7 +523,8 @@ $control-padding-horizontal: calc(0.625em - #{$control-border-width}) !default
   &:active,
   &.is-active
     outline: none
-  &[disabled]
+  &[disabled],
+  fieldset[disabled] &
     cursor: not-allowed
 
 %control
