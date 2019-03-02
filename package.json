@@ -1,6 +1,6 @@
 {
   "name": "platform-js",
-  "version": "0.7.4",
+  "version": "0.7.4-1",
   "description": "JavaScript bundles for internal development/testing proccesses in DIERA.RU",
   "main": "dist/js/platform.vue.bundle.js",
   "scripts": {
