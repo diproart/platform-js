@@ -34,19 +34,11 @@ const libs = {
     `${nodeModules}/alertifyjs/build/alertify.min.js`
   ],
   'platform.utils-slim.js': [
-    // @note diera.ru чат в zammad требует $.animation (этого нет slim)
     `${nodeModules}/jquery/dist/jquery.slim.min.js`,
-    // полная версия
-    // `${nodeModules}/jquery/dist/jquery.min.js`,
     `${nodeModules}/lodash/lodash.min.js`,
-    // `${nodeModules}/picturefill/dist/picturefill.min.js`,
     `${nodeModules}/localforage/dist/localforage.min.js`
-    //* `${nodeModules}/picturefill/dist/plugins/**/*.min.js`,
   ],
   'platform.utils.js': [
-    // чат в zammad требует $.animation (этого нет в slim)
-    // `${nodeModules}/jquery/dist/jquery.slim.min.js`,
-    // полная версия
     `${nodeModules}/jquery/dist/jquery.min.js`,
     `${nodeModules}/lodash/lodash.min.js`,
     `${nodeModules}/picturefill/dist/picturefill.min.js`,
@@ -64,96 +56,38 @@ const bundles = {
    * development build
    */
   'vue-slim': [
-    // DOM
     `${nodeModules}/jquery/dist/jquery.slim.min.js`,
-
-    // utils
-    // @deprected since 0.7.2
-    // `${nodeModules}/lodash/lodash.min.js`,
-
-    // cookies, localStorage etc
-    // @deprecated since 0.7.2
-    //`${nodeModules}/localforage/dist/localforage.min.js`,
-
-    // http
     `${nodeModules}/axios/dist/axios.min.js`,
-
-    // vue framework
-    `${nodeModules}/vue/dist/vue.min.js`, // core
-    `${nodeModules}/vuex/dist/vuex.min.js`, // immutable (flux, redux pattern)
+    `${nodeModules}/vue/dist/vue.min.js`,
+    `${nodeModules}/vuex/dist/vuex.min.js`,
     `${nodeModules}/vue-router/dist/vue-router.min.js`,
-    `${nodeModules}/vee-validate/dist/vee-validate.min.js`, // form validate
+    `${nodeModules}/vee-validate/dist/vee-validate.min.js`,
     `${nodeModules}/vee-validate/dist/locale/ru.js`
   ],
   /**
    * "full" static platform build
    */
   vue: [
-    // DOM, jQuery
     `${nodeModules}/jquery/dist/jquery.min.js`,
     `${nodeModules}/jquery.cookie/jquery.cookie.js`,
-
-    //  utils
-    // @deprecated
-    // `${nodeModules}/lodash/lodash.min.js`,
-
-    // cookies, localStorage etc
-    // @deprected use lokijs
-    // @deprecated since 0.7.2
-    // `${nodeModules}/localforage/dist/localforage.min.js`,
-
-    // picture polyfill
-    // @deprecated since 0.7.2
-    // `${nodeModules}/picturefill/dist/picturefill.min.js`,
-
-    // overlay, modal, gallery
     `${nodeModules}/jquery-colorbox/jquery.colorbox-min.js`,
-
-    // slider
-    `${nodeModules}/swiper/dist/js/swiper.min.js`,
-
-    // gallery
-    `${nodeModules}/photoswipe/dist/photoswipe.min.js`,
-    `${nodeModules}/photoswipe/dist/photoswipe-ui-default.min.js`,
-
-    // pro* animations
-    // @deprecated will remove
-    `${nodeModules}/gsap/src/minified/TweenMax.min.js`,
-    `${nodeModules}/gsap/src/minified/plugins/CSSPlugin.min.js`,
-    `${nodeModules}/gsap/src/minified/plugins/ScrollToPlugin.min.js`,
-
-    // animations
+    `${nodeModules}/swiper/dist/js/swiper.min.js`, // TODO: move to media
+    `${nodeModules}/photoswipe/dist/photoswipe.min.js`, // TODO: move to media
+    `${nodeModules}/photoswipe/dist/photoswipe-ui-default.min.js`, // TODO: move to media
+    `${nodeModules}/gsap/src/minified/TweenMax.min.js`, // TODO: move to media
+    `${nodeModules}/gsap/src/minified/plugins/CSSPlugin.min.js`, // TODO: move to media
+    `${nodeModules}/gsap/src/minified/plugins/ScrollToPlugin.min.js`, // TODO: move to media
     `${nodeModules}/scrollmagic/scrollmagic/minified/ScrollMagic.min.js`,
     `${nodeModules}/scrollmagic/scrollmagic/minified/plugins/debug.addIndicators.min.js`,
     `${nodeModules}/scrollmagic/scrollmagic/minified/plugins/animation.gsap.min.js`,
-
-    // dropdown, positions, modals
-
-    // ui
-    // @deprecated since 0.7.2
-    // `${nodeModules}/select2/dist/js/select2.full.min.js`,
-
-    // кнопка наверх
     `${nodeModules}/scrollup/dist/lib/jquery.easing.js`,
     `${nodeModules}/scrollup/dist/jquery.scrollUp.min.js`,
-
-    // messenger
-    // @deprecated since 0.7.2
-    // `${nodeModules}/messenger/build/js/messenger.min.js`,
-    // `${nodeModules}/messenger/build/js/messenger-theme-flat.js`,
-    // `${nodeModules}/messenger/build/js/messenger-theme-future.js`,
-
-    // http
     `${nodeModules}/axios/dist/axios.min.js`,
-
-    // vue framework
-    `${nodeModules}/vue/dist/vue.min.js`, // core
-    `${nodeModules}/vuex/dist/vuex.min.js`, // immutable (flux, redux pattern)
-    `${nodeModules}/vee-validate/dist/vee-validate.min.js`, // form validate
+    `${nodeModules}/vue/dist/vue.min.js`,
+    `${nodeModules}/vuex/dist/vuex.min.js`,
+    `${nodeModules}/vee-validate/dist/vee-validate.min.js`,
     `${nodeModules}/vee-validate/dist/locale/ru.js`,
-    `${nodeModules}/vue-router/dist/vue-router.min.js`, // router
-
-    // alertify (used by insales)
+    `${nodeModules}/vue-router/dist/vue-router.min.js`,
     `${nodeModules}/alertifyjs/build/alertify.min.js`
   ]
 }
@@ -161,7 +95,7 @@ const bundles = {
 const styles = {
   'platform.media.css': [
     // @note for diera.ru можно просто скопировать в assets/platform/css/*
-    // !!! PHOTOSWIPE & COLORBOX >>> REQUIRED IMAGES !!!
+    // !!! PHOTOSWIPE & COLORBOX >>> REQUIRED THEME IMAGES !!!
     // [!] required `${nodeModules}/jquery-colorbox/jquery.colorbox-min.js`,
     // [!] required `${nodeModules}/photoswipe/dist/photoswipe.min.js`,
     // [!] required `${nodeModules}/photoswipe/dist/photoswipe-ui-default.min.js`,
