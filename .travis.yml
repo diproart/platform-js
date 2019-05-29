@@ -4,5 +4,5 @@ node_js:
   - "10"
 before_script:
   npm -i g gulp-cli
-script: yarn build
+script: npm run build
 
