@@ -49,6 +49,17 @@ let elements = [
   return path.resolve(`${rootPath}/${p}`)
 })
 
+let form = [
+  "sass/form/shared.sass",
+  "sass/form/input-textarea.sass",
+  "sass/form/checkbox-radio.sass",
+  "sass/form/select.sass",
+  "sass/form/file.sass",
+  "sass/form/tools.sass"
+].map(function(p){
+  return path.resolve(`${rootPath}/${p}`)
+})
+
 let grid = [
   "sass/grid/columns.sass",
   "sass/grid/tiles.sass"
@@ -80,6 +91,7 @@ let bulma = [
   ...utilities,
   ...base,
   ...elements,
+  ...form,
   ...components,
   ...grid,
   ...layout
@@ -139,6 +151,13 @@ gulp.task('bulma:components', () => {
     .pipe(gulp.dest('dist/sass'))
 })
 
+gulp.task('bulma:form', () => {
+  return gulp
+    .src(grid)
+    .pipe(concat('_platform-bulma-form.sass'))
+    .pipe(gulp.dest('dist/sass'))
+})
+
 gulp.task('bulma:grid', () => {
   return gulp
     .src(grid)
@@ -158,6 +177,7 @@ gulp.task('bulma', [
   'bulma:base',
   'bulma:elements',
   'bulma:components',
+  'bulma:form',
   'bulma:grid',
   'bulma:layout',
   'bulma:mixins',
