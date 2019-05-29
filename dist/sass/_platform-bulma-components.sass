@@ -80,13 +80,18 @@ $card-shadow: 0 2px 3px rgba($black, 0.1), 0 0 0 1px rgba($black, 0.1) !default
 
 $card-header-background-color: transparent !default
 $card-header-color: $text-strong !default
+$card-header-padding: 0.75rem !default
 $card-header-shadow: 0 1px 2px rgba($black, 0.1) !default
 $card-header-weight: $weight-bold !default
 
 $card-content-background-color: transparent !default
+$card-content-padding: 1.5rem !default
 
 $card-footer-background-color: transparent !default
 $card-footer-border-top: 1px solid $border !default
+$card-footer-padding: 0.75rem !default
+
+$card-media-margin: $block-spacing !default
 
 .card
   background-color: $card-background-color
@@ -107,7 +112,7 @@ $card-footer-border-top: 1px solid $border !default
   display: flex
   flex-grow: 1
   font-weight: $card-header-weight
-  padding: 0.75rem
+  padding: $card-header-padding
   &.is-centered
     justify-content: center
 
@@ -116,7 +121,7 @@ $card-footer-border-top: 1px solid $border !default
   cursor: pointer
   display: flex
   justify-content: center
-  padding: 0.75rem
+  padding: $card-header-padding
 
 .card-image
   display: block
@@ -124,7 +129,7 @@ $card-footer-border-top: 1px solid $border !default
 
 .card-content
   background-color: $card-content-background-color
-  padding: 1.5rem
+  padding: $card-content-padding
 
 .card-footer
   background-color: $card-footer-background-color
@@ -139,7 +144,7 @@ $card-footer-border-top: 1px solid $border !default
   flex-grow: 1
   flex-shrink: 0
   justify-content: center
-  padding: 0.75rem
+  padding: $card-footer-padding
   &:not(:last-child)
     border-right: $card-footer-border-top
 
@@ -147,11 +152,15 @@ $card-footer-border-top: 1px solid $border !default
 
 .card
   .media:not(:last-child)
-    margin-bottom: 0.75rem
+    margin-bottom: $card-media-margin
+
+$dropdown-menu-min-width: 12rem !default
 
 $dropdown-content-background-color: $white !default
 $dropdown-content-arrow: $link !default
 $dropdown-content-offset: 4px !default
+$dropdown-content-padding-bottom: 0.5rem !default
+$dropdown-content-padding-top: 0.5rem !default
 $dropdown-content-radius: $radius !default
 $dropdown-content-shadow: 0 2px 3px rgba($black, 0.1), 0 0 0 1px rgba($black, 0.1) !default
 $dropdown-content-z: 20 !default
@@ -186,7 +195,7 @@ $dropdown-divider-background-color: $border !default
 .dropdown-menu
   display: none
   left: 0
-  min-width: 12rem
+  min-width: $dropdown-menu-min-width
   padding-top: $dropdown-content-offset
   position: absolute
   top: 100%
@@ -196,8 +205,8 @@ $dropdown-divider-background-color: $border !default
   background-color: $dropdown-content-background-color
   border-radius: $dropdown-content-radius
   box-shadow: $dropdown-content-shadow
-  padding-bottom: 0.5rem
-  padding-top: 0.5rem
+  padding-bottom: $dropdown-content-padding-bottom
+  padding-top: $dropdown-content-padding-top
 
 .dropdown-item
   color: $dropdown-item-color
@@ -227,6 +236,8 @@ button.dropdown-item
   height: 1px
   margin: 0.5rem 0
 
+$level-item-spacing: ($block-spacing / 2) !default
+
 .level
   @extend %block
   align-items: center
@@ -247,7 +258,7 @@ button.dropdown-item
     .level-item
       &:not(:last-child)
         margin-bottom: 0
-        margin-right: 0.75rem
+        margin-right: $level-item-spacing
       &:not(.is-narrow)
         flex-grow: 1
   // Responsiveness
@@ -270,7 +281,7 @@ button.dropdown-item
   // Responsiveness
   +mobile
     &:not(:last-child)
-      margin-bottom: 0.75rem
+      margin-bottom: $level-item-spacing
 
 .level-left,
 .level-right
@@ -284,7 +295,7 @@ button.dropdown-item
     // Responsiveness
     +tablet
       &:not(:last-child)
-        margin-right: 0.75rem
+        margin-right: $level-item-spacing
 
 .level-left
   align-items: center
@@ -331,8 +342,8 @@ $list-item-hover-background-color: $background !default
     border-top-left-radius: $list-radius
     border-top-right-radius: $list-radius
   &:last-child
-    border-top-left-radius: $list-radius
-    border-top-right-radius: $list-radius
+    border-bottom-left-radius: $list-radius
+    border-bottom-right-radius: $list-radius
   &:not(:last-child)
     border-bottom: $list-item-border
   &.is-active
@@ -342,6 +353,7 @@ $list-item-hover-background-color: $background !default
 a.list-item
   background-color: $list-item-hover-background-color
   cursor: pointer
+
 .media
   align-items: flex-start
   display: flex
@@ -399,8 +411,15 @@ $menu-item-active-color: $link-invert !default
 $menu-item-active-background-color: $link !default
 
 $menu-list-border-left: 1px solid $border !default
+$menu-list-line-height: 1.25 !default
+$menu-list-link-padding: 0.5em 0.75em !default
+$menu-nested-list-margin: 0.75em !default
+$menu-nested-list-padding-left: 0.75em !default
 
 $menu-label-color: $text-light !default
+$menu-label-font-size: 0.75em !default
+$menu-label-letter-spacing: 0.1em !default
+$menu-label-spacing: 1em !default
 
 .menu
   font-size: $size-normal
@@ -413,12 +432,12 @@ $menu-label-color: $text-light !default
     font-size: $size-large
 
 .menu-list
-  line-height: 1.25
+  line-height: $menu-list-line-height
   a
     border-radius: $menu-item-radius
     color: $menu-item-color
     display: block
-    padding: 0.5em 0.75em
+    padding: $menu-list-link-padding
     &:hover
       background-color: $menu-item-hover-background-color
       color: $menu-item-hover-color
@@ -429,18 +448,18 @@ $menu-label-color: $text-light !default
   li
     ul
       border-left: $menu-list-border-left
-      margin: 0.75em
-      padding-left: 0.75em
+      margin: $menu-nested-list-margin
+      padding-left: $menu-nested-list-padding-left
 
 .menu-label
   color: $menu-label-color
-  font-size: 0.75em
-  letter-spacing: 0.1em
+  font-size: $menu-label-font-size
+  letter-spacing: $menu-label-letter-spacing
   text-transform: uppercase
   &:not(:first-child)
-    margin-top: 1em
+    margin-top: $menu-label-spacing
   &:not(:last-child)
-    margin-bottom: 1em
+    margin-bottom: $menu-label-spacing
 
 $message-background-color: $background !default
 $message-radius: $radius !default
@@ -461,6 +480,7 @@ $message-body-pre-background-color: $white !default
 $message-body-pre-code-background-color: transparent !default
 
 $message-header-body-border-width: 0 !default
+$message-colors: $colors !default
 
 .message
   @extend %block
@@ -480,7 +500,7 @@ $message-header-body-border-width: 0 !default
   &.is-large
     font-size: $size-large
   // Colors
-  @each $name, $pair in $colors
+  @each $name, $pair in $message-colors
     $color: nth($pair, 1)
     $color-invert: nth($pair, 2)
     $color-lightning: max((100% - lightness($color)) - 2%, 0%)
@@ -633,7 +653,7 @@ $modal-card-body-padding: 20px !default
   border-top: $modal-card-foot-border-top
   .button
     &:not(:last-child)
-      margin-right: 10px
+      margin-right: 0.5em
 
 .modal-card-body
   +overflow-touch
@@ -714,6 +734,7 @@ $navbar-breakpoint: $desktop !default
           color: $color-invert
         & > a.navbar-item,
         .navbar-link
+          &:focus,
           &:hover,
           &.is-active
             background-color: darken($color, 5%)
@@ -731,6 +752,7 @@ $navbar-breakpoint: $desktop !default
             color: $color-invert
           & > a.navbar-item,
           .navbar-link
+            &:focus,
             &:hover,
             &.is-active
               background-color: darken($color, 5%)
@@ -738,6 +760,7 @@ $navbar-breakpoint: $desktop !default
           .navbar-link
             &::after
               border-color: $color-invert
+        .navbar-item.has-dropdown:focus .navbar-link,
         .navbar-item.has-dropdown:hover .navbar-link,
         .navbar-item.has-dropdown.is-active .navbar-link
           background-color: darken($color, 5%)
@@ -780,6 +803,7 @@ body
 
 .navbar-brand
   a.navbar-item
+    &:focus,
     &:hover
       background-color: transparent
 
@@ -812,6 +836,8 @@ body
 a.navbar-item,
 .navbar-link
   cursor: pointer
+  &:focus,
+  &:focus-within,
   &:hover,
   &.is-active
     background-color: $navbar-item-hover-background-color
@@ -832,6 +858,7 @@ a.navbar-item,
     border-bottom: 1px solid transparent
     min-height: $navbar-height
     padding-bottom: calc(0.5rem - 1px)
+    &:focus,
     &:hover
       background-color: $navbar-tab-hover-background-color
       border-bottom-color: $navbar-tab-hover-border-bottom-color
@@ -931,16 +958,20 @@ a.navbar-item,
     &.is-transparent
       a.navbar-item,
       .navbar-link
+        &:focus,
         &:hover,
         &.is-active
           background-color: transparent !important
       .navbar-item.has-dropdown
         &.is-active,
+        &.is-hoverable:focus,
+        &.is-hoverable:focus-within,
         &.is-hoverable:hover
           .navbar-link
             background-color: transparent !important
       .navbar-dropdown
         a.navbar-item
+          &:focus,
           &:hover
             background-color: $navbar-dropdown-item-hover-background-color
             color: $navbar-dropdown-item-hover-color
@@ -968,6 +999,8 @@ a.navbar-item,
         box-shadow: 0 -8px 8px rgba($black, 0.1)
         top: auto
     &.is-active,
+    &.is-hoverable:focus,
+    &.is-hoverable:focus-within,
     &.is-hoverable:hover
       .navbar-dropdown
         display: block
@@ -1003,6 +1036,7 @@ a.navbar-item,
       white-space: nowrap
     a.navbar-item
       padding-right: 3rem
+      &:focus,
       &:hover
         background-color: $navbar-dropdown-item-hover-background-color
         color: $navbar-dropdown-item-hover-color
@@ -1058,9 +1092,10 @@ a.navbar-item,
   .navbar-link
     &.is-active
       color: $navbar-item-active-color
-    &.is-active:not(:hover)
+    &.is-active:not(:focus):not(:hover)
       background-color: $navbar-item-active-background-color
   .navbar-item.has-dropdown
+    &:focus,
     &:hover,
     &.is-active
       .navbar-link
@@ -1076,6 +1111,11 @@ $pagination-color: $grey-darker !default
 $pagination-border-color: $grey-lighter !default
 $pagination-margin: -0.25rem !default
 $pagination-min-width: $control-height !default
+
+$pagination-item-font-size: 1em !default
+$pagination-item-margin: 0.25rem !default
+$pagination-item-padding-left: 0.5em !default
+$pagination-item-padding-right: 0.5em !default
 
 $pagination-hover-color: $link-hover !default
 $pagination-hover-border-color: $link-hover-border !default
@@ -1130,11 +1170,11 @@ $pagination-shadow-inset: inset 0 1px 2px rgba($black, 0.2)
 .pagination-ellipsis
   @extend %control
   @extend %unselectable
-  font-size: 1em
-  padding-left: 0.5em
-  padding-right: 0.5em
+  font-size: $pagination-item-font-size
   justify-content: center
-  margin: 0.25rem
+  margin: $pagination-item-margin
+  padding-left: $pagination-item-padding-left
+  padding-right: $pagination-item-padding-right
   text-align: center
 
 .pagination-previous,
@@ -1217,6 +1257,7 @@ $pagination-shadow-inset: inset 0 1px 2px rgba($black, 0.2)
         justify-content: flex-end
         order: 3
 
+$panel-margin: $block-spacing !default
 $panel-item-border: 1px solid $border !default
 
 $panel-heading-background-color: $background !default
@@ -1227,6 +1268,7 @@ $panel-heading-radius: $radius !default
 $panel-heading-size: 1.25em !default
 $panel-heading-weight: $weight-light !default
 
+$panel-tabs-font-size: 0.875em !default
 $panel-tab-border-bottom: 1px solid $border !default
 $panel-tab-active-border-bottom-color: $link-active-border !default
 $panel-tab-active-color: $link-active !default
@@ -1245,7 +1287,7 @@ $panel-icon-color: $text-light !default
 .panel
   font-size: $size-normal
   &:not(:last-child)
-    margin-bottom: 1.5rem
+    margin-bottom: $panel-margin
 
 .panel-heading,
 .panel-tabs,
@@ -1268,7 +1310,7 @@ $panel-icon-color: $text-light !default
 .panel-tabs
   align-items: flex-end
   display: flex
-  font-size: 0.875em
+  font-size: $panel-tabs-font-size
   justify-content: center
   a
     border-bottom: $panel-tab-border-bottom
