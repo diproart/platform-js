@@ -66,14 +66,10 @@ For rapid prototyping without bootstrap project, templates or something else. Fo
 
 ## Build
 
-```
-yarn build
-
-# or
-
+```bash
 npm run build
 ```
 
 --
 
-2016, 2018 DIERA.RU
+2016, 2019 DIERA.RU
