@@ -153,7 +153,7 @@ gulp.task('bulma:components', () => {
 
 gulp.task('bulma:form', () => {
   return gulp
-    .src(grid)
+    .src(form)
     .pipe(concat('_platform-bulma-form.sass'))
     .pipe(gulp.dest('dist/sass'))
 })
