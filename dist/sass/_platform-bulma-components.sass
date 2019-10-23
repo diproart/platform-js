@@ -5,7 +5,7 @@ $breadcrumb-item-active-color: $text-strong !default
 $breadcrumb-item-padding-vertical: 0 !default
 $breadcrumb-item-padding-horizontal: 0.75em !default
 
-$breadcrumb-item-separator-color: $grey-light !default
+$breadcrumb-item-separator-color: $border-hover !default
 
 .breadcrumb
   @extend %block
@@ -75,20 +75,20 @@ $breadcrumb-item-separator-color: $grey-light !default
       content: "\0227B"
 
 $card-color: $text !default
-$card-background-color: $white !default
-$card-shadow: 0 2px 3px rgba($black, 0.1), 0 0 0 1px rgba($black, 0.1) !default
+$card-background-color: $scheme-main !default
+$card-shadow: 0 0.5em 1em -0.125em rgba($scheme-invert, 0.1), 0 0px 0 1px rgba($scheme-invert, 0.02) !default
 
 $card-header-background-color: transparent !default
 $card-header-color: $text-strong !default
-$card-header-padding: 0.75rem !default
-$card-header-shadow: 0 1px 2px rgba($black, 0.1) !default
+$card-header-padding: 0.75rem 1rem !default
+$card-header-shadow: 0 0.125em 0.25em rgba($scheme-invert, 0.1) !default
 $card-header-weight: $weight-bold !default
 
 $card-content-background-color: transparent !default
 $card-content-padding: 1.5rem !default
 
 $card-footer-background-color: transparent !default
-$card-footer-border-top: 1px solid $border !default
+$card-footer-border-top: 1px solid $border-light !default
 $card-footer-padding: 0.75rem !default
 
 $card-media-margin: $block-spacing !default
@@ -156,22 +156,22 @@ $card-media-margin: $block-spacing !default
 
 $dropdown-menu-min-width: 12rem !default
 
-$dropdown-content-background-color: $white !default
+$dropdown-content-background-color: $scheme-main !default
 $dropdown-content-arrow: $link !default
 $dropdown-content-offset: 4px !default
 $dropdown-content-padding-bottom: 0.5rem !default
 $dropdown-content-padding-top: 0.5rem !default
 $dropdown-content-radius: $radius !default
-$dropdown-content-shadow: 0 2px 3px rgba($black, 0.1), 0 0 0 1px rgba($black, 0.1) !default
+$dropdown-content-shadow: 0 0.5em 1em -0.125em rgba($scheme-invert, 0.1), 0 0px 0 1px rgba($scheme-invert, 0.02) !default
 $dropdown-content-z: 20 !default
 
-$dropdown-item-color: $grey-dark !default
-$dropdown-item-hover-color: $black !default
+$dropdown-item-color: $text !default
+$dropdown-item-hover-color: $scheme-invert !default
 $dropdown-item-hover-background-color: $background !default
 $dropdown-item-active-color: $link-invert !default
 $dropdown-item-active-background-color: $link !default
 
-$dropdown-divider-background-color: $border !default
+$dropdown-divider-background-color: $border-light !default
 
 .dropdown
   display: inline-flex
@@ -314,8 +314,8 @@ $level-item-spacing: ($block-spacing / 2) !default
   +tablet
     display: flex
 
-$list-background-color: $white !default
-$list-shadow: 0 2px 3px rgba($black, 0.1), 0 0 0 1px rgba($black, 0.1) !default
+$list-background-color: $scheme-main !default
+$list-shadow: 0 2px 3px rgba($scheme-invert, 0.1), 0 0 0 1px rgba($scheme-invert, 0.1) !default
 $list-radius: $radius !default
 
 $list-item-border: 1px solid $border !default
@@ -354,6 +354,8 @@ a.list-item
   background-color: $list-item-hover-background-color
   cursor: pointer
 
+$media-border-color: rgba($border, 0.5) !default
+
 .media
   align-items: flex-start
   display: flex
@@ -361,7 +363,7 @@ a.list-item
   .content:not(:last-child)
     margin-bottom: 0.75rem
   .media
-    border-top: 1px solid rgba($border, 0.5)
+    border-top: 1px solid $media-border-color
     display: flex
     padding-top: 0.75rem
     .content:not(:last-child),
@@ -372,7 +374,7 @@ a.list-item
       & + .media
         margin-top: 0.5rem
   & + .media
-    border-top: 1px solid rgba($border, 0.5)
+    border-top: 1px solid $media-border-color
     margin-top: 1rem
     padding-top: 1rem
   // Sizes
@@ -476,7 +478,7 @@ $message-body-color: $text !default
 $message-body-padding: 1.25em 1.5em !default
 $message-body-radius: $radius !default
 
-$message-body-pre-background-color: $white !default
+$message-body-pre-background-color: $scheme-main !default
 $message-body-pre-code-background-color: transparent !default
 
 $message-header-body-border-width: 0 !default
@@ -500,21 +502,33 @@ $message-colors: $colors !default
   &.is-large
     font-size: $size-large
   // Colors
-  @each $name, $pair in $message-colors
-    $color: nth($pair, 1)
-    $color-invert: nth($pair, 2)
-    $color-lightning: max((100% - lightness($color)) - 2%, 0%)
-    $color-luminance: colorLuminance($color)
-    $darken-percentage: $color-luminance * 70%
-    $desaturate-percentage: $color-luminance * 30%
+  @each $name, $components in $message-colors
+    $color: nth($components, 1)
+    $color-invert: nth($components, 2)
+    $color-light: null
+    $color-dark: null
+
+    @if length($components) >= 3
+      $color-light: nth($components, 3)
+      @if length($components) >= 4
+        $color-dark: nth($components, 4)
+      @else
+        $color-luminance: colorLuminance($color)
+        $darken-percentage: $color-luminance * 70%
+        $desaturate-percentage: $color-luminance * 30%
+        $color-dark: desaturate(darken($color, $darken-percentage), $desaturate-percentage)
+    @else
+      $color-lightning: max((100% - lightness($color)) - 2%, 0%)
+      $color-light: lighten($color, $color-lightning)
+
     &.is-#{$name}
-      background-color: lighten($color, $color-lightning)
+      background-color: $color-light
       .message-header
         background-color: $color
         color: $color-invert
       .message-body
         border-color: $color
-        color: desaturate(darken($color, $darken-percentage), $desaturate-percentage)
+        color: $color-dark
 
 .message-header
   align-items: center
@@ -551,7 +565,7 @@ $message-colors: $colors !default
 
 $modal-z: 40 !default
 
-$modal-background-background-color: rgba($black, 0.86) !default
+$modal-background-background-color: rgba($scheme-invert, 0.86) !default
 
 $modal-content-width: 640px !default
 $modal-content-margin-mobile: 20px !default
@@ -576,7 +590,7 @@ $modal-card-title-size: $size-4 !default
 $modal-card-foot-radius: $radius-large !default
 $modal-card-foot-border-top: 1px solid $border !default
 
-$modal-card-body-background-color: $white !default
+$modal-card-body-background-color: $scheme-main !default
 $modal-card-body-padding: 20px !default
 
 .modal
@@ -663,7 +677,7 @@ $modal-card-body-padding: 20px !default
   overflow: auto
   padding: $modal-card-body-padding
 
-$navbar-background-color: $white !default
+$navbar-background-color: $scheme-main !default
 $navbar-box-shadow-size: 0 2px 0 0 !default
 $navbar-box-shadow-color: $background !default
 $navbar-height: 3.25rem !default
@@ -672,10 +686,10 @@ $navbar-padding-horizontal: 2rem !default
 $navbar-z: 30 !default
 $navbar-fixed-z: 30 !default
 
-$navbar-item-color: $grey-dark !default
+$navbar-item-color: $text !default
 $navbar-item-hover-color: $link !default
-$navbar-item-hover-background-color: $white-bis !default
-$navbar-item-active-color: $black !default
+$navbar-item-hover-background-color: $scheme-main-bis !default
+$navbar-item-active-color: $scheme-invert !default
 $navbar-item-active-background-color: transparent !default
 $navbar-item-img-max-height: 1.75rem !default
 
@@ -689,7 +703,7 @@ $navbar-tab-active-border-bottom-color: $link !default
 $navbar-tab-active-border-bottom-style: solid !default
 $navbar-tab-active-border-bottom-width: 3px !default
 
-$navbar-dropdown-background-color: $white !default
+$navbar-dropdown-background-color: $scheme-main !default
 $navbar-dropdown-border-top: 2px solid $border !default
 $navbar-dropdown-offset: -4px !default
 $navbar-dropdown-arrow: $link !default
@@ -697,9 +711,9 @@ $navbar-dropdown-radius: $radius-large !default
 $navbar-dropdown-z: 20 !default
 
 $navbar-dropdown-boxed-radius: $radius-large !default
-$navbar-dropdown-boxed-shadow: 0 8px 8px rgba($black, 0.1), 0 0 0 1px rgba($black, 0.1) !default
+$navbar-dropdown-boxed-shadow: 0 8px 8px rgba($scheme-invert, 0.1), 0 0 0 1px rgba($scheme-invert, 0.1) !default
 
-$navbar-dropdown-item-hover-color: $black !default
+$navbar-dropdown-item-hover-color: $scheme-invert !default
 $navbar-dropdown-item-hover-background-color: $background !default
 $navbar-dropdown-item-active-color: $link !default
 $navbar-dropdown-item-active-background-color: $background !default
@@ -910,7 +924,7 @@ a.navbar-item,
       display: none
   .navbar-menu
     background-color: $navbar-background-color
-    box-shadow: 0 8px 16px rgba($black, 0.1)
+    box-shadow: 0 8px 16px rgba($scheme-invert, 0.1)
     padding: 0.5rem 0
     &.is-active
       display: block
@@ -922,7 +936,7 @@ a.navbar-item,
     &.is-fixed-bottom-touch
       bottom: 0
       &.has-shadow
-        box-shadow: 0 -2px 3px rgba($black, 0.1)
+        box-shadow: 0 -2px 3px rgba($scheme-invert, 0.1)
     &.is-fixed-top-touch
       top: 0
     &.is-fixed-top,
@@ -996,7 +1010,7 @@ a.navbar-item,
         border-radius: $navbar-dropdown-radius $navbar-dropdown-radius 0 0
         border-top: none
         bottom: 100%
-        box-shadow: 0 -8px 8px rgba($black, 0.1)
+        box-shadow: 0 -8px 8px rgba($scheme-invert, 0.1)
         top: auto
     &.is-active,
     &.is-hoverable:focus,
@@ -1023,7 +1037,7 @@ a.navbar-item,
     border-bottom-left-radius: $navbar-dropdown-radius
     border-bottom-right-radius: $navbar-dropdown-radius
     border-top: $navbar-dropdown-border-top
-    box-shadow: 0 8px 8px rgba($black, 0.1)
+    box-shadow: 0 8px 8px rgba($scheme-invert, 0.1)
     display: none
     font-size: 0.875rem
     left: 0
@@ -1074,7 +1088,7 @@ a.navbar-item,
     &.is-fixed-bottom-desktop
       bottom: 0
       &.has-shadow
-        box-shadow: 0 -2px 3px rgba($black, 0.1)
+        box-shadow: 0 -2px 3px rgba($scheme-invert, 0.1)
     &.is-fixed-top-desktop
       top: 0
   html,
@@ -1107,8 +1121,8 @@ a.navbar-item,
   &.is-fullheight-with-navbar
     min-height: calc(100vh - #{$navbar-height})
 
-$pagination-color: $grey-darker !default
-$pagination-border-color: $grey-lighter !default
+$pagination-color: $text-strong !default
+$pagination-border-color: $border !default
 $pagination-margin: -0.25rem !default
 $pagination-min-width: $control-height !default
 
@@ -1126,9 +1140,9 @@ $pagination-focus-border-color: $link-focus-border !default
 $pagination-active-color: $link-active !default
 $pagination-active-border-color: $link-active-border !default
 
-$pagination-disabled-color: $grey !default
-$pagination-disabled-background-color: $grey-lighter !default
-$pagination-disabled-border-color: $grey-lighter !default
+$pagination-disabled-color: $text-light !default
+$pagination-disabled-background-color: $border !default
+$pagination-disabled-border-color: $border !default
 
 $pagination-current-color: $link-invert !default
 $pagination-current-background-color: $link !default
@@ -1136,9 +1150,10 @@ $pagination-current-border-color: $link !default
 
 $pagination-ellipsis-color: $grey-light !default
 
-$pagination-shadow-inset: inset 0 1px 2px rgba($black, 0.2)
+$pagination-shadow-inset: inset 0 1px 2px rgba($scheme-invert, 0.2)
 
 .pagination
+  @extend %block
   font-size: $size-normal
   margin: $pagination-margin
   // Sizes
@@ -1258,15 +1273,17 @@ $pagination-shadow-inset: inset 0 1px 2px rgba($black, 0.2)
         order: 3
 
 $panel-margin: $block-spacing !default
-$panel-item-border: 1px solid $border !default
+$panel-item-border: 1px solid $border-light !default
+$panel-radius: $radius-large !default
+$panel-shadow: 0 0.5em 1em -0.125em rgba($scheme-invert, 0.1), 0 0px 0 1px rgba($scheme-invert, 0.02) !default
 
-$panel-heading-background-color: $background !default
+$panel-heading-background-color: $border-light !default
 $panel-heading-color: $text-strong !default
 $panel-heading-line-height: 1.25 !default
-$panel-heading-padding: 0.5em 0.75em !default
+$panel-heading-padding: 0.75em 1em !default
 $panel-heading-radius: $radius !default
 $panel-heading-size: 1.25em !default
-$panel-heading-weight: $weight-light !default
+$panel-heading-weight: $weight-bold !default
 
 $panel-tabs-font-size: 0.875em !default
 $panel-tab-border-bottom: 1px solid $border !default
@@ -1285,22 +1302,32 @@ $panel-block-active-icon-color: $link !default
 $panel-icon-color: $text-light !default
 
 .panel
+  border-radius: $panel-radius
+  box-shadow: $panel-shadow
   font-size: $size-normal
   &:not(:last-child)
     margin-bottom: $panel-margin
+  // Colors
+  @each $name, $components in $message-colors
+    $color: nth($components, 1)
+    $color-invert: nth($components, 2)
+    &.is-#{$name}
+      .panel-heading
+        background-color: $color
+        color: $color-invert
+      .panel-tabs a.is-active
+        border-bottom-color: $color
+      .panel-block.is-active .panel-icon
+        color: $color
 
-.panel-heading,
 .panel-tabs,
 .panel-block
-  border-bottom: $panel-item-border
-  border-left: $panel-item-border
-  border-right: $panel-item-border
-  &:first-child
-    border-top: $panel-item-border
+  &:not(:last-child)
+    border-bottom: $panel-item-border
 
 .panel-heading
   background-color: $panel-heading-background-color
-  border-radius: $panel-heading-radius $panel-heading-radius 0 0
+  border-radius: $panel-radius $panel-radius 0 0
   color: $panel-heading-color
   font-size: $panel-heading-size
   font-weight: $panel-heading-weight
@@ -1346,6 +1373,9 @@ $panel-icon-color: $text-light !default
     color: $panel-block-active-color
     .panel-icon
       color: $panel-block-active-icon-color
+  &:last-child
+    border-bottom-left-radius: $panel-radius
+    border-bottom-right-radius: $panel-radius
 
 a.panel-block,
 label.panel-block
@@ -1375,7 +1405,7 @@ $tabs-boxed-link-radius: $radius !default
 $tabs-boxed-link-hover-background-color: $background !default
 $tabs-boxed-link-hover-border-bottom-color: $border !default
 
-$tabs-boxed-link-active-background-color: $white !default
+$tabs-boxed-link-active-background-color: $scheme-main !default
 $tabs-boxed-link-active-border-color: $border !default
 $tabs-boxed-link-active-border-bottom-color: transparent !default
 

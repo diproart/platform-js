@@ -1,14 +1,14 @@
-$input-color: $grey-darker !default
-$input-background-color: $white !default
-$input-border-color: $grey-lighter !default
+$input-color: $text-strong !default
+$input-background-color: $scheme-main !default
+$input-border-color: $border !default
 $input-height: $control-height !default
-$input-shadow: inset 0 1px 2px rgba($black, 0.1) !default
+$input-shadow: inset 0 0.0625em 0.125em rgba($scheme-invert, 0.05) !default
 $input-placeholder-color: rgba($input-color, 0.3) !default
 
-$input-hover-color: $grey-darker !default
-$input-hover-border-color: $grey-light !default
+$input-hover-color: $text-strong !default
+$input-hover-border-color: $border-hover !default
 
-$input-focus-color: $grey-darker !default
+$input-focus-color: $text-strong !default
 $input-focus-border-color: $link !default
 $input-focus-box-shadow-size: 0 0 0 0.125em !default
 $input-focus-box-shadow-color: rgba($link, 0.25) !default
@@ -20,8 +20,8 @@ $input-disabled-placeholder-color: rgba($input-disabled-color, 0.3) !default
 
 $input-arrow: $link !default
 
-$input-icon-color: $grey-lighter !default
-$input-icon-active-color: $grey !default
+$input-icon-color: $border !default
+$input-icon-active-color: $text !default
 
 $input-radius: $radius !default
 
@@ -53,6 +53,10 @@ $input-radius: $radius !default
 
 %input
   +input
+
+$textarea-padding: $control-padding-horizontal !default
+$textarea-max-height: 40em !default
+$textarea-min-height: 8em !default
 
 %input-textarea
   @extend %input
@@ -90,8 +94,8 @@ $input-radius: $radius !default
   @extend %input-textarea
   &.is-rounded
     border-radius: $radius-rounded
-    padding-left: 1em
-    padding-right: 1em
+    padding-left: calc(#{$control-padding-horizontal} + 0.375em)
+    padding-right: calc(#{$control-padding-horizontal} + 0.375em)
   &.is-static
     background-color: transparent
     border-color: transparent
@@ -104,11 +108,11 @@ $input-radius: $radius !default
   display: block
   max-width: 100%
   min-width: 100%
-  padding: 0.625em
+  padding: $textarea-padding
   resize: vertical
   &:not([rows])
-    max-height: 600px
-    min-height: 120px
+    max-height: $textarea-max-height
+    min-height: $textarea-min-height
   &[rows]
     height: initial
   // Modifiers
@@ -226,10 +230,10 @@ $input-radius: $radius !default
 $file-border-color: $border !default
 $file-radius: $radius !default
 
-$file-cta-background-color: $white-ter !default
-$file-cta-color: $grey-dark !default
-$file-cta-hover-color: $grey-darker !default
-$file-cta-active-color: $grey-darker !default
+$file-cta-background-color: $scheme-main-ter !default
+$file-cta-color: $text !default
+$file-cta-hover-color: $text-strong !default
+$file-cta-active-color: $text-strong !default
 
 $file-name-border-color: $border !default
 $file-name-border-style: solid !default
@@ -404,7 +408,7 @@ $file-name-max-width: 16em !default
   .fa
     font-size: 14px
 
-$label-color: $grey-darker !default
+$label-color: $text-strong !default
 $label-weight: $weight-bold !default
 
 $help-size: $size-small !default

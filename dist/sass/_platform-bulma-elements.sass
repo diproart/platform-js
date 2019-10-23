@@ -1,11 +1,11 @@
 $box-color: $text !default
-$box-background-color: $white !default
+$box-background-color: $scheme-main !default
 $box-radius: $radius-large !default
-$box-shadow: 0 2px 3px rgba($black, 0.1), 0 0 0 1px rgba($black, 0.1) !default
+$box-shadow: 0 0.5em 1em -0.125em rgba($scheme-invert, 0.1), 0 0px 0 1px rgba($scheme-invert, 0.02) !default
 $box-padding: 1.25rem !default
 
-$box-link-hover-shadow: 0 2px 3px rgba($black, 0.1), 0 0 0 1px $link !default
-$box-link-active-shadow: inset 0 1px 2px rgba($black, 0.2), 0 0 0 1px $link !default
+$box-link-hover-shadow: 0 0.5em 1em -0.125em rgba($scheme-invert, 0.1), 0 0 0 1px $link !default
+$box-link-active-shadow: inset 0 1px 2px rgba($scheme-invert, 0.2), 0 0 0 1px $link !default
 
 .box
   @extend %block
@@ -23,15 +23,15 @@ a.box
   &:active
     box-shadow: $box-link-active-shadow
 
-$button-color: $grey-darker !default
-$button-background-color: $white !default
+$button-color: $text-strong !default
+$button-background-color: $scheme-main !default
 $button-family: false !default
 
-$button-border-color: $grey-lighter !default
+$button-border-color: $border !default
 $button-border-width: $control-border-width !default
 
-$button-padding-vertical: calc(0.375em - #{$button-border-width}) !default
-$button-padding-horizontal: 0.75em !default
+$button-padding-vertical: calc(0.5em - #{$button-border-width}) !default
+$button-padding-horizontal: 1em !default
 
 $button-hover-color: $link-hover !default
 $button-hover-border-color: $link-hover-border !default
@@ -48,14 +48,14 @@ $button-text-color: $text !default
 $button-text-hover-background-color: $background !default
 $button-text-hover-color: $text-strong !default
 
-$button-disabled-background-color: $white !default
-$button-disabled-border-color: $grey-lighter !default
+$button-disabled-background-color: $scheme-main !default
+$button-disabled-border-color: $border !default
 $button-disabled-shadow: none !default
 $button-disabled-opacity: 0.5 !default
 
-$button-static-color: $grey !default
-$button-static-background-color: $white-ter !default
-$button-static-border-color: $grey-lighter !default
+$button-static-color: $text-light !default
+$button-static-background-color: $scheme-main-ter !default
+$button-static-border-color: $border !default
 
 // The button sizes use mixins so they can be used at different breakpoints
 =button-small
@@ -95,14 +95,14 @@ $button-static-border-color: $grey-lighter !default
       height: 1.5em
       width: 1.5em
     &:first-child:not(:last-child)
-      margin-left: calc(-0.375em - #{$button-border-width})
-      margin-right: 0.1875em
+      margin-left: calc(#{-1 / 2 * $button-padding-horizontal} - #{$button-border-width})
+      margin-right: $button-padding-horizontal / 4
     &:last-child:not(:first-child)
-      margin-left: 0.1875em
-      margin-right: calc(-0.375em - #{$button-border-width})
+      margin-left: $button-padding-horizontal / 4
+      margin-right: calc(#{-1 / 2 * $button-padding-horizontal} - #{$button-border-width})
     &:first-child:last-child
-      margin-left: calc(-0.375em - #{$button-border-width})
-      margin-right: calc(-0.375em - #{$button-border-width})
+      margin-left: calc(#{-1 / 2 * $button-padding-horizontal} - #{$button-border-width})
+      margin-right: calc(#{-1 / 2 * $button-padding-horizontal} - #{$button-border-width})
   // States
   &:hover,
   &.is-hovered
@@ -231,6 +231,23 @@ $button-static-border-color: $grey-lighter !default
           border-color: $color-invert
           box-shadow: none
           color: $color-invert
+      // If light and dark colors are provided
+      @if length($pair) >= 4
+        $color-light: nth($pair, 3)
+        $color-dark: nth($pair, 4)
+        &.is-light
+          background-color: $color-light
+          color: $color-dark
+          &:hover,
+          &.is-hovered
+            background-color: darken($color-light, 2.5%)
+            border-color: transparent
+            color: $color-dark
+          &:active,
+          &.is-active
+            background-color: darken($color-light, 5%)
+            border-color: transparent
+            color: $color-dark
   // Sizes
   &.is-small
     +button-small
@@ -265,8 +282,8 @@ $button-static-border-color: $grey-lighter !default
     pointer-events: none
   &.is-rounded
     border-radius: $radius-rounded
-    padding-left: 1em
-    padding-right: 1em
+    padding-left: calc(#{$button-padding-horizontal} + 0.25em)
+    padding-right: calc(#{$button-padding-horizontal} + 0.25em)
 
 .buttons
   align-items: center
@@ -336,12 +353,13 @@ $container-offset: (2 * $gap) !default
   margin: 0 auto
   position: relative
   width: auto
+  &.is-fluid
+    max-width: none
+    padding-left: $gap
+    padding-right: $gap
+    width: 100%
   +desktop
     max-width: $desktop - $container-offset
-    &.is-fluid
-      margin-left: $gap
-      margin-right: $gap
-      max-width: none
   +until-widescreen
     &.is-widescreen
       max-width: $widescreen - $container-offset
@@ -509,8 +527,6 @@ $content-table-foot-cell-color: $text-strong !default
   &.is-large
     font-size: $size-large
 
-@warn "The form.sass file is DEPRECATED. It has moved into its own /form folder. Please import sass/form/_all instead."
-
 $icon-dimensions: 1.5rem !default
 $icon-dimensions-small: 1rem !default
 $icon-dimensions-medium: 2rem !default
@@ -544,6 +560,8 @@ $dimensions: 16 24 32 48 64 96 128 !default
     width: 100%
     &.is-rounded
       border-radius: $radius-rounded
+  &.is-fullwidth
+    width: 100%
   // Ratio
   &.is-square,
   &.is-1by1,
@@ -604,6 +622,7 @@ $dimensions: 16 24 32 48 64 96 128 !default
       width: $dimension * 1px
 
 $notification-background-color: $background !default
+$notification-code-background-color: $scheme-main !default
 $notification-radius: $radius !default
 $notification-padding: 1.25rem 2.5rem 1.25rem 1.5rem !default
 
@@ -620,7 +639,7 @@ $notification-padding: 1.25rem 2.5rem 1.25rem 1.5rem !default
     color: currentColor
   code,
   pre
-    background: $white
+    background: $notification-code-background-color
   pre code
     background: transparent
   & > .delete
@@ -639,7 +658,7 @@ $notification-padding: 1.25rem 2.5rem 1.25rem 1.5rem !default
       background-color: $color
       color: $color-invert
 
-$progress-bar-background-color: $border !default
+$progress-bar-background-color: $border-light !default
 $progress-value-background-color: $text !default
 $progress-border-radius: $radius-rounded !default
 
@@ -707,10 +726,10 @@ $progress-indeterminate-duration: 1.5s !default
   to
     background-position: -200% 0
 
-$table-color: $grey-darker !default
-$table-background-color: $white !default
+$table-color: $text-strong !default
+$table-background-color: $scheme-main !default
 
-$table-cell-border: 1px solid $grey-lighter !default
+$table-cell-border: 1px solid $border !default
 $table-cell-border-width: 0 0 1px !default
 $table-cell-padding: 0.5em 0.75em !default
 $table-cell-heading-color: $text-strong !default
@@ -724,13 +743,13 @@ $table-head-background-color: transparent !default
 $table-body-background-color: transparent !default
 $table-foot-background-color: transparent !default
 
-$table-row-hover-background-color: $white-bis !default
+$table-row-hover-background-color: $scheme-main-bis !default
 
 $table-row-active-background-color: $primary !default
 $table-row-active-color: $primary-invert !default
 
-$table-striped-row-even-background-color: $white-bis !default
-$table-striped-row-even-hover-background-color: $white-ter !default
+$table-striped-row-even-background-color: $scheme-main-bis !default
+$table-striped-row-even-hover-background-color: $scheme-main-ter !default
 
 .table
   @extend %block
@@ -906,6 +925,13 @@ $tag-delete-margin: 1px !default
     &.is-#{$name}
       background-color: $color
       color: $color-invert
+      // If a light and dark colors are provided
+      @if length($pair) > 3
+        $color-light: nth($pair, 3)
+        $color-dark: nth($pair, 4)
+        &.is-light
+          background-color: $color-light
+          color: $color-dark
   // Sizes
   &.is-normal
     font-size: $size-small
@@ -957,7 +983,7 @@ a.tag
   &:hover
     text-decoration: underline
 
-$title-color: $grey-darker !default
+$title-color: $text-strong !default
 $title-family: false !default
 $title-size: $size-3 !default
 $title-weight: $weight-semibold !default
@@ -967,12 +993,12 @@ $title-strong-weight: inherit !default
 $title-sub-size: 0.75em !default
 $title-sup-size: 0.75em !default
 
-$subtitle-color: $grey-dark !default
+$subtitle-color: $text !default
 $subtitle-family: false !default
 $subtitle-size: $size-5 !default
 $subtitle-weight: $weight-normal !default
 $subtitle-line-height: 1.25 !default
-$subtitle-strong-color: $grey-darker !default
+$subtitle-strong-color: $text-strong !default
 $subtitle-strong-weight: $weight-semibold !default
 $subtitle-negative-margin: -1.25rem !default
 
