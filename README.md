@@ -70,6 +70,25 @@ For rapid prototyping without bootstrap project, templates or something else. Fo
 npm run build
 ```
 
+## Docker (only testing)
+
+```bash
+./build-with-docker.sh i
+./build-with-docker.sh 'run build'
+```
+
+### publish
+
+Publish used `~/.npmrc` & `~/.gitconfig`
+
+```bash
+# 1) pack
+# 2) publish
+./publish-with-docker.sh
+```
+
+> by default publish has `--dry-run` flag, please see source
+
 --
 
 2016, 2019 DIERA.RU
