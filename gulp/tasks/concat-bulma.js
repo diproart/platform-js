@@ -36,7 +36,7 @@ let elements = [
   "sass/elements/button.sass",
   "sass/elements/container.sass",
   "sass/elements/content.sass",
-  "sass/elements/form.sass",
+  // "sass/elements/form.sass", no, since 0.8.0
   "sass/elements/icon.sass",
   "sass/elements/image.sass",
   "sass/elements/notification.sass",
@@ -176,10 +176,11 @@ gulp.task('bulma', [
   'bulma:utilities',
   'bulma:base',
   'bulma:elements',
-  'bulma:components',
   'bulma:form',
+  'bulma:components',
   'bulma:grid',
   'bulma:layout',
+  // extended helpers
   'bulma:mixins',
   'bulma:vars',
   'bulma:initial_variables'
