@@ -41,6 +41,7 @@ _tmp/*
 *.zip
 *.tar
 *.tar.gz
+*.tgz
 npm-debug.log
 out
 jsdoc
