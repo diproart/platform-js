@@ -18,7 +18,7 @@ const styles = config.styles
 /**
  * clean
  */
-gulp.task('platform:clean', ['checklibs'], done => rimraf('dist', done))
+gulp.task('platform:clean', ['checklibs'], done => rimraf('dist/{css,sass,js}', done))
 
 gulp.task('build:platform:libs', [
   'platform:libs:vue',
