@@ -1,6 +1,6 @@
 #!/bin/bash -xe
 
-TAG=0.8.0
+TAG=0.8.2
 
 # 1) pack
 # @see https://docs.npmjs.com/cli/pack
