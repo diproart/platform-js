@@ -140,6 +140,8 @@ $variable-columns: true !default
   @return $value
 
 @function colorLuminance($color)
+  @if type-of($color) != 'color'
+    @return 0.55
   $color-rgb: ('red': red($color),'green': green($color),'blue': blue($color))
   @each $name, $value in $color-rgb
     $adjusted: 0
@@ -174,6 +176,16 @@ $variable-columns: true !default
     $target-l: round($base-l + ($luminance-delta * 53))
     @return change-color($color, $lightness: max($base-l, $target-l))
   @return $text-strong
+
+@function bulmaRgba($color, $alpha)
+  @if type-of($color) != 'color'
+    @return $color
+  @return rgba($color, $alpha)
+
+@function bulmaDarken($color, $amount)
+  @if type-of($color) != 'color'
+    @return $color
+  @return darken($color, $amount)
 
 $primary: $turquoise !default
 
@@ -338,7 +350,7 @@ $sizes: $size-1 $size-2 $size-3 $size-4 $size-5 $size-6 $size-7 !default
     &:nth-child(3)
       top: calc(50% + 4px)
   &:hover
-    background-color: rgba(black, 0.05)
+    background-color: bulmaRgba(black, 0.05)
   // Modifers
   &.is-active
     span
@@ -460,7 +472,7 @@ $sizes: $size-1 $size-2 $size-3 $size-4 $size-5 $size-6 $size-7 !default
   @extend %unselectable
   -moz-appearance: none
   -webkit-appearance: none
-  background-color: rgba($scheme-invert, 0.2)
+  background-color: bulmaRgba($scheme-invert, 0.2)
   border: none
   border-radius: $radius-rounded
   cursor: pointer
@@ -496,9 +508,9 @@ $sizes: $size-1 $size-2 $size-3 $size-4 $size-5 $size-6 $size-7 !default
     width: 2px
   &:hover,
   &:focus
-    background-color: rgba($scheme-invert, 0.3)
+    background-color: bulmaRgba($scheme-invert, 0.3)
   &:active
-    background-color: rgba($scheme-invert, 0.4)
+    background-color: bulmaRgba($scheme-invert, 0.4)
   // Sizes
   &.is-small
     height: 16px

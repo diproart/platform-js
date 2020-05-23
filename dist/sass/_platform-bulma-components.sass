@@ -354,7 +354,7 @@ a.list-item
   background-color: $list-item-hover-background-color
   cursor: pointer
 
-$media-border-color: rgba($border, 0.5) !default
+$media-border-color: bulmaRgba($border, 0.5) !default
 
 .media
   align-items: flex-start
@@ -565,7 +565,7 @@ $message-colors: $colors !default
 
 $modal-z: 40 !default
 
-$modal-background-background-color: rgba($scheme-invert, 0.86) !default
+$modal-background-background-color: bulmaRgba($scheme-invert, 0.86) !default
 
 $modal-content-width: 640px !default
 $modal-content-margin-mobile: 20px !default
@@ -711,7 +711,7 @@ $navbar-dropdown-radius: $radius-large !default
 $navbar-dropdown-z: 20 !default
 
 $navbar-dropdown-boxed-radius: $radius-large !default
-$navbar-dropdown-boxed-shadow: 0 8px 8px rgba($scheme-invert, 0.1), 0 0 0 1px rgba($scheme-invert, 0.1) !default
+$navbar-dropdown-boxed-shadow: 0 8px 8px bulmaRgba($scheme-invert, 0.1), 0 0 0 1px bulmaRgba($scheme-invert, 0.1) !default
 
 $navbar-dropdown-item-hover-color: $scheme-invert !default
 $navbar-dropdown-item-hover-background-color: $background !default
@@ -751,7 +751,7 @@ $navbar-breakpoint: $desktop !default
           &:focus,
           &:hover,
           &.is-active
-            background-color: darken($color, 5%)
+            background-color: bulmaDarken($color, 5%)
             color: $color-invert
         .navbar-link
           &::after
@@ -769,7 +769,7 @@ $navbar-breakpoint: $desktop !default
             &:focus,
             &:hover,
             &.is-active
-              background-color: darken($color, 5%)
+              background-color: bulmaDarken($color, 5%)
               color: $color-invert
           .navbar-link
             &::after
@@ -777,7 +777,7 @@ $navbar-breakpoint: $desktop !default
         .navbar-item.has-dropdown:focus .navbar-link,
         .navbar-item.has-dropdown:hover .navbar-link,
         .navbar-item.has-dropdown.is-active .navbar-link
-          background-color: darken($color, 5%)
+          background-color: bulmaDarken($color, 5%)
           color: $color-invert
         .navbar-dropdown
           a.navbar-item
@@ -858,7 +858,6 @@ a.navbar-item,
     color: $navbar-item-hover-color
 
 .navbar-item
-  display: block
   flex-grow: 0
   flex-shrink: 0
   img
@@ -924,7 +923,7 @@ a.navbar-item,
       display: none
   .navbar-menu
     background-color: $navbar-background-color
-    box-shadow: 0 8px 16px rgba($scheme-invert, 0.1)
+    box-shadow: 0 8px 16px bulmaRgba($scheme-invert, 0.1)
     padding: 0.5rem 0
     &.is-active
       display: block
@@ -936,7 +935,7 @@ a.navbar-item,
     &.is-fixed-bottom-touch
       bottom: 0
       &.has-shadow
-        box-shadow: 0 -2px 3px rgba($scheme-invert, 0.1)
+        box-shadow: 0 -2px 3px bulmaRgba($scheme-invert, 0.1)
     &.is-fixed-top-touch
       top: 0
     &.is-fixed-top,
@@ -999,7 +998,6 @@ a.navbar-item,
     align-items: center
     display: flex
   .navbar-item
-    display: flex
     &.has-dropdown
       align-items: stretch
     &.has-dropdown-up
@@ -1010,7 +1008,7 @@ a.navbar-item,
         border-radius: $navbar-dropdown-radius $navbar-dropdown-radius 0 0
         border-top: none
         bottom: 100%
-        box-shadow: 0 -8px 8px rgba($scheme-invert, 0.1)
+        box-shadow: 0 -8px 8px bulmaRgba($scheme-invert, 0.1)
         top: auto
     &.is-active,
     &.is-hoverable:focus,
@@ -1037,7 +1035,7 @@ a.navbar-item,
     border-bottom-left-radius: $navbar-dropdown-radius
     border-bottom-right-radius: $navbar-dropdown-radius
     border-top: $navbar-dropdown-border-top
-    box-shadow: 0 8px 8px rgba($scheme-invert, 0.1)
+    box-shadow: 0 8px 8px bulmaRgba($scheme-invert, 0.1)
     display: none
     font-size: 0.875rem
     left: 0
@@ -1088,7 +1086,7 @@ a.navbar-item,
     &.is-fixed-bottom-desktop
       bottom: 0
       &.has-shadow
-        box-shadow: 0 -2px 3px rgba($scheme-invert, 0.1)
+        box-shadow: 0 -2px 3px bulmaRgba($scheme-invert, 0.1)
     &.is-fixed-top-desktop
       top: 0
   html,
@@ -1300,6 +1298,7 @@ $panel-block-active-color: $link-active !default
 $panel-block-active-icon-color: $link !default
 
 $panel-icon-color: $text-light !default
+$panel-colors: $colors !default
 
 .panel
   border-radius: $panel-radius
@@ -1308,7 +1307,7 @@ $panel-icon-color: $text-light !default
   &:not(:last-child)
     margin-bottom: $panel-margin
   // Colors
-  @each $name, $components in $message-colors
+  @each $name, $components in $panel-colors
     $color: nth($components, 1)
     $color-invert: nth($components, 2)
     &.is-#{$name}

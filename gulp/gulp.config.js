@@ -8,8 +8,9 @@ const libs = {
   'platform.vue.js': [
     `${nodeModules}/vue/dist/vue.min.js`,
     `${nodeModules}/vuex/dist/vuex.min.js`,
-    `${nodeModules}/vee-validate/dist/vee-validate.min.js`,
-    `${nodeModules}/vee-validate/dist/locale/ru.js`,
+    `${nodeModules}/vee-validate/dist/vee-validate.full.min.js`,
+    `src/vee-validate.localize.js`,
+    `${nodeModules}/vue-resource/dist/vue-resource.min.js`,
     `${nodeModules}/vue-router/dist/vue-router.min.js`,
     `${nodeModules}/axios/dist/axios.min.js`
   ],
@@ -62,7 +63,8 @@ const bundles = {
     `${nodeModules}/vuex/dist/vuex.min.js`,
     `${nodeModules}/vue-router/dist/vue-router.min.js`,
     `${nodeModules}/vee-validate/dist/vee-validate.min.js`,
-    `${nodeModules}/vee-validate/dist/locale/ru.js`
+    `src/vee-validate.localize.js`,
+    `${nodeModules}/vee-validate/dist/locale/ru.json`
   ],
   /**
    * "full" static platform build
@@ -85,8 +87,9 @@ const bundles = {
     `${nodeModules}/axios/dist/axios.min.js`,
     `${nodeModules}/vue/dist/vue.min.js`,
     `${nodeModules}/vuex/dist/vuex.min.js`,
-    `${nodeModules}/vee-validate/dist/vee-validate.min.js`,
-    `${nodeModules}/vee-validate/dist/locale/ru.js`,
+    `${nodeModules}/vee-validate/dist/vee-validate.full.min.js`,
+    `src/vee-validate.localize.js`,
+    `${nodeModules}/vue-resource/dist/vue-resource.min.js`,
     `${nodeModules}/vue-router/dist/vue-router.min.js`,
     `${nodeModules}/alertifyjs/build/alertify.min.js`
   ]
