@@ -58,3 +58,5 @@ yaspeller_report.html
 
 .npmrc
 .editorconfig
+cypress/integration/examples
+cypress/fixtures/

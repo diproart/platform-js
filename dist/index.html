@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Platform-js Demo</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.2/css/bulma.min.css" integrity="sha256-qS+snwBgqr+iFVpBB58C9UCxKFhyL03YHpZfdNUhSEw=" crossorigin="anonymous">
+  <link rel="stylesheet" href="css/platform.media.css">
+
+
+</head>
+<body>
+  <div class="hero">
+    <div class="hero-body">
+      <div class="container">
+        <h1>bundle demo</h1>
+      </div>
+    </div>
+  </div>
+  <div class="section">
+    <div class="container content">
+      <div id="bundle">
+        <p>{{message}}</p>
+        <p id="status" class="tag" v-bind:class="{'is-success': isSuccess}">{{status}}</p>
+        <form v-on:submit.prevent="submit">
+          <validation-provider v-slot="v" rules="required|max:25">
+            <div class="field">
+              <label for="name" class="label">Name</label>
+              <div class="control">
+                <input name="name" v-model="formData.name" class="input" type="text">
+              </div>
+              <p class="help" :class="{'is-danger': v.invalid }">{{ v.errors[0] }}</p>
+            </div>
+          </validation-provider>
+          <div class="field columns">
+            <div class="column">
+              <button class="button is-primary" type="submit">
+                submit
+              </button>
+            </div>
+            <div class="column">
+              <button v-on:click="resetForm" class="button reset is-danger" type="button">
+                reset
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <script src="js/platform.vue.bundle.js"></script>
+  <script>
+    (function(){
+      const SUBMITTED_STATUS = 'SUBMITTED'
+      document.addEventListener('DOMContentLoaded', () => {
+        Vue.component('validation-provider', VeeValidate.ValidationProvider)
+        window.app = new Vue({
+          components: {
+            //
+          },
+          data: {
+            status: 'pristine',
+            message: 'message',
+            version: Vue.version,
+            formData: {
+              name: 'name'
+            }
+          },
+          computed: {
+            isSuccess: function(){
+              return this.status === SUBMITTED_STATUS
+            }
+          },
+          methods: {
+            submit: function(){
+              this.status = SUBMITTED_STATUS
+            },
+            resetForm: function(){
+              this.status = 'pristine'
+            }
+          }
+        }).$mount('#bundle')
+      });
+    })();
+  </script>
+</body>
+</html>
