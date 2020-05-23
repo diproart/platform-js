@@ -89,6 +89,29 @@ Publish used `~/.npmrc` & `~/.gitconfig`
 
 > by default publish has `--dry-run` flag, please see source
 
+
+## cypress
+
+Testing (demo) some things.
+
+static server
+
+```bash
+npm i -g serve
+```
+
+run
+
+```bash
+serve -s dist
+```
+
+cypress
+
+```bash
+npx cypress open
+```
+
 --
 
 2016, 2019 DIERA.RU

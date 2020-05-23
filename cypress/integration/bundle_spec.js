@@ -2,9 +2,6 @@ describe('bundle', () => {
   it('localhost:5000', () => {
     cy.visit('localhost:5000')
     cy.contains('bundle demo')
-    //cy.get('[name=name]').should('have.value', 'name')
-
-    // expect(window.Vue.version).is.eql('2.6.8')
   })
 })
 
